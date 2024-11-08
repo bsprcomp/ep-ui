@@ -1,0 +1,77 @@
+<!-- 排序 -->
+<template>
+  <div class="wrapper vp-raw">
+    <P
+      >table 设置
+      sortable="custom"开启全部后端排序，部分排序可以在columns中设置，设置v-modal:sortParam接收排序属性</P
+    >
+    <EPTable
+      :data="data"
+      :columns="columns"
+      v-model:sortParam="sortParam"
+      @getData="getData"
+      @sort="sort"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, reactive, ref } from "vue"
+const data = ref<any>([])
+const sortParam = ref<any>({}) //例如name开启后 升序 为 ascs:"name" 降序为 descs:"name"
+const columns = ref([
+  { prop: "name", label: "姓名", minWidth: "100" },
+  { prop: "age", label: "年龄", minWidth: "180", sortable: "custom" },
+  {
+    prop: "operation",
+    label: "操作",
+    width: 160,
+    operation: [
+      {
+        label: "编辑",
+        fun: (row, index, data) => {
+          alert("编辑")
+          edit(row, index, data)
+        }
+      },
+      {
+        label: "删除",
+        fun: (row, index, data) => {
+          alert("删除")
+          deleteRow(row, index, data)
+        }
+      }
+    ]
+  }
+])
+const edit = (row, index, data) => {
+  console.log(row, index)
+}
+const deleteRow = (row, index, data) => {
+  console.log(row, index)
+}
+const getData = () => {
+  // 处理后端排序
+  console.log(sortParam.value, "sortParam")
+  data.value = Array.from({ length: 100 }).map((_, index) => ({
+    id: index,
+    name: "@bscomp" + index,
+    age: `${1 + index}`
+  }))
+}
+// 也可以自行监听
+const sort = data => {
+  console.log(data, "监听sort====")
+  // 处理逻辑
+}
+onMounted(() => {
+  getData()
+})
+</script>
+<style scoped>
+.wrapper {
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+</style>
