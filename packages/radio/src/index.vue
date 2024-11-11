@@ -19,6 +19,8 @@
 
 <script setup lang="ts" name="EPRadio">
 import { computed, ref } from "vue"
+import { ElRadioGroup, ElRadio, ElRadioButton } from "element-plus"
+
 import type { OptionsProps, RadioItem } from "./radio"
 type Optional<T> = {
   [k in keyof T]?: T[k]
@@ -35,10 +37,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const radioType = computed(() => {
   const obj = {
-    radio: "el-radio",
-    button: "el-radio-button"
+    radio: ElRadio,
+    button: ElRadioButton
   }
-  return obj[props.type] ?? "el-radio"
+  return obj[props.type] ?? ElRadio
 })
 const newOptionsProps = ref<OptionsProps>({
   ...{

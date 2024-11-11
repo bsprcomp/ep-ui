@@ -1,10 +1,10 @@
 <!-- 排序 -->
 <template>
   <div class="wrapper vp-raw">
-    <P
-      >table 设置
-      sortable="custom"开启全部后端排序，部分排序可以在columns中设置，设置v-modal:sortParam接收排序属性</P
-    >
+    <p>
+      table 设置
+      sortable="custom"开启全部后端排序，部分排序可以在columns中设置，设置v-modal:sortParam接收排序属性
+    </p>
     <EPTable
       :data="data"
       :columns="columns"
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue"
-const data = ref<any>([])
+const data = ref<any[]>([])
 const sortParam = ref<any>({}) //例如name开启后 升序 为 ascs:"name" 降序为 descs:"name"
 const columns = ref([
   { prop: "name", label: "姓名", minWidth: "100" },
@@ -29,26 +29,26 @@ const columns = ref([
     operation: [
       {
         label: "编辑",
-        fun: (row, index, data) => {
+        func: (row, scope) => {
           alert("编辑")
-          edit(row, index, data)
+          edit(row, scope)
         }
       },
       {
         label: "删除",
-        fun: (row, index, data) => {
+        func: (row, scope) => {
           alert("删除")
-          deleteRow(row, index, data)
+          deleteRow(row, scope)
         }
       }
     ]
   }
 ])
-const edit = (row, index, data) => {
-  console.log(row, index)
+const edit = (row, scope) => {
+  console.log(row, scope)
 }
-const deleteRow = (row, index, data) => {
-  console.log(row, index)
+const deleteRow = (row, scope) => {
+  console.log(row, scope)
 }
 const getData = () => {
   // 处理后端排序

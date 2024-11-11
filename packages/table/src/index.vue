@@ -1,5 +1,5 @@
 <template>
-  <div class="ep-table" ref="EPTableBox">
+  <div class="e-p-table" ref="EPTableBox">
     <div class="header">
       <el-space size="small">
         <slot name="btn"><i></i></slot>
@@ -22,8 +22,9 @@
     <div class="table-content" ref="tableContent">
       <el-table
         :max-height="height"
-        ref="EPTable"
+        ref="tableInstance"
         :data="state.tableData"
+        show-overflow-tooltip
         @selection-change="selectionChange"
         @row-click="rowClick"
         :row-key="rowKey"
@@ -38,85 +39,118 @@
               :key="index + 'i'"
               :sortable="item.sortable || sortable"
               :index="index => indexMethod(index, item)"
-              v-bind="{ align, ...item }"
+              v-bind="{ align, ...item, renderHeader: undefined }"
             >
               <!-- 自定义header -->
-              <template #header v-if="item.renderHeader || item.headerSlot">
+              <template #header v-if="item.renderHeader || item.headerSlot || item.headerRequired">
                 <!-- jsx -->
-                <render-header
+                <CustomRender
                   v-if="item.renderHeader"
                   :column="item"
                   :render="item.renderHeader"
-                />
+                  :row="undefined"
+                  :index="index"
+                ></CustomRender>
+                <div style="display: inline" v-if="item.headerRequired">
+                  <span style="color: #f56c6c; font-size: 16px; margin-right: 3px">*</span>
+                  <span>{{ item.label }}</span>
+                </div>
                 <!-- 插槽 -->
-                <slot v-if="item.headerSlot" :name="item.headerSlot"></slot>
+                <slot :scope="item" v-if="item.headerSlot" :name="item.headerSlot"></slot>
               </template>
-              <template v-slot="scope" v-if="item.type !== 'selection' && item.type !== 'index'">
-                <!-- render渲染 -->
-                <template v-if="item.render">
-                  <render-col
-                    :column="item"
-                    :row="scope.row"
-                    :render="item.render"
-                    :index="scope.$index"
+              <!-- 一般列 -->
+              <template
+                v-slot="scope"
+                v-if="!item.type && item.prop !== 'operation' && !item.formatter"
+              >
+                <!-- 可编辑 -->
+                <template v-if="item.inputType && editRowKey == scope.row[rowKey]">
+                  <CustomRender
+                    v-if="item.renderEdit"
+                    v-bind="{ ...item }"
+                    :render="item.renderEdit"
+                    v-model="scope.row[`${item.editKey || item.prop}EditValue`]"
+                  />
+                  <template v-if="item.editSlotName">
+                    <slot :name="item.editSlotName" />
+                  </template>
+                  <RowEdit
+                    v-else
+                    v-bind="item"
+                    :type="item.inputType"
+                    v-model="scope.row[`${item.editKey || item.prop}EditValue`]"
                   />
                 </template>
-
-                <!-- 自定义插槽 -->
-                <template v-if="item.slotName">
-                  <slot :name="item.slotName" :scope="scope"></slot>
-                </template>
-                <!-- 操作列 -->
-                <template v-if="item.prop == 'operation'">
-                  <template v-for="(op, index) in item.operation" :key="index">
-                    <el-button
-                      v-if="!(op.isVisible && op.isVisible(scope.row, scope.$index))"
-                      @click="op.fun && op.fun(scope.row, scope.$index, state.tableData)"
-                      v-bind="{
-                        type: 'primary',
-                        link: true,
-                        ...op
-                      }"
-                      :disabled="
-                        op.disabled || (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
-                      "
-                    >
-                      <!-- render渲染 -->
-                      <template v-if="op.render">
-                        <render-col
-                          :column="op"
-                          :row="scope.row"
-                          :render="op.render"
-                          :index="scope.$index"
-                        />
-                      </template>
-                      <template v-if="op.slotName">
-                        <slot :name="op.slotName" :scope="scope"></slot>
-                      </template>
-                      <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
+                <!-- 不可编辑 -->
+                <template v-else>
+                  <!-- render渲染 -->
+                  <template v-if="item.render">
+                    <CustomRender :row="scope.row" :render="item.render" :index="scope.$index" />
+                  </template>
+                  <!-- 自定义插槽 -->
+                  <template v-else-if="item.slotName">
+                    <slot :name="item.slotName" :scope="scope"></slot>
+                  </template>
+                  <!-- 链接 -->
+                  <template v-else-if="item.isLink">
+                    <el-button type="primary" link @click="linkTo(scope.row, item.query, item.path)"
+                      >{{ scope.row[item.prop as any] }}
                     </el-button>
                   </template>
+                  <div v-else>
+                    <span>{{ scope.row[item.prop as any] }}</span>
+                  </div>
                 </template>
-                <div
-                  v-if="
-                    !item.render &&
-                    !item.slotName &&
-                    !item.canEdit &&
-                    !item.filters &&
-                    !item.operation
-                  "
-                >
-                  <span>{{ scope.row[item.prop] }}</span>
-                </div>
+              </template>
+              <!-- 展开列 -->
+              <template v-slot="scope" v-if="item.type === 'expand'">
+                <slot name="expand" :scope="scope"></slot>
+                <!-- render渲染 -->
+                <template v-if="item.render">
+                  <CustomRender :row="scope.row" :render="item.render" :index="scope.$index" />
+                </template>
+              </template>
+              <!-- 操作列 -->
+              <template v-slot="scope" v-if="item.prop == 'operation'">
+                <template v-if="editRowKey !== undefined">
+                  <template v-if="scope.row[rowKey] == editRowKey">
+                    <el-Button link type="primary" @click="handleRowEditSave(scope.row)"
+                      >保存</el-Button
+                    >
+                    <el-Button link @click="handleRowEditCancel()">取消</el-Button>
+                  </template>
+                </template>
+                <template v-else v-for="(op, index) in item.operation" :key="index">
+                  <EPButton
+                    v-if="!(op.isVisible && op.isVisible(scope.row, scope.$index))"
+                    @click="handleRowClick(scope.row, op, scope)"
+                    v-bind="{
+                      type: 'primary',
+                      link: true,
+                      ...op
+                    }"
+                    :disabled="
+                      op.disabled || (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
+                    "
+                  >
+                    <!-- render渲染 -->
+                    <template v-if="op.render">
+                      <CustomRender
+                        :column="op"
+                        :row="scope.row"
+                        :render="op.render"
+                        :index="scope.$index"
+                      />
+                    </template>
+                    <template v-if="op.slotName">
+                      <slot :name="op.slotName" :scope="scope"></slot>
+                    </template>
+                    <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
+                  </EPButton>
+                </template>
               </template>
             </el-table-column>
           </template>
-          <!-- 表头合并单元格 -->
-          <!-- <ep-table-column v-else :key="index + 'm'" :item="item" :align="align" v-bind="$attrs">
-          <template v-for="(index, name) in slots" v-slot:[name]="data">
-            <slot :name="name" v-bind="data"></slot>
-          </template>
-        </ep-table-column> -->
         </template>
         <slot></slot>
         <!-- 操作按钮 -->
@@ -126,53 +160,37 @@
     <el-pagination
       class="el-pagination-com"
       v-if="isShowPagination"
-      v-model:current-page="page[newPageProps.currentPage || 'currentPage']"
-      v-model:page-size="page[newPageProps.pageSize || 'pageSize']"
+      v-model:current-page="page[newPageProps.currentPage]"
+      v-model:page-size="page[newPageProps.pageSize]"
       :total="page.total"
-      :page-sizes="newPageProps.pageSizes || [10, 20, 50, 100]"
-      :layout="newPageProps.layout || 'total,sizes, prev, pager, next, jumper'"
+      :page-sizes="newPageProps.pageSizes"
+      :layout="newPageProps.layout"
       :background="newPageProps.background"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
-      v-bind="$attrs"
+      v-bind="{ size: $attrs.size, ...bindPageProps }"
     >
       <slot name="pagination"></slot>
     </el-pagination>
   </div>
 </template>
 
-<script setup lang="ts" name="EPTable">
+<script setup lang="ts" name="EPTable" generic="T extends Record<string,any>">
+import type { TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
-import {
-  computed,
-  ref,
-  watch,
-  useSlots,
-  reactive,
-  onMounted,
-  onUpdated,
-  onBeforeUnmount,
-  nextTick
-} from "vue"
-import Sortable from "sortablejs"
-import SingleEditCell from "./singleEditCell.vue"
-import ColumnSet from "./ColumnSet.vue"
-import RenderCol from "./renderCol.vue"
-import RenderHeader from "./renderHeader.vue"
-// 虚拟滚动
-import { useVirtualized } from "./useVirtualized"
+import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
+import { ElSpace, ElTable, ElTableColumn, ElButton, ElPagination } from "element-plus"
+import useHooks from "./useHooks"
 
-const tableContent = ref()
-const {
-  scrollContainerEl,
-  updateRenderedItemCache,
-  updateOffset,
-  getDom,
-  saveDATA,
-  getItemHeightFromCache
-} = useVirtualized()
+import ColumnSet from "./ColumnSet.vue"
+import CustomRender from "./CustomRender.vue"
+import RowEdit from "./RowEdit.vue"
+import EPButton from "../../button"
+
+import { useRoute, useRouter } from "vue-router"
+
 // 分页设置
-const page = defineModel("page", {
+const page = defineModel<Record<string, any>>("page", {
   default: {
     page: 1,
     total: 0,
@@ -183,39 +201,47 @@ const check = defineModel<any>("check", {
   default: []
 })
 const sortParam = defineModel<any>("sortParam", { default: {} })
+const tableInstance = ref<TableInstance>()
 
-import { useExpose } from "./useExpose"
-const { EPTable, fun } = useExpose()
-type EPTableProps = {
+interface Props<T> {
   name?: string
-  rowKey: string
+  rowKey?: string
   filterCheckList?: (list: any[]) => any
-  isShowMenu: boolean
+  isShowMenu?: boolean
   // table所需数据
-  data: Record<string, any>[] | []
+  data: T[]
+  rowClick?: (row: any) => void
   // 表头数据
-  columns: (Record<string, any> & { operation: any[] })[]
+  columns: {
+    type?: "index" | "selection" | "expand" | string
+    prop?: string
+    label?: string
+    width?: string | number
+    minWidth?: string | number
+    isLink?: boolean
+    slotName?: string
+    render?: Function
+    [x: string]: any
+    operation?:
+      | {
+          label?: string
+          width?: string
+          isVisible?: (row: any, index: number) => boolean
+          operationType?: "rowEdit"
+          func: Function
+          disabled?: boolean
+          isDisabled?: (row: any, index: number) => boolean
+          slotName?: string
+          render?: (row: any) => VNode
+        }[]
+      | []
+      | undefined
+  }[]
   // table对齐方式
   align?: "left" | "center" | "right"
-
-  // 是否开启行拖拽
-  isRowSort?: boolean
-  // 是否开启点击整行选中单选框
-  rowClickRadio?: boolean
-  // 设置默认选中项（单选）defaultRadioCol值必须大于0！
-  defaultRadioCol?: Number
-  // 序列号显示是否分页累加
-  isPaginationCumulative?: boolean
   // 是否显示分页
   isShowPagination?: boolean
-  // 是否开启编辑保存按钮
-  isShowFooterBtn?: boolean
-  // 是否开启虚拟列表
-  useVirtual: boolean
-  // 虚拟列表的渲染行数
-  virtualShowSize: number
-  rules: Record<string, any>
-  sortable: boolean
+  sortable?: boolean
   pageProps?: {
     size?: "" | "default" | "small" | "large"
     pageSize?: string
@@ -224,37 +250,38 @@ type EPTableProps = {
     pageSizes?: number[]
     background?: boolean
   }
-  menuConfig: Object
+  menuConfig?: Object
   extra?: number
 }
 
-const props = withDefaults(defineProps<EPTableProps>(), {
+const props = withDefaults(defineProps<Props<T>>(), {
   rowKey: "id",
   isShowMenu: false,
   pageProps: () => ({}),
   extra: 0
 })
-const newPageProps = computed(() => ({
-  pageSize: "size",
-  currentPage: "page",
-  size: "default",
-  background: true,
-  ...props.pageProps
-}))
+const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
+const {
+  editRowKey,
+  handleRowClick,
+  handleRowEditSave,
+  handleRowEditCancel,
+  newPageProps,
+  bindPageProps
+} = useHooks(props, emits)
+const route = useRoute()
+const router = useRouter()
+const tableContent = ref()
 //  剩余高度计算
 const { height } = useRemainingHeight(tableContent, props.extra)
 
 // 初始化数据
-let state = reactive({
+let state = reactive<any>({
   tableData: props.data,
   columnSet: [],
   copyTableData: [] // 键盘事件
 })
-// 单选框
-const radioVal = ref<number | any>("")
-// 判断单选选中及取消选中
-const forbidden = ref(true)
-// 获取ep-table ref
+// 获取e-p-table ref
 const EPTableBox = ref<HTMLElement | any>(null)
 // 获取columnSet Ref
 const columnSetRef = ref<HTMLElement | any>(null)
@@ -266,18 +293,16 @@ const handleRef = (el: any, scope: { $index: number; column: { property: string 
     formRef.value[`formRef-${scope.$index}-${item.prop || scope.column.property}`] = el
   }
 }
-// 获取所有单元格编辑组件 ref
-const ediEPTableRef: any = ref({})
-// 动态单元格编辑组件 ref
-const handleEdiEPTableRef = (
-  el: any,
-  scope: { $index: number; column: { property: string } },
-  item: { prop: any }
-) => {
-  if (el) {
-    ediEPTableRef.value[`singleEditRef-${scope.$index}-${item.prop || scope.column.property}`] = el
+// link类型跳转
+const linkTo = (row, query = { name: 22 }, path) => {
+  if (route.path || path) {
+    router.push({
+      path: `/${route.path}/${row[props.rowKey]}` || path,
+      query
+    })
   }
 }
+
 // 序号
 const indexMethod = (index, item) => {
   if (props.isShowPagination && item.type == "index") {
@@ -294,20 +319,13 @@ const indexMethod = (index, item) => {
     return index
   }
 }
-// 抛出事件
-const emits = defineEmits(["sort", "getData", "rowSort", "validateError"])
+
 // 获取所有插槽
 const slots = useSlots()
 watch(
   () => props.data,
   val => {
-    // console.log(111, val)
-    if (props.useVirtual) {
-      saveDATA.value = val
-      updateRenderData(0)
-    } else {
-      state.tableData = val
-    }
+    state.tableData = val
   },
   { deep: true }
 )
@@ -344,85 +362,12 @@ const handleSizeChange = () => {
   emits("getData")
 }
 
-onMounted(() => {
-  if (props.defaultRadioCol) {
-    defaultRadioSelect(props.defaultRadioCol)
-  }
-  initSort()
-  if (props.useVirtual) {
-    saveDATA.value = props.data
-    getDom()
-    scrollContainerEl.value?.addEventListener("scroll", handleScroll)
-  }
-})
-// 更新实际渲染数据
-const updateRenderData = (scrollTop: number) => {
-  let startIndex = 0
-  let offsetHeight = 0
-  for (let i = 0; i < saveDATA.value.length; i++) {
-    offsetHeight += getItemHeightFromCache(i)
-    if (offsetHeight >= scrollTop) {
-      startIndex = i
-      break
-    }
-  }
-  // 计算得出的渲染数据
-  state.tableData = saveDATA.value.slice(startIndex, startIndex + props.virtualShowSize)
-  // 缓存最新的列表项高度
-  updateRenderedItemCache(startIndex)
-  // 更新偏移值
-  updateOffset(offsetHeight - getItemHeightFromCache(startIndex))
-}
-// 滚动事件
-const handleScroll = (e: any) => {
-  // 渲染正确的数据
-  updateRenderData(e.target.scrollTop)
-  // console.log("滚动事件---handleScroll")
-}
-// 移除滚动事件
-onBeforeUnmount(() => {
-  // console.log("移除滚动事件")
-  if (props.useVirtual) {
-    scrollContainerEl.value?.removeEventListener("scroll", handleScroll)
-  }
-})
 onUpdated(() => {
-  EPTable.value.doLayout()
+  tableInstance.value?.doLayout()
 })
-// 默认选中（单选项）---index必须是大于等于1（且只能默认选中第一页的数据）
-const defaultRadioSelect = (index: number | any) => {
-  radioVal.value = index
-  emits("radioChange", state.tableData[index - 1], radioVal.value)
-}
-// 行拖拽
-const initSort = () => {
-  if (!props.isRowSort) return
-  const el = EPTableBox.value?.querySelector(".el-table__body-wrapper tbody")
-  // console.log('3333', el)
-  Sortable.create(el, {
-    animation: 150, // 动画
-    // handle: '.move', // 指定拖拽目标，点击此目标才可拖拽元素(此例中设置操作按钮拖拽)
-    // filter: '.disabled', // 指定不可拖动的类名（el-table中可通过row-class-name设置行的class）
-    // dragClass: 'dragClass', // 设置拖拽样式类名
-    // ghostClass: 'ghostClass', // 设置拖拽停靠样式类名
-    // chosenClass: 'chosenClass', // 设置选中样式类名
-    onEnd: (evt: { oldIndex: any; newIndex: any }) => {
-      const curRow = state.tableData.splice(evt.oldIndex, 1)[0]
-      state.tableData.splice(evt.newIndex, 0, curRow)
-      emits("rowSort", state.tableData)
-    }
-  })
-}
 
-// 单元格编辑是否存在校验
-const isEditRules = computed(() => {
-  return (
-    (props.rules && Object.keys(props.rules).length > 0) ||
-    props.columns.some((item: any) => item?.configEdit?.rules)
-  )
-})
 // 所有列（表头数据）
-const renderColumns = computed<EPTableProps["columns"]>(() => {
+const renderColumns = computed<Props<T>["columns"]>(() => {
   if (state.columnSet.length === 0) {
     return props.columns
   }
@@ -438,52 +383,14 @@ const isTableHeader = computed(() => {
   return renderColumns.value.some((item: any) => item.children)
 })
 
-// forbidden取值（选择单选或取消单选）
-// const isForbidden = () => {
-//   forbidden.value = false
-//   setTimeout(() => {
-//     forbidden.value = true
-//   }, 0)
-// }
-// 单选抛出事件radioChange
-// const radioClick = (row: any, index: any) => {
-//   forbidden.value = !forbidden.value
-//   const isCurrentlySelected = radioVal.value === index
-//   if (isCurrentlySelected) {
-//     radioVal.value = null
-//   } else {
-//     radioVal.value = index
-//   }
-//   isForbidden()
-//   emits("radioChange", radioVal.value ? row : null, radioVal.value)
-// }
-
-// 点击单选框单元格触发事件
-// const radioHandleChange = (row: any, index: any) => {
-//   if (row?.isRadioDisabled) return
-//   if (props.rowClickRadio) {
-//     return
-//   }
-//   radioClick(row, index)
-// }
-// 点击某行事件
-// const rowClick = (row: any) => {
-//   if (row.isRadioDisabled) return
-//   if (!props.rowClickRadio) {
-//     return
-//   }
-//   radioClick(row, state.tableData.indexOf(row) + 1)
-// }
-
 // 获取columnSet缓存数据
 const reSetColumnSet = () => {
   return columnSetRef.value?.reSetColumnSet()
 }
-// 暴露方法出去
-defineExpose(fun)
+defineExpose({ tableInstance })
 </script>
 <style lang="scss" scoped>
-.ep-table {
+.e-p-table {
   height: 100%;
   position: relative;
   display: flex;

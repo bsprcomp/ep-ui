@@ -34,7 +34,7 @@
 import { computed, onMounted, reactive, ref } from "vue"
 const dialogVisible = ref(false)
 const isEdit = ref(false)
-const data = ref<any>([])
+const data = ref<any[]>([])
 const formRef = ref()
 const form = reactive({
   name: "",
@@ -67,14 +67,14 @@ const columns = [
     operation: [
       {
         label: "编辑",
-        fun: row => {
+        func: row => {
           edit(row)
         }
       },
       {
         label: "删除",
-        fun: (row, index, data) => {
-          deleteRow(row, index, data)
+        func: (row, scope) => {
+          deleteRow(row, scope)
         }
       }
     ]
@@ -90,8 +90,8 @@ const edit = row => {
   Object.assign(form, row)
   isEdit.value = true
 }
-const deleteRow = (row, index, data) => {
-  console.log(row, index, data)
+const deleteRow = (row, scope) => {
+  console.log(row, scope)
 }
 const submit = async () => {
   await formRef.value.validate()

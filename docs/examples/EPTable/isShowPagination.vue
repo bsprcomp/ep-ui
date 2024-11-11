@@ -19,7 +19,7 @@
 import { onMounted, reactive, ref } from "vue"
 // 初始化
 const page = reactive({ size: 10, page: 1, total: 0 })
-const data = ref<any>([])
+const data = ref<any[]>([])
 // 模拟接口数据
 const DATA = Array.from({ length: 100 }).map((_, index) => ({
   id: index,
@@ -35,7 +35,7 @@ const columns = ref([
 // page变化回调
 const getData = () => {
   data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
-  page.total = 100
+  page.total = 20
 }
 onMounted(() => {
   getData()

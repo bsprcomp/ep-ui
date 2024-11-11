@@ -8,7 +8,7 @@
 
 <script setup lang="tsx">
 import { createElementVNode, onMounted, ref } from "vue"
-const data = ref<any>([])
+const data = ref<any[]>([])
 const columns = [
   {
     minWidth: "800px",
@@ -19,38 +19,36 @@ const columns = [
       {
         label: "disabled禁止",
         disabled: true,
-        fun: (row, index, data) => {
-          deleteRow(row, index, data)
-        }
+        func: (row, scope) => {}
       },
       {
         label: "isDisabled回调禁止",
-        isDisabled: (row, index) => row.id % 2 == 0,
-        fun: row => edit(row)
+        isDisabled: (row, scope) => row.id % 2 == 0,
+        func: (row, scope) => {}
       },
       {
         label: "删除",
-        fun: (row, index, data) => {
-          deleteRow(row, index, data)
+        func: (row, scope) => {
+          alert("删除")
         }
       },
       {
         render: () => createElementVNode("span", { style: { color: "red" } }, "createElementVNode"),
-        fun: row => alert("createElementVNode渲染")
+        func: row => alert("createElementVNode渲染")
       },
       {
         render: () => <el-radio>JSX/TSX渲染</el-radio>,
-        fun: row => alert("JSX/TSX渲染")
+        func: row => alert("JSX/TSX渲染")
       },
       {
         label: "插槽渲染",
         slotName: "operationCom",
-        fun: row => alert("插槽渲染")
+        func: row => alert("插槽渲染")
       },
       {
         label: "是否显示",
-        isVisible: (row, index) => row.id % 2 == 0,
-        fun: row => alert("显示")
+        isVisible: (row, scope) => row.id % 2 == 0,
+        func: row => alert("显示")
       }
     ]
   }

@@ -18,8 +18,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue"
 // 初始化
-const page = reactive({ size: 10, page: 1, total: 0 })
-const data = ref<any>([])
+const page = reactive({ size: 20, page: 1, total: 0 })
+const data = ref<any[]>([])
 // 模拟接口数据
 const DATA = Array.from({ length: 100 }).map((_, index) => ({
   id: +Date.now() + index,

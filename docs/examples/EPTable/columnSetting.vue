@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
-const data = ref<any>([])
+const data = ref<any[]>([])
 const columns = ref([
   { prop: "name", label: "姓名", isShowHidden: true },
   { prop: "age", label: "年龄" },
@@ -29,24 +29,24 @@ const columns = ref([
     operation: [
       {
         label: "编辑",
-        fun: (row, index, data) => {
-          edit(row, index, data)
+        func: (row, scope) => {
+          edit(row, scope)
         }
       },
       {
         label: "删除",
-        fun: (row, index, data) => {
-          deleteRow(row, index, data)
+        func: (row, scope) => {
+          deleteRow(row, scope)
         }
       }
     ]
   }
 ])
-const edit = (row, index, data) => {
-  console.log(row, index, data)
+const edit = (row, scope) => {
+  console.log(row, scope)
 }
-const deleteRow = (row, index, data) => {
-  console.log(row, index, data)
+const deleteRow = (row, scope) => {
+  console.log(row, scope)
 }
 onMounted(() => {
   data.value = Array.from({ length: 2 }).map((_, index) => ({

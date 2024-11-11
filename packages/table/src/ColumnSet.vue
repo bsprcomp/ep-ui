@@ -1,3 +1,4 @@
+<!-- 仅对有prop属性且不为operation（操作列，序号，复选框等不要排序） -->
 <template>
   <el-dropdown :trigger="columnBind.trigger" popper-class="column_set">
     <el-button v-if="columnBind.title" v-bind="columnBind">{{ columnBind.title }}</el-button>
@@ -12,6 +13,7 @@
           >
             <template #item="{ element, index }">
               <el-checkbox
+                v-if="element.prop && element.prop !== 'operation'"
                 :checked="!element.hidden"
                 @click.native.stop
                 :disabled="element.checkBoxDisabled"
@@ -47,7 +49,7 @@ const columnBind = computed<any>(() => {
 })
 // 获取缓存数据
 const getColumnSetCache = () => {
-  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name || props.title}`)
+  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name}`)
   let columnOption = initColumnSet()
   let valueArr = JSON.parse(value) || []
   columnOption.map(item => {
@@ -59,10 +61,7 @@ const getColumnSetCache = () => {
   initColumnSet().map(val => {
     columnOption.map(item => {
       if (Object.hasOwn(val, "isShowHidden")) {
-        if (val.label === item.label && val.prop === item.prop && val.isShowHidden) {
-          item.hidden = val.isShowHidden
-        }
-        if (val.label === item.label && val.prop === item.prop && !val.isShowHidden) {
+        if (val.label === item.label && val.prop === item.prop) {
           item.hidden = val.isShowHidden
         }
       }
@@ -106,19 +105,14 @@ onMounted(() => {
 watch(
   () => state.columnSet,
   val => {
-    console.log(val, "val")
-
     emits("columnSetting", val)
-    localStorage.setItem(
-      `ep-ui:EPTable.columnSet-${props.name || props.title}`,
-      JSON.stringify(val)
-    )
+    localStorage.setItem(`ep-ui:EPTable.columnSet-${props.name}`, JSON.stringify(val))
   },
   { deep: true }
 )
 // 重新赋值
 const reSetColumnSet = () => {
-  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name || props.title}`)
+  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name}`)
   state.columnSet = JSON.parse(value)
   emits("columnSetting", state.columnSet)
 }

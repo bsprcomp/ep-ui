@@ -1,7 +1,11 @@
-<!-- 基础用法 -->
+<!-- render -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" />
+    <EPTable :data="data" :columns="columns">
+      <template v-slot:testSlot="{ scope }">
+        <span style="color: pink">我的身高是{{ scope.row.height }}</span>
+      </template>
+    </EPTable>
   </div>
 </template>
 
@@ -12,10 +16,30 @@ const data = ref<any[]>([])
 const columns = ref<any[]>([
   {
     prop: "name",
-    label: "姓名",
+    label: "render渲染",
+    render: (row, index) => (
+      <span style="color:red">
+        render：{row.name} {index}
+      </span>
+    ),
     minWidth: "100"
   },
-  { prop: "age", label: "年龄", minWidth: "180" },
+  {
+    prop: "age",
+    label: "formatter渲染",
+    minWidth: "180",
+    formatter: (row: any, column: any, cellValue: any, index: number) => (
+      <span style="color:blue">
+        render：{row.age} {index}
+      </span>
+    )
+  },
+  {
+    prop: "height",
+    label: "slotName插槽渲染",
+    minWidth: "180",
+    slotName: "testSlot"
+  },
   {
     prop: "operation",
     label: "操作",
@@ -50,7 +74,8 @@ onMounted(() => {
   data.value = Array.from({ length: 2 }).map((_, index) => ({
     id: index,
     name: "@bscomp",
-    age: 18
+    age: 18,
+    height: 180 + index
   }))
 })
 </script>

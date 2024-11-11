@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
-const data = ref<any>([])
+const data = ref<any[]>([])
 const checkList = ref([])
 const columns = ref([
   { type: "selection", width: "55" },

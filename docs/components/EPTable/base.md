@@ -53,6 +53,12 @@ EPTable/btnSlot
 EPTable/operation
 :::
 
+### 操作列开启行编辑（需配和 inputType 使用）
+
+:::demo 默认支持 input,select,radio,time,其他类型使用 custom 自定义
+EPTable/rowEdit
+:::
+
 ### 操作列复杂操作（按钮禁止，按钮自定义渲染，按钮是否显示）
 
 :::demo
@@ -61,7 +67,7 @@ EPTable/customColumn
 
 ### 列菜单设置 isShowMenu
 
-:::demo 支持拖拽排序
+:::demo 仅对有 prop 属性且不为 operation（操作列，序号，复选框等不要排序）
 EPTable/columnSetting
 :::
 
@@ -77,312 +83,179 @@ EPTable/sort
 EPTable/sortBackend
 :::
 
-### 基本表尾合计
+### 列 render/formatter/slotName 渲染
 
-<!--
-:::demo 在`EPTable`标签中添加`show-summary`,默认情况下，对于合计行，第一列不进行数据求合操作，而是显示「合计」二字（可通过 sum-text 配置），其余列会将本列所有`数值`(不区分`Number`与`String`类型)进行求合操作，并显示出来。
-EPTable/showSummary
-::: -->
-
-### 自定义表尾合计
-
-<!-- :::demo 在`EPTable`标签中添加`show-summary`,自定义合计逻辑：使用 `summary-method` 并传入一个方法，返回一个数组，这个数组中的各项就会显示在合计行的各列中，可以是一个 VNode 或 String。
-EPTable/summaryMethod
-::: -->
-
-### 特定项远程排序
-
-<!-- :::demo 在`columns`某一项中添加`sort:custom`或`sortable:custom`,则代表用户希望远程排序，需要监听 `Table` 的 `sort-change` 事件
-EPTable/sortCellChange
-::: -->
-
-### 单选框表格
-
-<!-- :::demo 在`table`对象中添加`firstColumn:{ type: 'radio', fixed: true }`,可以再次点击取消选中；添加`@radioChange`事件传当前选中行是数据；默认点击整行选中 可以设置`rowClickRadio：false`,只有点击单选框才选中
-EPTable/radio
-::: -->
-
-### 单选框--默认选中项及开启点击整行选中
-
-<!-- :::demo 在`table`对象中添加`firstColumn:{ type: 'radio', fixed: true }`,可以再次点击取消选中；添加`@radioChange`事件传当前选中行是数据；默认点击整行选中,defaultRadioCol: 表默认选中项
-EPTable/radioDefault
-::: -->
-
-### 单选框--禁用
-
-<!-- :::demo `table`的`data` 数据源满足某条件时，新增`isRadioDisabled`属性为`true`，禁用单选。
-EPTable/isRadioDisabled
-::: -->
-
-### 集成分页器
-
-<!-- :::demo
-EPTable/isShowPagination
-::: -->
-
-### 分页器-设置 layout 自定义插槽使用
-
-<!-- :::demo
-EPTable/paginationSlot
-::: -->
-
-### 某列 render 渲染
-
-<!-- :::demo
+:::demo
 EPTable/render
-::: -->
-
-### 某列 作用域插槽渲染
-
-<!-- :::demo
-EPTable/slotName
-::: -->
+:::
 
 ### 自定义表头渲染
 
-<!-- :::demo
+:::demo
 EPTable/renderHeader
-::: -->
-
-### 列--动态显示隐藏且拖动排序
-
-<!-- :::demo 在`EPTable标签`中设置`columnSetting`开启`并且`需要设置`name`属性且在项目中`必须`保持唯一性。属性`columnSetBind`配置更改 button 样式：继承`el-button`所有属性;`column`配置`isShowHidden`属性更改是否默认隐藏显示（true:默认设置列不显示；反之或者不设置`isShowHidden`属性显示）;`注意：如果isShowHidden设置为true后，即便选中显示，但每次刷新都不会显示`。
-EPTable/columnSetting
-::: -->
-
-<!-- ### 行--拖拽排序
-
-:::demo 属性`isRowSort`是否开启行拖拽排序;事件`@rowSort`，返回最终排序的 table 数据;`注意`: `row-key` 需要设置，否则拖动排序可能显示不正常
-EPTable/rowSort
-:::
-
-### 表头合并单元格（多级表头）
-
-:::demo 只需要配置`columns`中某项新增`children：Array[]`属性;表头合并自动加边框
-EPTable/multileHead
-:::
-
-### 表头合并（多级表头）-插槽使用
-
-:::demo 只需要配置`columns`中某项新增`children：Array[]`属性;表头合并自动加边框
-EPTable/slotNameMerge
-:::
-
-### 多级表头--单元格编辑
-
-:::demo
-EPTable/multileHeadEdit
-:::
-
-### 自定义操作按钮样式
-
-:::demo 设置`operator`数组中的`bind对象`继承`el-button`所有属性
-EPTable/operatorBtn
-:::
-
-### 操作按钮 render 方式
-
-:::demo 设置`operator`数组中的` render函数``遵循tsx方式 `
-EPTable/operatorRender
-:::
-
-### 操作按钮插槽方式
-
-:::demo
-EPTable/operatorSlotName
-:::
-
-### Tree-Table
-
-:::demo 按照`el-table`方式配置；新增`isTree`属性——其作用是布局 EPTable-Tree 样式
-EPTable/treeTable
-:::
-
-### 超级 TreTable 使用
-
-:::demo 按照`el-table`方式配置
-EPTable/treeMenuTable
-:::
-
-### 单元格编辑功能
-
-:::demo
-EPTable/configEdit
-:::
-
-### 单元格单独编辑
-
-:::demo
-EPTable/configEditUse
-:::
-
-### 单元格编辑--键盘事件
-
-:::demo `isKeyup` 单元格编辑是否开启键盘事件;向上、向下、回车横向的下一个输入框
-EPTable/singleEditKeyup
-::: -->
-
-<!-- ### 单元格编辑--使用组件事件
-
-:::demo `eventHandle`继承第三方组件事件，根据第三方组件事件传参，若第三方组件事件`本身有参数`则返回`三`个参数不然就是后`两`个参数：第一个就是本身自己带的参数，第二个是`porp`，第三个是`scope`(`scope.row`)--就是当前行的数据；`scope.$index`就是当前行数
-EPTable/eventHandle
-:::
-
-### 单元格编辑--校验 rules
-
-:::demo `columns`: `columns`某一项的 rules;`table`: rules; `saveMethod方法`:singleEdit.value.saveMethod((data) => {console.log('callback 返回数据', data)})
-EPTable/rules
-:::
-
-### 单元格编辑--TSelectTable 校验 rules
-
-:::demo
-EPTable/rulesSelectTable
 :::
 
 ### 展开行
 
 :::demo 在`table`对象中添加`firstColumn:{ type: 'expand', fixed: true }` `expand`作用域插槽，解构传出`{scope}`
 EPTable/expand
-::: -->
+:::
 
 ### EPTable 参数配置
 
----
+## 表格 API
 
-### 1、代码示例
+### 快速配置参数
 
-```html
-<EPTable
-  :table="table"
-  :columns="table.columns"
-  @size-change="handlesSizeChange"
-  @page-change="handlesCurrentChange"
-/>
+| 参数                  | 说明                                                                                                    | 类型                                          | 默认值 |
+| :-------------------- | :------------------------------------------------------------------------------------------------------ | :-------------------------------------------- | :----- |
+| data                  | 列表数据                                                                                                | `Array`                                       | []     |
+| columns               | 表头信息 示例如下                                                                                       | `Array`                                       | []     |
+| border                | 是否开启边框线                                                                                          | `Boolean`                                     | false  |
+| isShowPagination      | 是否显示分页                                                                                            | `Boolean`                                     | false  |
+| show-overflow-tooltip | 当内容过长被隐藏时显示 tooltip                                                                          | `Boolean`\/`object(element-plus 2.2.28 支持)` | true   |
+| v-model:page          | page 双向绑定，页面默认应设置`const page = reactive({ size: 10\|20\|50\|100, page: 1, total: 0 })`      | `Object`                                      |        |
+| pageProps             | 继承 el-pagination 所有属性。`注：pageSize 和 currentPage 两参数赋予特殊意义，见下面单独说明 pageProps` |                                               |        |
+
+### columns ts 属性如下
+
+```javascript
+  type columns= ({
+    type?: "index" | "selection" | "expand"
+    prop?: string
+    label?: string
+    width?: string
+    minWidth?: string
+    render?:(row,index)=>VNode|string // (封装新增)
+    formatter?: (row: any, column: any, cellValue: any, index: number) => VNode | string //（element-plus 提供，格式化单元格内容）
+    slotName?:string // 插槽渲染列
+    [x: string]: any
+  } & {
+    // 操作按钮 中 使用el-button封装，继承EPButton所有属性
+    operation: {
+      label?: string
+      width?: string
+      isVisible?: (row: any, index: number) => boolean
+      operationType?: "rowEdit" // rowEdit 为开启行编辑，配合inputType使用
+      func: (row:any,scope:any)=>{}
+      disabled?: boolean
+      isDisabled?: (row: any, index: number) => boolean
+      slotName?: string
+      render?: (row: any) =>VNode | string
+      //
+    }[]
 ```
 
-### 2、配置参数（Table Attributes）
+### pageProps ts 如下
 
-| 参数                                   | 说明                                                                                | 类型             | 默认值                                     |
-| :------------------------------------- | :---------------------------------------------------------------------------------- | :--------------- | :----------------------------------------- |
-| table                                  | 表格数据对象                                                                        | Object           | {}                                         |
-| ---layout                              | 分页组件布局[参考](https://element-plus.org/zh-CN/component/pagination.html?_blank) | String           | `'total,sizes, prev, pager, next, jumper'` |
-| ---rules                               | 规则（可依据 elementPlus el-form 配置————对应 columns 的 prop 值）                  | Object           | -                                          |
-| ---border                              | 是否开启边框线                                                                      | Boolean          | false                                      |
-| ---data                                | 展示数据                                                                            | Array            | []                                         |
-| ---toolbar                             | 表格外操作栏选中表格某行，可以将其数据传出                                          | Array            | []                                         |
-| ---operator                            | 表格内操作栏数据                                                                    | Array            | []                                         |
-| -------hasPermi                        | 表格内操作栏按钮权限资源（必须传`btnPermissions`属性才生效）                        | String           | -                                          |
-| -------show                            | 表格内操作栏根据状态显示                                                            | Object           | -                                          |
-| -------render                          | render 函数渲染使用的 Function(val) 可以用 tsx 方式                                 | Function         | -                                          |
-| -------noshow                          | 表格内操作栏根据多种状态不显示                                                      | Array            | -                                          |
-| -------bind                            | 继承 el-button 所有 Attributes                                                      | Object           | -                                          |
-| -------fun                             | 事件名                                                                              | function         | -                                          |
-| ---operatorConfig                      | 表格内操作栏样式                                                                    | Object           | -                                          |
-| --------fixed                          | 列是否固定在左侧或者右侧。 true 表示固定在左侧(true / 'left' / 'right')             | string / boolean | -                                          |
-| --------label                          | 显示的标题                                                                          | string           | '操作'                                     |
-| --------width                          | 对应列的宽度(固定的)                                                                | string / number  | -                                          |
-| --------minWidth                       | 对应列的最小宽度(会把剩余宽度按比例分配给设置了 min-width 的列)                     | string / number  | -                                          |
-| --------align                          | 对齐方式 （left / center / right）                                                  | string           | 'center'                                   |
-| --------bind                           | el-table-column Attributes                                                          | Object           | -                                          |
-| ---firstColumn                         | 表格首列(序号 index,复选框 selection,单选 radio,展开行 expand）排列                 | object/Array     | -                                          |
-| ---total                               | 数据总条数                                                                          | Number           | -                                          |
-| ---pageSize                            | 页数量                                                                              | Number           | -                                          |
-| ---currentPage                         | 是否需要显示切换页条数                                                              | Number           | -                                          |
-| columns                                | 表头信息                                                                            | Array            | []                                         |
-| ----sort                               | 排序 （设置：sort:true）                                                            | Boolean          | false                                      |
-| ----sortable                           | 排序，若设置为 'custom'，需要监听 Table 的 sort-change 事件                         | Boolean /string  | false                                      |
-| ----align                              | 对齐方式 （left / center / right）                                                  | string           | 'center'                                   |
-| ----renderHeader                       | 列标题 Label 区域渲染使用的 Function(val) 可以用 jsx 方式                           | Function         | -                                          |
-| ----render                             | 某列 render 函数渲染使用的 Function(val) 可以用 jsx 方式                            | Function         | -                                          |
-| ----bind                               | el-table-column Attributes                                                          | Object           | -                                          |
-| ----width                              | 对应列的宽度(固定的)                                                                | string / number  | -                                          |
-| ----minWidth                           | 对应列的最小宽度(会把剩余宽度按比例分配给设置了 min-width 的列)                     | string / number  | -                                          |
-| ----slotName                           | 插槽显示此列数据（其值是具名作用域插槽                                              | String           | -                                          |
-| ----isShowHidden                       | 是否动态显示隐藏列设置（隐藏/显示列）                                               | Boolean          | false                                      |
-| ----slotNameMerge                      | 合并表头插槽显示此列数据（其值是具名作用域插槽）                                    | String           | -                                          |
-| ----------scope                        | 具名插槽获取此行数据必须用解构接收{scope}.row 是当前行数据 }                        | Object           | -                                          |
-| ----canEdit                            | 是否开启单元格编辑功能                                                              | Boolean          | false                                      |
-| ----configEdit                         | 表格编辑配置（开启编辑功能有效）                                                    | Object           | -                                          |
-| ----------rules                        | 规则（可依据 elementPlus el-form 配置————对应 columns 的 prop 值）                  | Object           | -                                          |
-| ----------label                        | placeholder 显示                                                                    | String           | -                                          |
-| ----------editComponent                | 组件名称可直接指定全局注册的组件，也可引入'element'如：'el-input'                   | String/component | -                                          |
-| ----------eventHandle                  | 第三方 UI 的 事件（返回三个参数，需解构获取{val,prop,scope}）                       | Object           | -                                          |
-| ----------bind                         | 第三方 UI 的 Attributes，（`Function`返回值 scope）                                 | Object/Function  | -                                          |
-| ----------event                        | 触发 handleEvent 事件的标志                                                         | String           | -                                          |
-| ----------type                         | 下拉或者复选框显示（select-arr/select-obj/checkbox）                                | String           | -                                          |
-| ----------list                         | 下拉选择数据源名称                                                                  | String           | -                                          |
-| ----------arrLabel                     | type:select-arr 时对应显示的中文字段                                                | String           | label                                      |
-| ----------arrKey                       | type:select-arr 时对应显示的数字字段                                                | String           | key                                        |
-| ----filters                            | 字典过滤                                                                            | Object           | -                                          |
-| ----------list                         | listTypeInfo 里面对应的下拉数据源命名                                               | String           | -                                          |
-| ----------key                          | 数据源的 key 字段                                                                   | String           | 'value'                                    |
-| ----------label                        | 数据源的 label 字段                                                                 | String           | 'label'                                    |
-| btnPermissions                         | 按钮权限数据集（后台返回的按钮权限集合）                                            | Array            | -                                          |
-| listTypeInfo                           | 下拉选择数据源                                                                      | Object           | -                                          |
-| footer                                 | 底部操作区（默认隐藏，使用插槽展示“保存”按钮）                                      | slot             | -                                          |
-| pagination                             | 分页器自定义内容 设置文案(table 设置 layout 才生效)                                 | slot             | -                                          |
-| isKeyup                                | 单元格编辑是否开启键盘事件                                                          | Boolean          | false                                      |
-| isShowFooterBtn                        | 是否显示保存按钮                                                                    | Boolean          | false                                      |
-| title                                  | 表格左上标题                                                                        | String /slot     | -                                          |
-| tableTitle                             | 表格左上标题（为解决顶层容器会出现原生的 title 属性）同时存在优先展示插槽           | String /slot     | -                                          |
-| isShowPagination                       | 是否显示分页(默认显示分页)                                                          | Boolean          | true                                       |
-| isPaginationCumulative                 | 序列号显示是否分页累加                                                              | Boolean          | false                                      |
-| isCopy                                 | 是否允许双击单元格复制                                                              | Boolean          | false                                      |
-| defaultRadioCol                        | 设置默认选中项（单选）defaultRadioCol 值必须大于 0！                                | Number           | -                                          |
-| rowClickRadio                          | 是否开启点击整行选中单选框                                                          | Boolean          | true                                       |
-| columnSetting                          | 是否显示设置（隐藏/显示列）                                                         | Boolean          | false                                      |
-| name                                   | 开启列拖拽，缓存唯一性标识(如果没有设置 name 取 title 或 tableTitle)                | String           | -                                          |
-| isRowSort                              | 是否开启行拖拽(`row-key` 需要设置)                                                  | Boolean          | false                                      |
-| isTree                                 | 是否开启 Tree-table 样式                                                            | Boolean          | false                                      |
-| columnSetBind                          | 列设置按钮配置（继承`el-button`所有属性）                                           | Object           | -                                          |
-| ----btnTxt                             | 按钮显示文字                                                                        | String           | '列设置'                                   |
-| ----title                              | 点击按钮下拉显示 title                                                              | String           | '列设置'                                   |
-| ----isShowTitle                        | 点击按钮下拉是否显示 title                                                          | Boolean          | true                                       |
-| ----size                               | el-button 的 size                                                                   | String           | 'default'                                  |
-| ----icon                               | el-button 的 icon                                                                   | String           | 'Setting'                                  |
-| align                                  | table 对齐方式 可选值`left`、`center`、`right`                                      | String           | 'center'                                   |
-| isSlotToolbar                          | TAdaptivePage 组件是否使用了 Toolbar 插槽                                           | Boolean          | false                                      |
-| isSlotTitle                            | TAdaptivePage 组件是否使用了 title 插槽                                             | Boolean          | -                                          |
-| sortable                               | 设置为 'custom',需要监听 Table 的 sort-change 事件                                  | Boolean/string   | -                                          |
-| border<el-tag>1.4.12</el-tag>          | 是否开启边框线                                                                      | Boolean          | false                                      |
-| tableLoading<el-tag>1.4.12</el-tag>    | table loading                                                                       | Boolean          | false                                      |
-| loadingTxt<el-tag>1.4.12</el-tag>      | table loading 文字提示                                                              | string           | 加载中...                                  |
-| useVirtual<el-tag>1.4.13</el-tag>      | table 是否开启虚拟滚动                                                              | Boolean          | false                                      |
-| virtualShowSize<el-tag>1.4.13</el-tag> | 虚拟列表的渲染行数                                                                  | Number           | 30                                         |
+```javascript
+// 配置分页
+  type pageProps= {
+    size?: "" | "default" | "small" | "large"
+    pageSize?: string //默认值 "size"， 和page中当前页数属性映射
+    currentPage?: string// 默认值"page" ，和page中每页显示条目个数属性映射
+    layout?: string
+    pageSizes?: number[]
+    background?: boolean
+  }
 
-### 3、events 其他事件按照 el-table 直接使用（如 sort-change 排序事件）
+  // pageProps 中pageSize和currentPage 无需改动情况
+  const page=reactive({page:1,size:10,total:0})
+    // pageProps 中pageSize和currentPage 需要变动情况
+  const page=reactive({pageIndex:1,pageSize:10,total:0})
+  const pageProps={pageSize:"pageSize",currentPage:"pageIndex"}
 
-| 事件名        | 说明                         | 返回值                                        |
-| :------------ | :--------------------------- | :-------------------------------------------- |
-| page-change   | 当前页码                     | 当前选中的页码                                |
-| save          | 保存按钮                     | 编辑后的所有数据                              |
-| handleEvent   | 单个输入触发事件             | configEdit 中的 event 值和对应输入的 value 值 |
-| radioChange   | 单选选中事件                 | 返回当前选中的整行数据                        |
-| rowSort       | 行拖拽排序后触发事件         | 返回排序后的 table 数据                       |
-| validateError | 单元格编辑保存校验不通过触发 | 返回校验不通过的 prop--label 集合             |
+```
 
-### 4、Methods 方法 继承 el-table 所有方法(Expose)
+### 表格属性
 
-| 事件名             | 说明                                                           | 返回值              |
-| :----------------- | :------------------------------------------------------------- | :------------------ |
-| saveMethod         | 单元格编辑保存方法                                             | callback(tableData) |
-| resetFields        | 对表单进行重置，并移除校验结果（单元格编辑时生效）             | —                   |
-| clearValidate      | 清空校验规则（单元格编辑时生效）                               | -                   |
-| defaultRadioSelect | 单选默认选中--且只能默认选中第一页的数据--传入值必须大于等于 1 | -                   |
-| reSetColumnSet     | 开启 columnSetting，调用此方法 columnSet 显示修改后缓存数据    | -                   |
+| 名称                            | 描述                                                                                                                                                                                                          | 类型                                                                                                                                                                 | 默认值                                                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| data                            | 表格数据                                                                                                                                                                                                      | `any[]`                                                                                                                                                              | []                                                                                                              |
+| height                          | 表格的高度。默认情况下，高度为 `auto`。如果值为数字，则高度以像素为单位测量；如果值为字符串，则该值将分配给元素的 `style.height`，高度受外部样式影响。                                                        | `string` / `number`                                                                                                                                                  | —                                                                                                               |
+| max-height                      | 表格的最大高度。合法值为数字或以 px 为单位的高度。                                                                                                                                                            | `string` / `number`                                                                                                                                                  | —                                                                                                               |
+| stripe                          | 表格是否为条纹表格。                                                                                                                                                                                          | `boolean`                                                                                                                                                            | false                                                                                                           |
+| border                          | 表格是否有垂直边框。                                                                                                                                                                                          | `boolean`                                                                                                                                                            | false                                                                                                           |
+| size                            | 表格的大小。                                                                                                                                                                                                  | `enum`：`'' \| 'large' \| 'default' \| 'small'`                                                                                                                      | —                                                                                                               |
+| fit                             | 列的宽度是否自动适应其容器。                                                                                                                                                                                  | `boolean`                                                                                                                                                            | true                                                                                                            |
+| show-header                     | 表格头部是否可见。                                                                                                                                                                                            | `boolean`                                                                                                                                                            | true                                                                                                            |
+| highlight-current-row           | 当前行是否高亮显示。                                                                                                                                                                                          | `boolean`                                                                                                                                                            | false                                                                                                           |
+| current-row-key                 | 当前行的键，仅作为设置属性。                                                                                                                                                                                  | `string` / `number`                                                                                                                                                  | —                                                                                                               |
+| row-class-name                  | 返回自定义行类名的函数，或为每行分配类名的字符串。                                                                                                                                                            | `Function` `(data: { row: any, rowIndex: number }) => string` / `string`                                                                                             | —                                                                                                               |
+| row-style                       | 返回自定义行样式的函数，或为每行分配自定义样式的对象。                                                                                                                                                        | `Function` `(data: { row: any, rowIndex: number }) => CSSProperties` / `CSSProperties`                                                                               | —                                                                                                               |
+| cell-class-name                 | 返回单元格自定义类名的函数，或为每个单元格分配类名的字符串。                                                                                                                                                  | `Function` `(data: { row: any, column: any, rowIndex: number, columnIndex: number }) => string` / `string`                                                           | —                                                                                                               |
+| cell-style                      | 返回单元格自定义样式的函数，或为每个单元格分配样式的对象。                                                                                                                                                    | `Function` `(data: { row: any, column: any, rowIndex: number, columnIndex: number }) => CSSProperties` / `CSSProperties`                                             | —                                                                                                               |
+| header-row-class-name           | 返回表头行自定义类名的函数，或为每个表头行分配类名的字符串。                                                                                                                                                  | `Function` `(data: { row: any, rowIndex: number }) => string` / `string`                                                                                             | —                                                                                                               |
+| header-row-style                | 返回表头行自定义样式的函数，或为每个表头行分配样式的对象。                                                                                                                                                    | `Function` `(data: { row: any, rowIndex: number }) => CSSProperties` / `CSSProperties`                                                                               | —                                                                                                               |
+| header-cell-class-name          | 返回表头单元格自定义类名的函数，或为每个表头单元格分配类名的字符串。                                                                                                                                          | `Function` `(data: { row: any, column: any, rowIndex: number, columnIndex: number }) => string` / `string`                                                           | —                                                                                                               |
+| header-cell-style               | 返回表头单元格自定义样式的函数，或为每个表头单元格分配样式的对象。                                                                                                                                            | `Function` `(data: { row: any, column: any, rowIndex: number, columnIndex: number }) => CSSProperties` / `CSSProperties`                                             | —                                                                                                               |
+| row-key                         | 行数据的键，用于优化渲染。如果启用了 `reserve-selection` 或显示树形数据，则该属性是必需的。当其类型为字符串时，支持多级访问，例如 `user.info.id`，但不支持 `user.info[0].id`，在这种情况下应使用 `Function`。 | `Function` `(row: any) => string` / `string`                                                                                                                         | —                                                                                                               |
+| empty-text                      | 当数据为空时显示的文本。可以使用 `#empty` 自定义此区域。                                                                                                                                                      | `string`                                                                                                                                                             | No Data                                                                                                         |
+| default-expand-all              | 是否默认展开所有行，仅在表格具有 `column type="expand"` 或包含树形结构数据时有效。                                                                                                                            | `boolean`                                                                                                                                                            | false                                                                                                           |
+| expand-row-keys                 | 通过此属性设置展开行，属性值是展开行的键，在使用此属性之前应先设置 `row-key`。                                                                                                                                | `string[]`                                                                                                                                                           | —                                                                                                               |
+| default-sort                    | 设置默认排序的列和顺序。属性 `prop` 用于设置默认排序列，属性 `order` 用于设置默认排序顺序。                                                                                                                   | `object` `Sort`                                                                                                                                                      | 如果设置了 `prop`，且未设置 `order`，则 `order` 默认为升序。                                                    |
+| tooltip-effect                  | 溢出工具提示的 `effect`。                                                                                                                                                                                     | `enum`：`'dark' \| 'light'`                                                                                                                                          | dark                                                                                                            |
+| tooltip-options ^(2.2.28)       | 溢出工具提示的选项，[参见以下工具提示组件](tooltip.html#attributes)。                                                                                                                                         | `object` `Pick<ElTooltipProps, 'effect' \| 'enterable' \| 'hideAfter' \| 'offset' \| 'placement' \| 'popperClass' \| 'popperOptions' \| 'showAfter' \| 'showArrow'>` | `[{ enterable: true, placement: 'top', showArrow: true, hideAfter: 200, popperOptions: { strategy: 'fixed' }}]` |
+| append-filter-panel-to ^(2.8.4) | 过滤面板附加到哪个元素。                                                                                                                                                                                      | `string`                                                                                                                                                             | —                                                                                                               |
+| show-summary                    | 是否显示汇总行。                                                                                                                                                                                              | `boolean`                                                                                                                                                            | false                                                                                                           |
+| sum-text                        | 汇总行第一列显示的文本。                                                                                                                                                                                      | `string`                                                                                                                                                             | Sum                                                                                                             |
+| summary-method                  | 自定义汇总方法。                                                                                                                                                                                              | `Function` `(data: { columns: any[], data: any[] }) => (VNode \| string)[]`                                                                                          | —                                                                                                               |
+| span-method                     | 返回行合并和列合并的函数。                                                                                                                                                                                    | `Function` `(data: { row: any, column: any, rowIndex: number, columnIndex: number }) => number[] \| { rowspan: number, colspan: number } \| void`                    | —                                                                                                               |
+| select-on-indeterminate         | 控制多选表格中主复选框的行为，当仅选择了一些行（但不是全部）时。如果为真，则将选择所有行，否则取消选择。                                                                                                      | `boolean`                                                                                                                                                            | true                                                                                                            |
+| indent                          | 树形数据的水平缩进。                                                                                                                                                                                          | `number`                                                                                                                                                             | 16                                                                                                              |
+| lazy                            | 是否延迟加载数据。                                                                                                                                                                                            | `boolean`                                                                                                                                                            | false                                                                                                           |
+| load                            | 加载子行数据的方法，仅在 `lazy` 为真时生效。                                                                                                                                                                  | `Function` `(row: any, treeNode: TreeNode, resolve: (data: any[]) => void) => void`                                                                                  | —                                                                                                               |
+| tree-props                      | 渲染嵌套数据的配置。                                                                                                                                                                                          | `object` `{ hasChildren?: string, children?: string, checkStrictly?: boolean }`                                                                                      | `{ hasChildren: 'hasChildren', children: 'children', checkStrictly: false }`                                    |
+| table-layout                    | 设置用于布局表格单元格、行和列的算法。                                                                                                                                                                        | `enum`：`'fixed' \| 'auto'`                                                                                                                                          | fixed                                                                                                           |
+| scrollbar-always-on             | 是否始终显示滚动条。                                                                                                                                                                                          | `boolean`                                                                                                                                                            | false                                                                                                           |
+| show-overflow-tooltip           | 是否隐藏多余内容并在单元格悬停时通过工具提示显示。影响所有表格列，参考表格 [tooltip-options](#table-attributes)。                                                                                             | `boolean` / `object`                                                                                                                                                 | —                                                                                                               |
+| flexible ^(2.2.1)               | 确保主轴最小大小不受内容影响。                                                                                                                                                                                | `boolean`                                                                                                                                                            | false                                                                                                           |
+| scrollbar-tabindex ^(2.8.3)     | 主体滚动条的包装容器的 tabindex。                                                                                                                                                                             | `string` / `number`                                                                                                                                                  | —                                                                                                               |
+
+### columns 元素 继承 el-table-column 属性
+
+| 名称                       | 描述                                                                                                                                                   | 类型                                                                                                                                                                         | 默认值                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| type                       | 列的类型。如果设置为 `selection`，则该列将显示复选框。如果设置为 `index`，则该列将显示行索引（从 1 开始）。如果设置为 `expand`，则该列将显示展开图标。 | `enum`：`'default' \| 'selection' \| 'index' \| 'expand'`                                                                                                                    | default                           |
+| index                      | 自定义每行的索引，仅在 `type=index` 的列上有效。                                                                                                       | `number` / `Function` `(index: number) => number`                                                                                                                            | —                                 |
+| label                      | 列的标签。                                                                                                                                             | `string`                                                                                                                                                                     | —                                 |
+| column-key                 | 列的键。如果需要使用 `filter-change` 事件，则需要此属性以标识正在过滤的列。                                                                            | `string`                                                                                                                                                                     | —                                 |
+| prop                       | 字段名称。也可以使用其别名 `property`。                                                                                                                | `string`                                                                                                                                                                     | —                                 |
+| width                      | 列的宽度。                                                                                                                                             | `string` / `number`                                                                                                                                                          | ''                                |
+| min-width                  | 列的最小宽度。具有 `width` 的列宽度是固定的，而具有 `min-width` 的列宽度按比例分配。                                                                   | `string` / `number`                                                                                                                                                          | ''                                |
+| fixed                      | 列是否固定在左侧或右侧。如果为 `true`，则固定在左侧。                                                                                                  | `enum`：`'left' \| 'right'` / `boolean`                                                                                                                                      | false                             |
+| sortable                   | 列是否可以排序。远程排序可以通过将此属性设置为 `'custom'` 并监听 `sort-change` 事件来实现。                                                            | `boolean` / `string`                                                                                                                                                         | false                             |
+| sort-method                | 排序方法，当 `sortable` 为 `true` 时有效。应返回一个数字，类似于 `Array.sort`。                                                                        | `Function` `<T = any>(a: T, b: T) => number`                                                                                                                                 | —                                 |
+| sort-by                    | 指定按哪个属性排序，当 `sortable` 为 `true` 且 `sort-method` 未定义时有效。如果设置为数组，则在前一个属性相等时，按下一个属性顺序排序。                | `Function` `(row: any, index: number) => string` / `string` / `object` `string[]`                                                                                            | —                                 |
+| sort-orders                | 排序策略的顺序，当 `sortable` 为 `true` 时有效。接受一个数组，当用户单击表头时，列按数组中的元素顺序排序。                                             | `object` `('ascending' \| 'descending' \| null)[]`                                                                                                                           | ['ascending', 'descending', null] |
+| resizable                  | 列宽是否可以调整，适用于 `el-table` 的 `border` 为 `true` 时。                                                                                         | `boolean`                                                                                                                                                                    | true                              |
+| formatter                  | 格式化单元格内容的函数。                                                                                                                               | `function` `(row: any, column: any, cellValue: any, index: number) => VNode \| string`                                                                                       | —                                 |
+| show-overflow-tooltip      | 是否隐藏多余内容并在单元格悬停时通过工具提示显示。                                                                                                     | `boolean` / `object`                                                                                                                                                         | undefined                         |
+| align                      | 对齐方式。                                                                                                                                             | `enum`：`'left' \| 'center' \| 'right'`                                                                                                                                      | left                              |
+| header-align               | 表头的对齐方式。如果省略，将应用上述 `align` 属性的值。                                                                                                | `enum`：`'left' \| 'center' \| 'right'`                                                                                                                                      | left                              |
+| class-name                 | 列中单元格的类名。                                                                                                                                     | `string`                                                                                                                                                                     | —                                 |
+| label-class-name           | 此列标签的类名。                                                                                                                                       | `string`                                                                                                                                                                     | —                                 |
+| selectable                 | 确定某一行是否可以被选中的函数，仅在 `type` 为 `selection` 时有效。                                                                                    | `Function` `(row: any, index: number) => boolean`                                                                                                                            | —                                 |
+| reserve-selection          | 数据刷新后是否保留选择，仅在 `type` 为 `selection` 时有效。注意需要 `row-key` 才能工作。                                                               | `boolean`                                                                                                                                                                    | false                             |
+| filters                    | 数据过滤选项的数组。该数组中每个元素都需要 `text` 和 `value`。                                                                                         | `object` `Array<{text: string, value: string}>`                                                                                                                              | —                                 |
+| filter-placement           | 过滤下拉菜单的位置。                                                                                                                                   | `enum`：`'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | —                                 |
+| filter-class-name ^(2.5.0) | 过滤下拉菜单的类名。                                                                                                                                   | `string`                                                                                                                                                                     | —                                 |
+| filter-multiple            | 数据过滤是否支持多个选项。                                                                                                                             | `boolean`                                                                                                                                                                    | true                              |
+| filter-method              | 数据过滤方法。如果 `filter-multiple` 为启用状态，此方法将在每行上多次调用，如果其中一个调用返回 `true`，则该行将显示。                                 | `function` `(value: any, row: any, column: any) => void`                                                                                                                     | —                                 |
+| filtered-value             | 选定数据的过滤值，当表头使用 `render-header` 渲染时可能会有用。                                                                                        | `object` `string[]`                                                                                                                                                          | —                                 |
+
+### Methods 方法 继承 el-table 所有方法(Expose)
+
+| 事件名   | 说明               | 返回值        |
+| :------- | :----------------- | :------------ | --- |
+| editSave | 单元格编辑保存方法 | callback(row) |     |
 
 ### 5、Slots 插槽
 
-| 插槽名     | 说明                                                | 参数  |
-| :--------- | :-------------------------------------------------- | :---- |
-| title      | EPTable 左侧 Title                                  | -     |
-| titleTip   | EPTable 头部 tip                                    | -     |
-| toolbar    | EPTable 右侧 toolbar                                | -     |
-| expand     | table.firstColumn.type：`expand` 展开行插槽         | scope |
-| -          | el-table-column 某列自定义插槽（slotName 命名）     | scope |
-| -          | el-table-column 单元格编辑插槽（editSlotName 命名） | scope |
-| -          | el-table-column 表头合并插槽（slotNameMerge 命名）  | scope |
-| -          | 操作列前一列自定义默认内容插槽                      | -     |
-| footer     | 底部操作区（默认隐藏，使用插槽展示“保存”按钮）      | -     |
-| pagination | 分页器自定义内容 设置文案(table 设置 layout 才生效) | -     |
+| 插槽名 | 说明                                                | 参数  |
+| :----- | :-------------------------------------------------- | :---- |
+| btn    | EPTable 左侧 btn 插槽                               | -     |
+| input  | EPTable 右侧 input 插槽                             | -     |
+| expand | table.firstColumn.type：`expand` 展开行插槽         | scope |
+| -      | el-table-column 某列自定义插槽（slotName 命名）     | scope |
+| -      | el-table-column 单元格编辑插槽（editSlotName 命名） | scope |

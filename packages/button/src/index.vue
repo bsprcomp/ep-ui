@@ -1,7 +1,7 @@
 <template>
   <!-- 按钮提示 -->
   <el-tooltip v-if="tip" :content="tip" v-bind="{ placement: 'top', ...tipProps }">
-    <el-button :loading="loading" v-bind="$attrs" class="ep-button-tip" @click="handleClick">
+    <el-button :loading="loading" v-bind="$attrs" class="e-p-button-tip" @click="handleClick">
       <slot> {{ value }}</slot>
     </el-button>
   </el-tooltip>
@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts" name="EPButton">
+import { ElTooltip, ElButton } from "element-plus"
+
 const loading = ref(false)
 const timer = ref()
 import { onUnmounted, ref } from "vue"
@@ -69,7 +71,7 @@ onUnmounted(() => {
 })
 </script>
 <style lang="scss" scoped>
-.ep-button-tip {
+.e-p-button-tip {
   padding: 0;
   height: auto;
 }

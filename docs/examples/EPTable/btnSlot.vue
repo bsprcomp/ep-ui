@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 const border = ref(false)
-const data = ref<any>([])
+const data = ref<any[]>([])
 const add = () => {
   alert("新增")
 }
