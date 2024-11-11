@@ -1,7 +1,7 @@
 <template>
   <component
-    :is="!useVirtual ? 'el-select' : 'el-select-v2'"
-    popper-class="ep-select"
+    :is="!useVirtual ? ElSelect : ElSelectV2"
+    popper-class="e-p-select"
     ref="selectRef"
     v-model="modelValue"
     :options="!useVirtual ? null : options"
@@ -41,17 +41,18 @@
 </template>
 
 <script setup lang="ts" name="EPSelect">
-import { computed, useSlots } from "vue"
+import { computed, ref, useSlots } from "vue"
+import { ElSelect, ElCheckbox, ElOption, ElSelectV2 } from "element-plus"
 type Props = {
-  multiple: boolean // 是否多选
-  isShowSelectAllBtn: boolean // 是否全选
-  width: string // 选择框宽度
-  filterable: boolean //是否开启搜索过滤
-  returnObject: boolean // 是否返回对象
-  selectProps: Record<string, any> // 选项映射
+  multiple?: boolean // 是否多选
+  isShowSelectAllBtn?: boolean // 是否全选
+  width?: string // 选择框宽度
+  filterable?: boolean //是否开启搜索过滤
+  returnObject?: boolean // 是否返回对象
+  selectProps?: Record<string, any> // 选项映射
   options: Record<string, any>[] | [] // 下拉框组件数据
-  useVirtual: boolean // 是否开启虚拟列表
-  formatterLabel: Function // 是否格式化label
+  useVirtual?: boolean // 是否开启虚拟列表
+  formatterLabel?: Function // 是否格式化label
 }
 const props = withDefaults(defineProps<Props>(), {
   multiple: false,
@@ -66,7 +67,7 @@ const props = withDefaults(defineProps<Props>(), {
   returnObject: false
 })
 const modelValue = defineModel<String | Number | string[] | Object>()
-const selectRef = defineModel<any>("ref")
+const selectRef = ref<any>()
 // 获取插槽
 const slots = useSlots()
 // 抛出事件
@@ -101,7 +102,7 @@ const selectAll = val => {
 }
 </script>
 <style lang="scss" scoped>
-.ep-select {
+.e-p-select {
   .el-select-dropdown {
     .all-checkbox {
       margin-left: 20px;

@@ -16,6 +16,7 @@
 
 <script setup lang="ts" name="EpInput">
 import { defineModel, defineEmits, computed } from "vue"
+import { ElInput } from "element-plus"
 type Props = {
   placeholder?: string
   width?: string

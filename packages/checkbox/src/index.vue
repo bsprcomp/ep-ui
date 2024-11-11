@@ -19,6 +19,7 @@
 
 <script setup lang="ts" name="EPCheckbox">
 import { computed, ref } from "vue"
+import { ElCheckboxGroup, ElCheckbox, ElCheckboxButton } from "element-plus"
 import type { OptionsProps, CheckboxItem } from "./checkbox"
 type Optional<T> = {
   [k in keyof T]?: T[k]
@@ -35,10 +36,10 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const checkType = computed(() => {
   const obj = {
-    check: "el-checkbox",
-    button: "el-checkbox-button"
+    check: ElCheckbox,
+    button: ElCheckboxButton
   }
-  return obj[props.type] ?? "el-checkbox"
+  return obj[props.type] ?? ElCheckbox
 })
 const newOptionsProps = ref<OptionsProps>({
   ...{

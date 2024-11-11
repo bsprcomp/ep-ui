@@ -1,12 +1,12 @@
 {
-  "name": "@bscomp/ep-ui",
+  "name": "@bscomp/ep-ui2",
   "version": "0.0.1",
   "description": "Vue3 中基于Element-plus二次封装基础组件文档",
   "author": "bishang",
   "license": "MIT",
   "private": false,
-  "main": "lib/ep-ui.cjs",
-  "module": "lib/ep-ui.cjs",
+  "main": "lib/ep-ui.umd.cjs",
+  "module": "lib/ep-ui.umd.cjs",
   "types": "lib/index.d.ts",
   "type": "module",
   "files": [
@@ -76,6 +76,10 @@
     "vue-router": "^4.1.5",
     "vue-tsc": "^0.40.4",
     "vuedraggable": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bsprcomp/ep-ui.git"
   },
   "keywords": [
     "element-ui",

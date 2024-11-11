@@ -24,7 +24,7 @@ const pageProps = {
   pageSizes: [15, 50, 100],
   background: false
 }
-const data = ref<any>([])
+const data = ref<any[]>([])
 // 模拟接口数据
 const DATA = Array.from({ length: 100 }).map((_, index) => ({
   id: index,

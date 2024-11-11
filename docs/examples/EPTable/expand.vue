@@ -1,27 +1,31 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" />
+    <EPTable :is-show-menu="true" :data="data" :columns="columns">
+      <template v-slot:expand="{ scope: { row } }">
+        <div style="margin-left: 60px; background: #e3e3e3; padding: 16px">
+          <p>姓名：{{ row.name }}</p>
+          <p>年龄：{{ row.age }}</p>
+          <p>身高{{ row.height }}</p>
+        </div>
+      </template>
+    </EPTable>
   </div>
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 import EPTable from "../../../packages/table/index"
 import { onMounted, ref } from "vue"
 const data = ref<any[]>([])
 const columns = ref<any[]>([
-  {
-    prop: "name",
-    label: "姓名",
-    minWidth: "100"
-  },
+  { type: "expand" },
+  { prop: "name", label: "姓名", minWidth: "100" },
   { prop: "age", label: "年龄", minWidth: "180" },
   {
     prop: "operation",
     label: "操作",
     width: 160,
     operation: [
-      // 继承EPButton 所有属性 默认link为true
       {
         label: "编辑",
         func: (row, scope) => {
@@ -31,7 +35,6 @@ const columns = ref<any[]>([
       },
       {
         label: "删除",
-        antiClick: true, // 开启防抖
         func: (row, scope) => {
           alert("删除")
           deleteRow(row, scope)
@@ -50,12 +53,13 @@ onMounted(() => {
   data.value = Array.from({ length: 2 }).map((_, index) => ({
     id: index,
     name: "@bscomp",
+    height: "180px",
     age: 18
   }))
 })
 </script>
 <style scoped>
 .wrapper {
-  height: 200px;
+  height: 400px;
 }
 </style>
