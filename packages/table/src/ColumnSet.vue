@@ -120,7 +120,11 @@ const reSetColumnSet = () => {
 const checkChanged = (checked: any, index: string | number) => {
   state.columnSet[index].hidden = !checked
   //  获取未隐藏col
-  const noHiddenCol = state.columnSet.filter(item => !item.hidden)
+  const noHiddenCol = state.columnSet.filter(
+    item => !item.hidden && item.prop !== "operation" && !item.type
+  )
+  console.log(noHiddenCol, "state.columnSet")
+
   // 未隐藏数量小于2 禁止点击取消选中
   if (noHiddenCol.length < 2) {
     noHiddenCol[0].checkBoxDisabled = true

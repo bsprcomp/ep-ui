@@ -1,5 +1,6 @@
 <template>
   <div class="e-p-table" ref="EPTableBox">
+    <slot name="extra"></slot>
     <div class="header">
       <el-space size="small">
         <slot name="btn"><i></i></slot>
@@ -175,7 +176,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="EPTable" generic="T extends Record<string,any>">
+<script setup lang="ts" name="EPTable">
 import type { TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
 import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
@@ -203,13 +204,13 @@ const check = defineModel<any>("check", {
 const sortParam = defineModel<any>("sortParam", { default: {} })
 const tableInstance = ref<TableInstance>()
 
-interface Props<T> {
+interface Props {
   name?: string
   rowKey?: string
   filterCheckList?: (list: any[]) => any
   isShowMenu?: boolean
   // table所需数据
-  data: T[]
+  data: any[]
   rowClick?: (row: any) => void
   // 表头数据
   columns: {
@@ -254,7 +255,7 @@ interface Props<T> {
   extra?: number
 }
 
-const props = withDefaults(defineProps<Props<T>>(), {
+const props = withDefaults(defineProps<Props>(), {
   rowKey: "id",
   isShowMenu: false,
   pageProps: () => ({}),
@@ -367,7 +368,7 @@ onUpdated(() => {
 })
 
 // 所有列（表头数据）
-const renderColumns = computed<Props<T>["columns"]>(() => {
+const renderColumns = computed<Props["columns"]>(() => {
   if (state.columnSet.length === 0) {
     return props.columns
   }
