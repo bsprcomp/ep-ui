@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="tsx">
-import EPTable from "../../../packages/table/index"
 import { onMounted, ref } from "vue"
 const data = ref<any[]>([])
 const columns = ref<any[]>([

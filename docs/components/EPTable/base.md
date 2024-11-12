@@ -4,6 +4,12 @@
 
 # EPTable 表格
 
+### 完整示例
+
+:::demo
+EPTable/completeExample
+:::
+
 ### 基础用法
 
 :::demo 组件只需简单配置 data 数据源和 columns 就能快速展示列表
@@ -112,7 +118,9 @@ EPTable/expand
 | data                  | 列表数据                                                                                                | `Array`                                       | []     |
 | columns               | 表头信息 示例如下                                                                                       | `Array`                                       | []     |
 | border                | 是否开启边框线                                                                                          | `Boolean`                                     | false  |
-| isShowPagination      | 是否显示分页                                                                                            | `Boolean`                                     | false  |
+| is-show-pagination    | 是否显示分页                                                                                            | `Boolean`                                     | false  |
+| is-show-menu          | 是否显示列菜单，需要配合 name 使用 （菜单可以拖拽排序）                                                 | `Boolean`                                     | false  |
+| name                  | table 唯一名称，项目不能重复，用于 lolocalStorage 缓存 menu                                             | `Boolean`                                     | false  |
 | show-overflow-tooltip | 当内容过长被隐藏时显示 tooltip                                                                          | `Boolean`\/`object(element-plus 2.2.28 支持)` | true   |
 | v-model:page          | page 双向绑定，页面默认应设置`const page = reactive({ size: 10\|20\|50\|100, page: 1, total: 0 })`      | `Object`                                      |        |
 | pageProps             | 继承 el-pagination 所有属性。`注：pageSize 和 currentPage 两参数赋予特殊意义，见下面单独说明 pageProps` |                                               |        |
@@ -123,6 +131,7 @@ EPTable/expand
   type columns= ({
     type?: "index" | "selection" | "expand"
     prop?: string
+    hidden?:boolen//列是否隐藏
     label?: string
     width?: string
     minWidth?: string
@@ -254,8 +263,9 @@ EPTable/expand
 
 | 插槽名 | 说明                                                | 参数  |
 | :----- | :-------------------------------------------------- | :---- |
-| btn    | EPTable 左侧 btn 插槽                               | -     |
-| input  | EPTable 右侧 input 插槽                             | -     |
+| extra  | EPTable 顶部 extra 插槽                             | -     |
+| btn    | EPTable header 行 左侧 btn 插槽                     | -     |
+| input  | EPTable header 行 右侧 input 插槽                   | -     |
 | expand | table.firstColumn.type：`expand` 展开行插槽         | scope |
 | -      | el-table-column 某列自定义插槽（slotName 命名）     | scope |
 | -      | el-table-column 单元格编辑插槽（editSlotName 命名） | scope |

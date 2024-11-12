@@ -52,6 +52,7 @@ const handleClick = () => {
   if (props.antiClick) {
     if (!loading.value) {
       loading.value = true
+      emits("click")
       timer.value = setTimeout(() => {
         loading.value = false
       }, props.time)

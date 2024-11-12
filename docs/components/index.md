@@ -2,21 +2,41 @@
 
 ::: tip 提示
 
-@bscomp/ep-ui 基于 vue3 + ts + Element-plus 再次封装的基础组件
+@bscomp/ep-ui 基于 vue3 (^3.4) + ts + Element-plus 再次封装的基础组件
 
 :::
 
 ### 安装
 
 ```bash:no-line-numbers
-pnpm add @bscomp/ep-ui -S
-&
 npm install @bscomp/ep-ui -S
 ```
 
+> #### 前提条件：必须安装 Element-plus 组件库和注册所有图标
+
 ### 全局使用
 
-> #### 前提条件：使用项目必须全局注册 Element-plus 组件库
+##### ep-ui 全局安装如下即可使用
+
+```js
+// main.ts
+import { createApp } from "vue"
+import App from "./App.vue"
+// element-plus图标
+import * as ElementPlusIconsVue from "@element-plus/icons-vue"
+import EP from "@bscomp/ep-ui"
+import "@bscomp/ep-ui/lib/style.css"
+const app = createApp(App)
+// 注册所有图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
+// 注册ep-ui
+app.use(EP)
+app.mount("#app")
+```
+
+##### 使用该组件库之外的 element-ui 组件，配合 Element-plus 全局安装示例如下
 
 ```js
 // main.ts
@@ -28,7 +48,7 @@ import "element-plus/theme-chalk/dark/css-vars.css"
 import locale from "element-plus/es/locale/lang/zh-cn"
 // element-plus图标
 import * as ElementPlusIconsVue from "@element-plus/icons-vue"
-import TuiPlus from "@bscomp/ep-ui"
+import EP from "@bscomp/ep-ui"
 import "@bscomp/ep-ui/lib/style.css"
 const app = createApp(App)
 // 注册所有图标
@@ -36,12 +56,51 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 // 注册ElementPlus
-app.use(ElementPlus, {
-  locale // 语言设置
-  // size: Cookies.get('size') || 'medium' // 尺寸设置
-})
-app.use(TuiPlus)
+app.use(ElementPlus)
+// 注册ep-ui
+app.use(EP)
 app.mount("#app")
+```
+
+##### ep-ui 支持在 Element-plus 自动导入下使用，Element-plus 组件自动导入示例如下
+
+```js
+// vite.config.ts
+import path from "path"
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import Components from "unplugin-vue-components/vite"
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
+const pathSrc = path.resolve(__dirname, "src")
+export default defineConfig({
+  resolve: {
+    alias: {
+      "~/": `${pathSrc}/`,
+      "@/": `${pathSrc}/`
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "~/styles/element/index.scss" as *;`
+      }
+    }
+  },
+  plugins: [
+    vue(),
+    Components({
+      // allow auto load markdown components under `./src/components/`
+      extensions: ["vue", "md"],
+      // allow auto import and register components used in markdown
+      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
+      resolvers: [
+        ElementPlusResolver({
+          importStyle: "sass"
+        })
+      ]
+    })
+  ]
+})
 ```
 
 ### 按需引入
@@ -51,7 +110,7 @@ app.mount("#app")
 import "@bscomp/ep-ui/lib/style.css"
 // 单个.vue文件引入
 ;<script setup lang="ts">
-  import {(TDetail, TForm)} from "@bscomp/ep-ui"
+  import {EPTable} from "@bscomp/ep-ui"
 </script>
 ```
 
@@ -66,12 +125,6 @@ compilerOptions：{
 }
 
 ```
-
-### 🔨 Vue3 + Vite 项目中安装引入报如下错误的解决方法
-
-> #### 把项目的 vite 版本升级到 4+
-
-<img src="../public/img/error.png">
 
 ### docs 文档结构目录
 
