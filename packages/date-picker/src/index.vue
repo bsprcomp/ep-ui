@@ -14,7 +14,6 @@
 </template>
 <script setup lang="ts" name="EPDatePicker">
 import { computed, onMounted, ref, useSlots } from "vue"
-import { ElDatePicker } from "element-plus"
 const slots = useSlots()
 const selectedDate = defineModel<any>()
 const datePicker = ref()

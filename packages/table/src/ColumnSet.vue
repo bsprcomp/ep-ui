@@ -2,7 +2,11 @@
 <template>
   <el-dropdown :trigger="columnBind.trigger" popper-class="column_set">
     <el-button v-if="columnBind.title" v-bind="columnBind">{{ columnBind.title }}</el-button>
-    <el-button v-else v-bind="columnBind"></el-button>
+    <el-button v-else>
+      <el-icon v-if="columnBind.icon">
+        <component :is="columnBind.icon"></component>
+      </el-icon>
+    </el-button>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item>

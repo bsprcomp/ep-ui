@@ -184,7 +184,7 @@
 import type { TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
 import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
-import { ElSpace, ElTable, ElTableColumn, ElButton, ElPagination } from "element-plus"
+// import { ElSpace, ElTable, ElTableColumn, ElButton, ElPagination } from "element-plus"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"

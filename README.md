@@ -15,17 +15,23 @@ npm i @bscomp/ep-ui
 > ### 前提条件：组件库依赖 Element-plus 组件库
 
 ```js
-// 在main.js中按下引入
+// main.js
 import { createApp } from "vue"
 import App from "./App.vue"
 import ElementPlus from "element-plus"
 import "element-plus/dist/index.css"
 import "element-plus/theme-chalk/dark/css-vars.css"
 import locale from "element-plus/es/locale/lang/zh-cn"
+// element-plus图标
+import * as ElementPlusIconsVue from "@element-plus/icons-vue"
 
 import EP from "@bscomp/ep-ui"
 import "@bscomp/ep-ui/lib/style.css"
 const app = createApp(App)
+// 注册所有图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 //全局注册element
 app.use(ElementPlus, {
   locale // 语言设置
@@ -45,15 +51,21 @@ import "@bscomp/ep-ui/lib/style.css"
 </script>
 ```
 
+## ep-ui Volar 组件类型提示
+
+需要在项目 src 文件下的 env.d.ts 中引入
+
+```js
+/// <reference types="@bscomp/ep-ui/lib/components.d.ts" />
+```
+
 ## 安装依赖
 
-> ### 注意: 本地环境版本最好安装 [Node.js 16.x+](https://nodejs.org/en)
+> ### 注意: 本地环境版本最好安装 [Node.js 18.x+](https://nodejs.org/en)
 
 ```shell
 # 安装依赖
 npm install
-# 如果安装依赖失败，可以尝试使用淘宝镜像  --registry=https://registry.npmmirror.com/
 >npm config set registry https://registry.npmmirror.com/ 切换淘宝镜像源
 >npm install
-
 ```

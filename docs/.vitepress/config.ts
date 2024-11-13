@@ -12,7 +12,7 @@ export default defineConfig({
     outline: 3,
     outlineTitle: "页面导航",
     // 可以定义此选项以在导航栏中展示带有图标的社交帐户链接。
-    socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
+    socialLinks: [{ icon: "github", link: "https://github.com/bsprcomp/ep-ui" }],
     search: {
       // 是否开启搜索
       provider: "local"
@@ -50,18 +50,13 @@ export default defineConfig({
         //   items: []
         // }
       ]
-    },
-    footer: {
-      message: "Released under the MIT License.",
-      copyright: "Copyright © 2019-present Evan You"
     }
   },
   markdown: {
     headers: {
       level: [0, 0]
     },
-    // light: #f9fafb, dark: --vp-code-block-bg
-    // theme: { light: "github-light", dark: "github-dark" },
+    theme: { light: "github-light", dark: "github-dark" },
     config: md => mdPlugin(md)
   }
 })
