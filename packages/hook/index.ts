@@ -9,10 +9,8 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
  */
 export function useRemainingHeight(parentNodeRef?: any, extra: number = 0, childnodeRef?: any) {
   const height = ref(0)
-
   const calculateHeight = () => {
-    height.value =
-      parentNodeRef.value.offsetHeight - (childnodeRef?.value?.offsetHeight ?? 0) + extra
+    height.value = parentNodeRef.value.offsetHeight - (childnodeRef?.value?.offsetHeight ?? 0)
   }
   onMounted(() => {
     nextTick(() => {
