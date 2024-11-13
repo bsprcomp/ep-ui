@@ -12,6 +12,7 @@
           <div class="input-content">
             <el-space size="small">
               <slot name="input"></slot>
+              <EPButton icon="Refresh" tip="刷新" @click="emits('getData')" />
               <!--列设置-->
               <column-set
                 v-if="isShowMenu"
@@ -184,7 +185,6 @@
 import type { TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
 import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
-// import { ElSpace, ElTable, ElTableColumn, ElButton, ElPagination } from "element-plus"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"
@@ -213,6 +213,7 @@ interface Props {
   rowKey?: string
   filterCheckList?: (list: any[]) => any
   isShowMenu?: boolean
+  refreshTitle?: string
   // table所需数据
   data: any[]
   rowClick?: (row: any) => void
@@ -260,6 +261,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  refreshTitle: "刷新",
   rowKey: "id",
   isShowMenu: false,
   pageProps: () => ({}),

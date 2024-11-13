@@ -84,6 +84,7 @@ const deleteRow = (row, scope) => {
 }
 // page变化回调
 const getData = () => {
+  console.log("getData")
   data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
   page.total = 20
 }

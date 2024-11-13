@@ -2,7 +2,6 @@
   <!-- 按钮提示 -->
   <el-tooltip v-if="tip" :content="tip" v-bind="{ placement: 'top', ...tipProps }">
     <el-button :loading="loading" v-bind="$attrs" class="e-p-button-tip" @click="handleClick">
-      <slot> {{ value }}</slot>
     </el-button>
   </el-tooltip>
   <!-- 无提示 -->
@@ -71,9 +70,3 @@ onUnmounted(() => {
   clearTimeout(timer.value)
 })
 </script>
-<style lang="scss" scoped>
-.e-p-button-tip {
-  padding: 0;
-  height: auto;
-}
-</style>
