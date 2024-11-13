@@ -1,26 +1,31 @@
 <template>
   <div class="e-p-table" ref="EPTableBox">
-    <slot name="extra"></slot>
-    <div class="header">
-      <el-space size="small">
-        <slot name="btn"><i></i></slot>
-      </el-space>
-      <div class="input-content">
-        <el-space size="small">
-          <slot name="input"></slot>
-          <!--列设置-->
-          <column-set
-            v-if="isShowMenu"
-            :name="name"
-            :menuConfig="menuConfig"
-            :columns="renderColumns"
-            ref="columnSetRef"
-            @columnSetting="v => (state.columnSet = v)"
-          />
-        </el-space>
-      </div>
-    </div>
     <div class="table-content" ref="tableContent">
+      <div ref="extraRef" class="header-wapper">
+        <div class="extra" v-if="slots.extra">
+          <slot name="extra"></slot>
+        </div>
+        <div class="header" v-if="slots.btn || slots.input || isShowMenu">
+          <el-space size="small">
+            <slot name="btn"><i></i></slot>
+          </el-space>
+          <div class="input-content">
+            <el-space size="small">
+              <slot name="input"></slot>
+              <EPButton icon="Refresh" tip="刷新" @click="emits('getData')" />
+              <!--列设置-->
+              <column-set
+                v-if="isShowMenu"
+                :name="name"
+                :menuConfig="menuConfig"
+                :columns="renderColumns"
+                ref="columnSetRef"
+                @columnSetting="v => (state.columnSet = v)"
+              />
+            </el-space>
+          </div>
+        </div>
+      </div>
       <el-table
         :max-height="height"
         ref="tableInstance"
@@ -180,7 +185,6 @@
 import type { TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
 import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
-import { ElSpace, ElTable, ElTableColumn, ElButton, ElPagination } from "element-plus"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"
@@ -209,6 +213,7 @@ interface Props {
   rowKey?: string
   filterCheckList?: (list: any[]) => any
   isShowMenu?: boolean
+  refreshTitle?: string
   // table所需数据
   data: any[]
   rowClick?: (row: any) => void
@@ -256,6 +261,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  refreshTitle: "刷新",
   rowKey: "id",
   isShowMenu: false,
   pageProps: () => ({}),
@@ -273,8 +279,9 @@ const {
 const route = useRoute()
 const router = useRouter()
 const tableContent = ref()
+const extraRef = ref()
 //  剩余高度计算
-const { height } = useRemainingHeight(tableContent, props.extra)
+const { height } = useRemainingHeight(tableContent, props.extra, extraRef)
 
 // 初始化数据
 let state = reactive<any>({
@@ -391,16 +398,35 @@ const reSetColumnSet = () => {
 defineExpose({ tableInstance })
 </script>
 <style lang="scss" scoped>
+div {
+  box-sizing: border-box;
+}
 .e-p-table {
+  box-sizing: border-box;
   height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  overflow: hidden;
   .table-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-sizing: border-box;
+    .header-wapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .extra {
+      padding-bottom: 16px;
+    }
+    .header {
+      padding-bottom: 16px;
+    }
   }
   .el-pagination-com {
+    padding-top: 16px;
     display: flex;
     justify-content: flex-end;
     align-items: center;

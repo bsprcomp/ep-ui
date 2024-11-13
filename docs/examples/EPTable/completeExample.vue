@@ -35,7 +35,7 @@ import { onMounted, reactive, ref } from "vue"
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])
 // 模拟数据
-const DATA = Array.from({ length: 100 }).map((_, index) => ({
+const DATA = Array.from({ length: 20 }).map((_, index) => ({
   id: index,
   name: "@bscomp_" + index,
   age: 1 + index,
@@ -84,6 +84,7 @@ const deleteRow = (row, scope) => {
 }
 // page变化回调
 const getData = () => {
+  console.log("getData")
   data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
   page.total = 20
 }
@@ -94,6 +95,7 @@ onMounted(() => {
 <style scoped>
 .wrapper {
   height: 400px;
+  overflow: hidden;
   ::v-deep(.el-table__header) {
     --el-table-header-bg-color: #f2f6fc;
   }
