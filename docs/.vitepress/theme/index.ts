@@ -13,12 +13,6 @@ import { VPDemo } from "../vitepress"
 // 基于element-plus二次封装基础组件
 import EpComponents from "../../../packages"
 import "../../public/css/index.css"
-import { createRouter, createWebHashHistory } from "vue-router"
-// 案例测试使用
-const router = createRouter({
-  history: createWebHashHistory(),
-  routes: []
-})
 
 export default {
   ...DefaultTheme,
@@ -35,7 +29,6 @@ export default {
     // 全局注册基础组件
     ctx.app.use(EpComponents)
     // 提供EPTable 测试链接使用
-    ctx.app.use(router)
     ctx.app.component("Demo", VPDemo)
     ctx.app.component("TVHtml", TVHtml)
     ctx.app.component("TIcon", TIcon)
