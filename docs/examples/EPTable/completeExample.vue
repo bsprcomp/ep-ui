@@ -96,8 +96,5 @@ onMounted(() => {
 .wrapper {
   height: 400px;
   overflow: hidden;
-  ::v-deep(.el-table__header) {
-    --el-table-header-bg-color: #f2f6fc;
-  }
 }
 </style>
