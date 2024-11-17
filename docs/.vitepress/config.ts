@@ -31,7 +31,7 @@ export default defineConfig({
     sidebar: {
       "/components": [
         {
-          text: "组件",
+          text: "Basic 基础组件",
           items: [
             {
               text: "Input 输入框",
@@ -41,14 +41,16 @@ export default defineConfig({
             { text: "Checkbox 多选框", link: "/components/EPCheckbox/base.md" },
             { text: "Button 按钮", link: "/components/EPButton/base.md" },
             { text: "Radio 组件", link: "/components/EPRadio/base.md" },
-            { text: "DatePicker 日期选择器", link: "/components/EPDatePicker/base.md" },
-            { text: "table组件", link: "/components/EPTable/base.md" }
+            { text: "DatePicker 日期选择器", link: "/components/EPDatePicker/base.md" }
+          ]
+        },
+        {
+          text: "Complex 复杂组件",
+          items: [
+            { text: "Table 组件", link: "/components/EPTable/base.md" },
+            { text: "Dynamic Form 动态表单(^0.0.8)", link: "/components/EPForm/base.md" }
           ]
         }
-        // {
-        //   text: "复杂组件",
-        //   items: []
-        // }
       ]
     }
   },

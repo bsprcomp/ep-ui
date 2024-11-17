@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <EPSelect v-model="selectValue" :options="options" @change="change" width="50%" />
+    <EPSelect v-model="selectValue" :options="options" @change="change" width="200px" />
   </div>
 </template>
 <script setup lang="ts" name="BaseEPSelect">

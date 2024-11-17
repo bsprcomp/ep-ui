@@ -4,7 +4,7 @@
       v-model="selectedDate"
       :shortcuts="shortcuts"
       ref="datePicker"
-      v-bind="{ type, valueFormat, format, ...$attrs }"
+      v-bind="{ type, valueFormat: defaultValueFormat, format: defaultFormat, ...$attrs }"
     >
       <template v-for="(_, name) in slots" v-slot:[name]="data">
         <slot :name="name" v-bind="data"></slot>
@@ -20,10 +20,21 @@ const datePicker = ref()
 const emit = defineEmits(["getRef"])
 
 type Props = {
-  format?: string
-  valueFormat?: string
   shortcutsName?:
-    | ("本日" | "本月" | "本年" | "近一日" | "近一周" | "近一月" | "近三月" | "近半年" | "近一年")[]
+    | (
+        | "今天"
+        | "昨天"
+        | "一周前"
+        | "本日"
+        | "本月"
+        | "本年"
+        | "近一日"
+        | "近一周"
+        | "近一月"
+        | "近三月"
+        | "近半年"
+        | "近一年"
+      )[]
     | string[]
 
   type?:
@@ -39,12 +50,35 @@ type Props = {
     | "daterange"
     | "monthrange"
     | "yearrange"
+  [x: string]: any
 }
 const props = withDefaults(defineProps<Props>(), {
   format: "YYYY-MM-DD",
-  valueFormat: "YYYY-MM-DD HH:mm:ss",
+  valueFormat: "YYYY-MM-DD",
   shortcutsName: () => []
 })
+const defaultFormat = ref()
+const defaultValueFormat = ref()
+
+const format = () => {
+  switch (props.type) {
+    case "date":
+      defaultValueFormat.value = defaultFormat.value = "YYYY-MM-DD"
+      break
+    case "daterange":
+      defaultValueFormat.value = defaultFormat.value = "YYYY-MM-DD"
+      break
+    case "datetime":
+      defaultValueFormat.value = defaultFormat.value = "YYYY-MM-DD HH:mm:ss"
+      break
+    case "datetimerange":
+      defaultValueFormat.value = defaultFormat.value = "YYYY-MM-DD HH:mm:ss"
+      break
+    default:
+      break
+  }
+}
+
 const subtractDays = (date: Date, days: number) => {
   const newDate = new Date(date)
   newDate.setDate(newDate.getDate() - days)
@@ -151,6 +185,7 @@ const shortcuts = computed(() => {
 })
 onMounted(() => {
   emit("getRef", datePicker.value)
+  format()
 })
 </script>
 
