@@ -20,8 +20,8 @@
   </div>
 </template>
 <script setup lang="tsx">
-// import { tools } from "../../../packages/index"
-import { tools } from "@bscomp/ep-ui" //在实际项目中使用
+import { tools } from "../../../packages/index"
+// import { tools } from "@bscomp/ep-ui" //在实际项目中使用
 import { computed, ref } from "vue"
 const expand = ref(false)
 // EPForm 组件中el-form实例
