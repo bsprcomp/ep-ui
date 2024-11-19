@@ -48,7 +48,8 @@ export default defineConfig({
           text: "Complex 复杂组件",
           items: [
             { text: "Table 组件", link: "/components/EPTable/base.md" },
-            { text: "Dynamic Form 动态表单(^0.0.8)", link: "/components/EPForm/base.md" }
+            { text: "Dynamic Form 动态表单(^0.0.8)", link: "/components/EPForm/base.md" },
+            { text: "Form Dialog 表单弹框(^0.0.9)", link: "/components/EPDialog/base.md" }
           ]
         }
       ]

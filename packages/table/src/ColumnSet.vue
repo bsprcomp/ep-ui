@@ -4,15 +4,16 @@
     <el-button v-if="columnBind.title" v-bind="columnBind">{{ columnBind.title }}</el-button>
     <el-button v-else v-bind="columnBind"></el-button>
     <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item>
+      <el-dropdown-menu class="el-dropdown-menu">
+        <el-dropdown-item class="el-dropdown-menu__item">
           <Draggable
-            class="t_table_column_setting_dropdown"
+            class="ep_table_column_setting_dropdown"
             v-model="state.columnSet"
             item-key="prop"
           >
             <template #item="{ element, index }">
               <el-checkbox
+                class="el-checkbox"
                 v-if="element.prop && element.prop !== 'operation'"
                 :checked="!element.hidden"
                 @click.native.stop
@@ -45,7 +46,7 @@ const props = defineProps({
   }
 })
 const columnBind = computed<any>(() => {
-  return { trigger: "hover", size: "default", icon: "Menu", ...props.menuConfig }
+  return { trigger: "click", size: "default", icon: "Menu", ...props.menuConfig }
 })
 // 获取缓存数据
 const getColumnSetCache = () => {
@@ -151,7 +152,7 @@ defineExpose({
       flex-direction: column;
       align-items: flex-start;
 
-      .t_table_column_setting_dropdown {
+      .ep_table_column_setting_dropdown {
         display: flex;
         flex-direction: column;
         max-height: 300px;
@@ -159,7 +160,8 @@ defineExpose({
         gap: 10px;
 
         .el-checkbox {
-          .el-checkbox__input.is-checked + .el-checkbox__label {
+          .el-checkbox__input.is-checked + .el-checkbox__label,
+          .ep-checkbox__input.is-checked + .ep-checkbox__label {
             cursor: move;
             color: var(--el-text-color-primary);
           }

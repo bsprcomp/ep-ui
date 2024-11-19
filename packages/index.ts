@@ -7,6 +7,7 @@ import EPTable from "./table"
 import EPForm from "./form"
 import EPDatePicker from "./date-picker"
 import EPRadio from "./radio"
+import EPDialog from "./form-dialog"
 import * as tools from "./utils"
 // 存储组件列表
 const components: {
@@ -19,7 +20,8 @@ const components: {
   EPForm,
   EPButton,
   EPDatePicker,
-  EPRadio
+  EPRadio,
+  EPDialog
 }
 // 插件声明：声明所有插件
 // 插件注册：在 Vue 项目的入口文件中，通过 ( app.use(插件) ) 进行注册
@@ -38,7 +40,18 @@ if (typeof window !== "undefined" && window.Vue) {
 }
 
 // 按需引入
-export { EPTable, EPForm, EPSelect, EPButton, EPDatePicker, EPRadio, EPCheckbox, EPInput, tools }
+export {
+  EPTable,
+  EPForm,
+  EPSelect,
+  EPButton,
+  EPDatePicker,
+  EPRadio,
+  EPCheckbox,
+  EPInput,
+  EPDialog,
+  tools
+}
 
 export default {
   // 导出的对象必须具有 install，才能被 Vue.use() 方法安装

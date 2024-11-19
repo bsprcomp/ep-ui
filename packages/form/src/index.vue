@@ -1,13 +1,14 @@
 <template>
-  <div class="e-p-form">
+  <div class="e-p-form-wrapper" :class="{ 'inline-flex-form': inline }">
     <el-form
       ref="formRef"
       :model="formModel"
       :rules="newRules"
-      :label-width="labelWidth"
       :label-position="labelPosition"
       v-bind="$attrs"
       :inline="inline"
+      :label-width="newLabelWidth"
+      class="e-p-form"
     >
       <component :is="inline ? 'div' : 'el-row'" :class="{ 'inline-flex': inline }">
         <template v-for="(item, index) in newFormItems">
@@ -80,6 +81,12 @@
           </template>
         </template>
       </template>
+      <EPButton type="primary" link v-if="expand !== undefined" @click="expand = !expand">
+        {{ expand ? "收起" : "展开" }}
+        <el-icon>
+          <component :is="expand ? 'ArrowUp' : 'ArrowDown'" />
+        </el-icon>
+      </EPButton>
     </div>
   </div>
 </template>
@@ -93,8 +100,8 @@ type Props = {
   formItems: Record<string, any>[] | []
   labelPosition?: "left" | "right" | "top"
   labelWidth?: string
-  isShowDefaultPlaceholder: boolean
-  operatorList: any[] | []
+  isShowDefaultPlaceholder?: boolean
+  operatorList?: any[] | []
   valueWidth?: string
   inline?: boolean
   colNum?: number
@@ -105,7 +112,6 @@ const props = withDefaults(defineProps<Props>(), {
   formProps: () => ({}),
   // label对齐方式
   labelPosition: "right",
-  labelWidth: "120px",
   valueWidth: "200px",
   formItems: () => [],
   isShowDefaultPlaceholder: true,
@@ -113,6 +119,13 @@ const props = withDefaults(defineProps<Props>(), {
   inline: false,
   colNum: 1
 })
+const newLabelWidth = computed(() => {
+  if (props.labelWidth) {
+    return props.labelWidth
+  }
+  return props.inline && !props.labelWidth ? undefined : "150px"
+})
+const expand = defineModel("expand")
 
 const { transformFormItems, getRules, getText, mouseover, disabled } = useHooks(props)
 // 获取ref
@@ -137,7 +150,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-.e-p-form {
+.e-p-form-wrapper:not(.inline-flex-form) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -165,5 +178,20 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
   }
+}
+.inline-flex-form {
+  display: flex;
+  .e-p-form {
+    flex: 1;
+  }
+  .inline-flex {
+    & > div {
+      display: inline-block;
+    }
+  }
+  .footer {
+    display: inline;
+  }
+  justify-content: space-between;
 }
 </style>
