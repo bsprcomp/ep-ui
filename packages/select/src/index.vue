@@ -103,10 +103,8 @@ const selectAll = val => {
 </script>
 <style lang="scss" scoped>
 .e-p-select {
-  .el-select-dropdown {
-    .all-checkbox {
-      margin-left: 20px;
-    }
+  .all-checkbox {
+    margin-left: 20px;
   }
 }
 </style>

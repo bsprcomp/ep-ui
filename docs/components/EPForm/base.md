@@ -1,4 +1,4 @@
-# EPForm 动态表单组件
+# EPDialog 动态表单组件
 
 ### 基础用法
 
@@ -16,6 +16,12 @@ EPForm/showText
 
 :::demo 设置 ColNum（被 24 整除，内部 el-row,el-col 布局）
 EPForm/ColNum
+:::
+
+### 行内表单(^0.0.9)
+
+:::demo 设置 inline=true,有操作按钮时，默认左右 space-between 布局
+EPForm/inline
 :::
 
 ### 自定义 label
