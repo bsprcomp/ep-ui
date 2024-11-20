@@ -6,6 +6,7 @@
     />
     <EPTable
       size="small"
+      :is-show-menu="false"
       :data="data"
       :columns="columns"
       v-model:page="page"

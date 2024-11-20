@@ -1,7 +1,7 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" />
+    <EPTable :is-show-pagination="false" :is-show-menu="false" :data="data" :columns="columns" />
   </div>
 </template>
 

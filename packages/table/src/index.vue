@@ -5,14 +5,14 @@
         <div class="extra" v-if="slots.extra">
           <slot name="extra"></slot>
         </div>
-        <div class="header" v-if="slots.btn || slots.input || isShowMenu">
+        <div class="header" v-if="slots.button || slots.input || isShowMenu">
           <el-space size="small">
-            <slot name="btn"><i></i></slot>
+            <slot name="button"><i></i></slot>
           </el-space>
           <div class="input-content">
             <el-space size="small">
               <slot name="input"></slot>
-              <EPButton icon="Refresh" tip="刷新" @click="emits('getData')" />
+              <EPButton v-if="isShowRefresh" icon="Refresh" tip="刷新" @click="emits('getData')" />
               <!--列设置-->
               <column-set
                 v-if="isShowMenu"
@@ -39,21 +39,24 @@
       >
         <!-- 主体内容 -->
         <template v-for="(item, index) in renderColumns">
-          <template v-if="!item.hidden">
+          <template v-if="!item?.hidden">
             <el-table-column
               show-overflow-tooltip
               :key="index + 'i'"
-              :sortable="item.sortable || sortable"
+              :sortable="item?.sortable || sortable"
               :index="index => indexMethod(index, item)"
               v-bind="{ align, ...item, renderHeader: undefined }"
             >
               <!-- 自定义header -->
-              <template #header v-if="item.renderHeader || item.headerSlot || item.headerRequired">
+              <template
+                #header
+                v-if="item?.renderHeader || item?.headerSlot || item?.headerRequired"
+              >
                 <!-- jsx -->
                 <CustomRender
-                  v-if="item.renderHeader"
+                  v-if="item?.renderHeader"
                   :column="item"
-                  :render="item.renderHeader"
+                  :render="item?.renderHeader"
                   :row="undefined"
                   :index="index"
                 ></CustomRender>
@@ -62,20 +65,20 @@
                   <span>{{ item.label }}</span>
                 </div>
                 <!-- 插槽 -->
-                <slot :scope="item" v-if="item.headerSlot" :name="item.headerSlot"></slot>
+                <slot :scope="item" v-if="item?.headerSlot" :name="item.headerSlot"></slot>
               </template>
               <!-- 一般列 -->
               <template
                 v-slot="scope"
-                v-if="!item.type && item.prop !== 'operation' && !item.formatter"
+                v-if="!item?.type && item?.prop !== 'operation' && !item?.formatter"
               >
                 <!-- 可编辑 -->
-                <template v-if="item.inputType && editRowKey == scope.row[rowKey]">
+                <template v-if="item?.inputType && editRowKey == scope.row[rowKey]">
                   <CustomRender
-                    v-if="item.renderEdit"
+                    v-if="item?.renderEdit"
                     v-bind="{ ...item }"
-                    :render="item.renderEdit"
-                    v-model="scope.row[`${item.editKey || item.prop}EditValue`]"
+                    :render="item?.renderEdit"
+                    v-model="scope.row[`${item.editKey || item?.prop}EditValue`]"
                   />
                   <template v-if="item.editSlotName">
                     <slot :name="item.editSlotName" />
@@ -84,40 +87,40 @@
                     v-else
                     v-bind="item"
                     :type="item.inputType"
-                    v-model="scope.row[`${item.editKey || item.prop}EditValue`]"
+                    v-model="scope.row[`${item.editKey || item?.prop}EditValue`]"
                   />
                 </template>
                 <!-- 不可编辑 -->
                 <template v-else>
                   <!-- render渲染 -->
-                  <template v-if="item.render">
-                    <CustomRender :row="scope.row" :render="item.render" :index="scope.$index" />
+                  <template v-if="item?.render">
+                    <CustomRender :row="scope.row" :render="item?.render" :index="scope.$index" />
                   </template>
                   <!-- 自定义插槽 -->
-                  <template v-else-if="item.slotName">
-                    <slot :name="item.slotName" :scope="scope"></slot>
+                  <template v-else-if="item?.slotName">
+                    <slot :name="item?.slotName" :scope="scope"></slot>
                   </template>
                   <!-- 链接 -->
-                  <template v-else-if="item.isLink">
+                  <template v-else-if="item?.isLink">
                     <el-button type="primary" link @click="linkTo(scope.row, item.query, item.path)"
-                      >{{ scope.row[item.prop as any] }}
+                      >{{ scope.row[item?.prop as any] }}
                     </el-button>
                   </template>
                   <div v-else>
-                    <span>{{ scope.row[item.prop as any] }}</span>
+                    <span>{{ scope.row[item?.prop as any] }}</span>
                   </div>
                 </template>
               </template>
               <!-- 展开列 -->
-              <template v-slot="scope" v-if="item.type === 'expand'">
+              <template v-slot="scope" v-if="item?.type === 'expand'">
                 <slot name="expand" :scope="scope"></slot>
                 <!-- render渲染 -->
-                <template v-if="item.render">
-                  <CustomRender :row="scope.row" :render="item.render" :index="scope.$index" />
+                <template v-if="item?.render">
+                  <CustomRender :row="scope.row" :render="item?.render" :index="scope.$index" />
                 </template>
               </template>
               <!-- 操作列 -->
-              <template v-slot="scope" v-if="item.prop == 'operation'">
+              <template v-slot="scope" v-if="item?.prop == 'operation'">
                 <template v-if="editRowKey !== undefined">
                   <template v-if="scope.row[rowKey] == editRowKey">
                     <el-Button link type="primary" @click="handleRowEditSave(scope.row)"
@@ -258,14 +261,17 @@ interface Props {
   }
   menuConfig?: Object
   extra?: number
+  isShowRefresh?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   refreshTitle: "刷新",
   rowKey: "id",
-  isShowMenu: false,
+  isShowMenu: true,
   pageProps: () => ({}),
-  extra: 0
+  extra: 0,
+  isShowPagination: true,
+  isShowRefresh: false
 })
 const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
 const {
@@ -298,7 +304,7 @@ const formRef = ref({})
 // 动态form ref
 const handleRef = (el: any, scope: { $index: number; column: { property: string } }, item) => {
   if (el) {
-    formRef.value[`formRef-${scope.$index}-${item.prop || scope.column.property}`] = el
+    formRef.value[`formRef-${scope.$index}-${item?.prop || scope.column.property}`] = el
   }
 }
 // link类型跳转

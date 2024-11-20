@@ -155,15 +155,14 @@ defineExpose({
       .ep_table_column_setting_dropdown {
         display: flex;
         flex-direction: column;
-        max-height: 300px;
+        max-height: 450px;
         overflow-y: auto;
-        gap: 10px;
+        gap: 12px;
 
         .el-checkbox {
           .el-checkbox__input.is-checked + .el-checkbox__label,
           .ep-checkbox__input.is-checked + .ep-checkbox__label {
             cursor: move;
-            color: var(--el-text-color-primary);
           }
         }
       }

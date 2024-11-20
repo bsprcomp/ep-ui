@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper vp-raw">
     <p>选中数：{{ checkList.length }}</p>
-    <EPTable v-model:check="checkList" :data="data" :columns="columns" />
+    <EPTable :is-show-menu="false" v-model:check="checkList" :data="data" :columns="columns" />
   </div>
 </template>
 
@@ -29,6 +29,8 @@ watch(checkList, () => {
 </script>
 <style scoped>
 .wrapper {
-  height: 270px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
 }
 </style>

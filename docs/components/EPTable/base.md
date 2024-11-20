@@ -256,7 +256,7 @@ EPTable/expand
 | 插槽名 | 说明                                                | 参数  |
 | :----- | :-------------------------------------------------- | :---- |
 | extra  | EPTable 顶部 extra 插槽                             | -     |
-| btn    | EPTable header 行 左侧 btn 插槽                     | -     |
+| button | EPTable header 行 左侧 button 插槽                  | -     |
 | input  | EPTable header 行 右侧 input 插槽                   | -     |
 | expand | table.firstColumn.type：`expand` 展开行插槽         | scope |
 | -      | el-table-column 某列自定义插槽（slotName 命名）     | scope |

@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper vp-raw">
     <EPTable :data="data" :columns="columns">
-      <template #btn>
+      <template #button>
         <EPButton type="primary" value="新 增" @click="add" />
       </template>
     </EPTable>

@@ -10,14 +10,12 @@
       :columns="columns"
       @getData="getData"
       size="small"
-      is-show-pagination
-      is-show-menu
       name="TestTable"
     >
       <!-- 表额外插槽，单独一行，自行处理样式 -->
       <template #extra><span style="font-weight: 700"> 我是EPTable</span> </template>
-      <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
-      <template #btn>
+      <!-- 预留button插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
+      <template #button>
         <EPButton value="新 增" type="primary" antiClick @click="add" />
         <EPButton value="批量删除" @click="batchDelete" />
       </template>
