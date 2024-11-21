@@ -56,6 +56,12 @@ EPForm/CustomOperator
 | btnSlotName   | 操作按钮插槽命名                                                                       | String                                          | -       |
 | operatorList  | 操作按钮 list，见如下表                                                                | Array                                           | -       |
 
+#### 事件
+
+| 名称       | 说明           | 类型       |
+| ---------- | -------------- | ---------- |
+| formChange | 表单值变化监听 | `Function` |
+
 #### operatorList 配置
 
 | 参数      | 说明                           | 类型     | 默认值             |

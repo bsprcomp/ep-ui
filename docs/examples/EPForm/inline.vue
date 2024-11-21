@@ -14,6 +14,7 @@
         v-model:expand="expand"
         v-model="formParams"
         :operatorList="operatorList"
+        @formChange="formChange"
         @getRef="el => (formRef = el)"
       />
     </div>
@@ -77,6 +78,10 @@ const operatorList = [
   },
   { label: "重 置", bind: { type: "default" }, fun: resetFields }
 ]
+
+const formChange = () => {
+  console.log("表单变化")
+}
 </script>
 <style scoped>
 .wrapper {

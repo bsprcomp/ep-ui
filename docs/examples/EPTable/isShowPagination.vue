@@ -12,12 +12,15 @@
       v-model:page="page"
       :isShowPagination="true"
       @getData="getData"
+      :loading="loading"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue"
+import { onMounted, onUnmounted, reactive, ref } from "vue"
+const loading = ref(true)
+const timer = ref()
 // 初始化
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])
@@ -35,11 +38,19 @@ const columns = ref([
 ])
 // page变化回调
 const getData = () => {
-  data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
-  page.total = 20
+  loading.value = true
+
+  timer.value = setTimeout(() => {
+    loading.value = false
+    data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
+    page.total = 20
+  }, 200)
 }
 onMounted(() => {
   getData()
+})
+onUnmounted(() => {
+  clearTimeout(timer.value)
 })
 </script>
 <style lang="scss" scoped>

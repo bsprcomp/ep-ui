@@ -96,7 +96,7 @@
 </template>
 <script setup lang="ts" name="EPForm">
 import CustomRender from "./CustomRender.vue"
-import { computed, ref, onMounted } from "vue"
+import { computed, ref, onMounted, watch } from "vue"
 import useHooks from "./useHooks"
 
 type Props = {
@@ -151,12 +151,21 @@ const newRules = computed(() => getRules())
 // 获取格式化后的formItems
 const newFormItems = computed(() => transformFormItems())
 // 抛出事件
-const emits = defineEmits(["getRef"])
+const emits = defineEmits(["getRef", "formChange"])
 const resetFields = () => formRef.value.resetFields()
 const validate = fun => formRef.value.validate(fun)
 const clearValidate = () => formRef.value.clearValidate()
 // 暴露方法出去
 defineExpose({ resetFields, validate, clearValidate })
+watch(
+  formModel,
+  () => {
+    emits("formChange")
+  },
+  {
+    deep: true
+  }
+)
 onMounted(() => {
   emits("getRef", formRef.value, formRef)
 })

@@ -118,6 +118,7 @@ EPTable/expand
 | data                  | 列表数据                                                                                                | `Array`                                       | []     |
 | columns               | 表头信息 示例如下                                                                                       | `Array`                                       | []     |
 | border                | 是否开启边框线                                                                                          | `Boolean`                                     | false  |
+| loading               | table loading 动画                                                                                      | `Boolean`                                     | false  |
 | is-show-pagination    | 是否显示分页                                                                                            | `Boolean`                                     | false  |
 | is-show-menu          | 是否显示列菜单，需要配合 name 使用 （菜单可以拖拽排序）                                                 | `Boolean`                                     | false  |
 | name                  | table 唯一名称，项目不能重复，用于 lolocalStorage 缓存 menu                                             | `Boolean`                                     | false  |
