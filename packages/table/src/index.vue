@@ -6,9 +6,9 @@
           <slot name="extra"></slot>
         </div>
         <div class="header" v-if="slots.button || slots.input || isShowMenu">
-          <el-space size="small">
+          <div class="btn-wrapper">
             <slot name="button"><i></i></slot>
-          </el-space>
+          </div>
           <div class="input-content">
             <el-space size="small">
               <slot name="input"></slot>
@@ -36,6 +36,7 @@
         :row-key="rowKey"
         @sort-change="sortChange"
         v-bind="$attrs"
+        v-loading="loading"
       >
         <!-- 主体内容 -->
         <template v-for="(item, index) in renderColumns">
@@ -212,6 +213,7 @@ const sortParam = defineModel<any>("sortParam", { default: {} })
 const tableInstance = ref<TableInstance>()
 
 interface Props {
+  loading?: boolean
   name?: string
   rowKey?: string
   filterCheckList?: (list: any[]) => any
@@ -265,6 +267,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  loading: false,
   refreshTitle: "刷新",
   rowKey: "id",
   isShowMenu: true,
@@ -451,6 +454,13 @@ div {
         cursor: pointer;
       }
     }
+  }
+}
+.btn-wrapper {
+  display: flex;
+  gap: 8px;
+  ::v-deep(.el-button + .el-button) {
+    margin-left: 0 !important;
   }
 }
 </style>

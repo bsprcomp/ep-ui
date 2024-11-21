@@ -157,8 +157,6 @@ defineExpose({
         flex-direction: column;
         max-height: 450px;
         overflow-y: auto;
-        gap: 12px;
-
         .el-checkbox {
           .el-checkbox__input.is-checked + .el-checkbox__label,
           .ep-checkbox__input.is-checked + .ep-checkbox__label {
