@@ -17,19 +17,19 @@
       <!-- 预留button插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
       <template #button>
         <EPButton value="新 增" type="primary" antiClick @click="add" />
-        <EPButton value="批量删除" @click="batchDelete" />
+        <!-- <EPButton value="批量删除" @click="batchDelete" /> -->
       </template>
       <!-- 预留input插槽 ，可以放置搜索框等 -->
       <template #input>
-        <!-- antiClick 开启点击loading -->
-        <EPInput placeholder="请输入姓名" />
+        <!-- <EPInput placeholder="请输入姓名" /> -->
+        <EPForm inline :formItems="formItems" />
       </template>
     </EPTable>
   </div>
 </template>
 
 <script setup lang="tsx">
-import { onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])
 // 模拟数据
@@ -66,6 +66,18 @@ const columns = ref<any[]>([
         }
       }
     ]
+  }
+])
+const formItems = computed(() => [
+  {
+    prop: "test_1", //el-form-item属性
+    label: "用户名", //el-form-item label值
+    comp: "EPInput" // 组件类型
+  },
+  {
+    prop: "test_2", //el-form-item属性
+    label: "测试", //el-form-item label值
+    comp: "EPInput" // 组件类型
   }
 ])
 const batchDelete = () => {

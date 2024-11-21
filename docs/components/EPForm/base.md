@@ -20,7 +20,7 @@ EPForm/ColNum
 
 ### 行内表单(^0.0.9)
 
-:::demo 设置 inline=true,有操作按钮时，默认左右 space-between 布局
+:::demo 设置 inline=true,有操作按钮时，默认左右 space-between 布局，调整间距使用 inlineGap(flex 的 gap) 属性，默认"16px 8px"
 EPForm/inline
 :::
 

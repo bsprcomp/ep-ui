@@ -10,7 +10,11 @@
       :label-width="newLabelWidth"
       class="e-p-form"
     >
-      <component :is="inline ? 'div' : 'el-row'" :class="{ 'inline-flex': inline }">
+      <component
+        :is="inline ? 'div' : 'el-row'"
+        :class="{ 'inline-flex': inline }"
+        :style="inlineFlex"
+      >
         <template v-for="(item, index) in newFormItems">
           <component :is="inline ? 'div' : 'el-col'" :span="24 / (item.colNum || colNum)">
             <el-form-item v-if="!item.hidden" :key="index" v-bind="item">
@@ -105,6 +109,7 @@ type Props = {
   valueWidth?: string
   inline?: boolean
   colNum?: number
+  inlineGap?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -117,8 +122,16 @@ const props = withDefaults(defineProps<Props>(), {
   isShowDefaultPlaceholder: true,
   operatorList: () => [],
   inline: false,
-  colNum: 1
+  colNum: 1,
+  inlineGap: "18px 8px"
 })
+const inlineFlex =
+  (props.inline && {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: props.inlineGap || "18px 8px"
+  }) ||
+  {}
 const newLabelWidth = computed(() => {
   if (props.labelWidth) {
     return props.labelWidth
@@ -157,7 +170,7 @@ onMounted(() => {
   height: 100%;
   .inline-flex {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
   }
   .text_show {
     color: var(--el-text-color-primary);
@@ -193,5 +206,8 @@ onMounted(() => {
     display: inline;
   }
   justify-content: space-between;
+}
+.el-form--inline .el-form-item {
+  margin: 0;
 }
 </style>

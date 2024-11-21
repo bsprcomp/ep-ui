@@ -10,19 +10,17 @@
             <slot name="button"><i></i></slot>
           </div>
           <div class="input-content">
-            <el-space size="small">
-              <slot name="input"></slot>
-              <EPButton v-if="isShowRefresh" icon="Refresh" tip="刷新" @click="emits('getData')" />
-              <!--列设置-->
-              <column-set
-                v-if="isShowMenu"
-                :name="name"
-                :menuConfig="menuConfig"
-                :columns="renderColumns"
-                ref="columnSetRef"
-                @columnSetting="v => (state.columnSet = v)"
-              />
-            </el-space>
+            <slot name="input"></slot>
+            <EPButton v-if="isShowRefresh" icon="Refresh" tip="刷新" @click="emits('getData')" />
+            <!--列设置-->
+            <column-set
+              v-if="isShowMenu"
+              :name="name"
+              :menuConfig="menuConfig"
+              :columns="renderColumns"
+              ref="columnSetRef"
+              @columnSetting="v => (state.columnSet = v)"
+            />
           </div>
         </div>
       </div>
@@ -456,7 +454,8 @@ div {
     }
   }
 }
-.btn-wrapper {
+.btn-wrapper,
+.input-content {
   display: flex;
   gap: 8px;
   ::v-deep(.el-button + .el-button) {
