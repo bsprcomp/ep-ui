@@ -10,28 +10,26 @@
       :columns="columns"
       @getData="getData"
       size="small"
-      is-show-pagination
-      is-show-menu
       name="TestTable"
     >
       <!-- 表额外插槽，单独一行，自行处理样式 -->
       <template #extra><span style="font-weight: 700"> 我是EPTable</span> </template>
-      <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
-      <template #btn>
+      <!-- 预留button插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
+      <template #button>
         <EPButton value="新 增" type="primary" antiClick @click="add" />
         <EPButton value="批量删除" @click="batchDelete" />
       </template>
       <!-- 预留input插槽 ，可以放置搜索框等 -->
       <template #input>
-        <!-- antiClick 开启点击loading -->
-        <EPInput placeholder="请输入姓名" />
+        <!-- <EPInput placeholder="请输入姓名" /> -->
+        <EPForm v-model="params" @formChange="getData" inline :formItems="formItems" />
       </template>
     </EPTable>
   </div>
 </template>
 
 <script setup lang="tsx">
-import { onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref } from "vue"
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])
 // 模拟数据
@@ -44,7 +42,7 @@ const DATA = Array.from({ length: 20 }).map((_, index) => ({
 const columns = ref<any[]>([
   {
     prop: "name",
-    label: "姓名"
+    label: "用户名"
   },
   { prop: "age", label: "年龄" },
   { prop: "address", label: "地址" },
@@ -70,6 +68,14 @@ const columns = ref<any[]>([
     ]
   }
 ])
+const formItems = computed(() => [
+  {
+    prop: "name", //el-form-item属性
+    label: "用户名", //el-form-item label值
+    comp: "EPInput" // 组件类型
+  }
+])
+const params = ref({ name: "" })
 const batchDelete = () => {
   console.log("批量删除")
 }
@@ -85,8 +91,9 @@ const deleteRow = (row, scope) => {
 // page变化回调
 const getData = () => {
   console.log("getData")
-  data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
-  page.total = 20
+  const newData = DATA.slice((page.page - 1) * page.size, page.page * page.size)
+  data.value = newData.filter(item => item.name.includes(params.value.name))
+  page.total = data.value.length
 }
 onMounted(() => {
   getData()

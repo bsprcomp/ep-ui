@@ -10,7 +10,11 @@
       :label-width="newLabelWidth"
       class="e-p-form"
     >
-      <component :is="inline ? 'div' : 'el-row'" :class="{ 'inline-flex': inline }">
+      <component
+        :is="inline ? 'div' : 'el-row'"
+        :class="{ 'inline-flex': inline }"
+        :style="inlineFlex"
+      >
         <template v-for="(item, index) in newFormItems">
           <component :is="inline ? 'div' : 'el-col'" :span="24 / (item.colNum || colNum)">
             <el-form-item v-if="!item.hidden" :key="index" v-bind="item">
@@ -92,7 +96,7 @@
 </template>
 <script setup lang="ts" name="EPForm">
 import CustomRender from "./CustomRender.vue"
-import { computed, ref, onMounted } from "vue"
+import { computed, ref, onMounted, watch } from "vue"
 import useHooks from "./useHooks"
 
 type Props = {
@@ -105,6 +109,7 @@ type Props = {
   valueWidth?: string
   inline?: boolean
   colNum?: number
+  inlineGap?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -117,8 +122,16 @@ const props = withDefaults(defineProps<Props>(), {
   isShowDefaultPlaceholder: true,
   operatorList: () => [],
   inline: false,
-  colNum: 1
+  colNum: 1,
+  inlineGap: "18px 8px"
 })
+const inlineFlex =
+  (props.inline && {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: props.inlineGap || "18px 8px"
+  }) ||
+  {}
 const newLabelWidth = computed(() => {
   if (props.labelWidth) {
     return props.labelWidth
@@ -138,12 +151,21 @@ const newRules = computed(() => getRules())
 // 获取格式化后的formItems
 const newFormItems = computed(() => transformFormItems())
 // 抛出事件
-const emits = defineEmits(["getRef"])
+const emits = defineEmits(["getRef", "formChange"])
 const resetFields = () => formRef.value.resetFields()
 const validate = fun => formRef.value.validate(fun)
 const clearValidate = () => formRef.value.clearValidate()
 // 暴露方法出去
 defineExpose({ resetFields, validate, clearValidate })
+watch(
+  formModel,
+  () => {
+    emits("formChange")
+  },
+  {
+    deep: true
+  }
+)
 onMounted(() => {
   emits("getRef", formRef.value, formRef)
 })
@@ -157,7 +179,7 @@ onMounted(() => {
   height: 100%;
   .inline-flex {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
   }
   .text_show {
     color: var(--el-text-color-primary);
@@ -193,5 +215,8 @@ onMounted(() => {
     display: inline;
   }
   justify-content: space-between;
+}
+.el-form--inline .el-form-item {
+  margin: 0;
 }
 </style>

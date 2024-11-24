@@ -1,7 +1,7 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :is-show-menu="true" :data="data" :columns="columns">
+    <EPTable :data="data" :columns="columns">
       <template v-slot:expand="{ scope: { row } }">
         <div style="margin-left: 60px; background: #e3e3e3; padding: 16px">
           <p>姓名：{{ row.name }}</p>

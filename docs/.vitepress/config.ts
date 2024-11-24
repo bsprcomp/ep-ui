@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress"
 import { mdPlugin } from "./config/plugins"
 export default defineConfig({
+  head: [["link", { rel: "icon", href: "/ep-ui/favicon.ico" }]],
   title: "ep-ui基础组件文档",
   description: "基于Element-plus基础组件封装使用",
   lang: "cn-ZH",

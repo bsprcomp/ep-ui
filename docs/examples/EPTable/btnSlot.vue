@@ -8,7 +8,7 @@
       :columns="columns"
       :isShowPagination="false"
     >
-      <template #btn>
+      <template #button>
         <EPButton type="primary" value="新 增" @click="add" />
         <el-switch v-model="border" label="border" inactive-text="开启border" />
       </template>

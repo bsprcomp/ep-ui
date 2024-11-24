@@ -5,25 +5,38 @@
     <el-button v-else v-bind="columnBind"></el-button>
     <template #dropdown>
       <el-dropdown-menu class="el-dropdown-menu">
-        <el-dropdown-item class="el-dropdown-menu__item">
+        <template #default>
           <Draggable
             class="ep_table_column_setting_dropdown"
             v-model="state.columnSet"
             item-key="prop"
           >
             <template #item="{ element, index }">
-              <el-checkbox
-                class="el-checkbox"
-                v-if="element.prop && element.prop !== 'operation'"
-                :checked="!element.hidden"
-                @click.native.stop
-                :disabled="element.checkBoxDisabled"
-                @change="(checked: any) => checkChanged(checked, index)"
-                >{{ element.label }}</el-checkbox
-              >
+              <div class="item">
+                <el-checkbox
+                  class="el-checkbox"
+                  v-if="
+                    !['index', 'selection', 'expand', 'default'].includes(element.type) &&
+                    element.prop !== 'operation' &&
+                    isShow &&
+                    !element.hiddenMenu &&
+                    !element.hiddenAll
+                  "
+                  :checked="!element.hidden"
+                  @click.native.stop
+                  :disabled="element.checkBoxDisabled"
+                  @change="(checked: any) => checkChanged(checked, index)"
+                  >{{ element.label }}</el-checkbox
+                >
+              </div>
+            </template>
+            <template #footer>
+              <slot name="footer">
+                <el-button class="footer" link @click="reSetColumnSet"> 重置 </el-button>
+              </slot>
             </template>
           </Draggable>
-        </el-dropdown-item>
+        </template>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
@@ -31,7 +44,7 @@
 
 <script setup lang="ts" name="columnSet">
 import Draggable from "vuedraggable"
-import { watch, onMounted, reactive, computed } from "vue"
+import { watch, onMounted, computed, ref, nextTick } from "vue"
 const props = defineProps({
   columns: {
     type: Array,
@@ -45,97 +58,93 @@ const props = defineProps({
     default: () => ({})
   }
 })
+const isShow = ref(true)
 const columnBind = computed<any>(() => {
   return { trigger: "click", size: "default", icon: "Menu", ...props.menuConfig }
 })
+
+// 获取实际显示列
+const disabledHiddenCol = () => {
+  const noHiddenCol = state.value.columnSet.filter(element => {
+    return (
+      !["index", "selection", "expand", "default"].includes(element.type) &&
+      element.prop !== "operation" &&
+      !element.hiddenAll &&
+      !element.hidden
+    )
+  })
+  // 未隐藏数量小于2 禁止点击取消选中
+  if (noHiddenCol.length < 2 && noHiddenCol.length > 0) {
+    noHiddenCol[0].checkBoxDisabled = true
+  } else {
+    noHiddenCol.forEach((_, index) => {
+      noHiddenCol[index].checkBoxDisabled = false
+    })
+  }
+}
+
 // 获取缓存数据
 const getColumnSetCache = () => {
-  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name}`)
-  let columnOption = initColumnSet()
-  let valueArr = JSON.parse(value) || []
+  let obj: any = localStorage.getItem(`column:${props.name}`)
+  let columnOption = JSON.parse(JSON.stringify(props.columns))
+  let propMap = JSON.parse(obj) || {}
   columnOption.map(item => {
-    let findEle = valueArr.find(
-      (ele: { label: any; prop: any }) => ele.label === item.label && ele.prop === item.prop
-    )
-    item.hidden = findEle ? findEle.hidden : false
+    item.hidden = !!propMap[item.prop] || item.hidden
   })
-  initColumnSet().map(val => {
-    columnOption.map(item => {
-      if (Object.hasOwn(val, "isShowHidden")) {
-        if (val.label === item.label && val.prop === item.prop) {
-          item.hidden = val.isShowHidden
-        }
-      }
-    })
-  })
-  if (columnOption.length !== valueArr.length) {
-    value = JSON.stringify(columnOption)
-  }
-  return value ? JSON.parse(value) : initColumnSet()
-}
-// 初始化
-const initColumnSet = () => {
-  const columnSet = props.columns.map((col: any, index) =>
-    col.isShowHidden
-      ? {
-          label: col.label,
-          prop: col.prop,
-          hidden: true,
-          checkBoxDisabled: false,
-          isShowHidden: col.isShowHidden
-        }
-      : {
-          label: col.label,
-          prop: col.prop,
-          checkBoxDisabled: false,
-          hidden: false
-        }
-  )
-  return columnSet
+
+  return columnOption
 }
 
 // 抛出事件
 const emits = defineEmits(["columnSetting"])
-const state: any = reactive({
+const state: any = ref({
   columnSet: []
 })
+const setItem = obj => {
+  if (JSON.stringify(obj) === "{}") {
+    if (localStorage.getItem(`column:${props.name}`)) {
+      localStorage.removeItem(`column:${props.name}`)
+    }
+  } else {
+    localStorage.setItem(`column:${props.name}`, JSON.stringify(obj))
+  }
+}
 onMounted(() => {
-  state.columnSet = getColumnSetCache()
-  emits("columnSetting", state.columnSet)
+  state.value.columnSet = getColumnSetCache()
+  nextTick(() => {
+    disabledHiddenCol()
+  })
+  emits("columnSetting", state.value.columnSet)
 })
 watch(
-  () => state.columnSet,
+  () => state.value.columnSet,
   val => {
     emits("columnSetting", val)
-    localStorage.setItem(`ep-ui:EPTable.columnSet-${props.name}`, JSON.stringify(val))
+    const obj = (val || []).reduce((acc, curr) => {
+      if (curr.hidden) {
+        acc[curr.prop] = curr.hidden
+      }
+      return acc
+    }, {})
+    setItem(obj)
   },
   { deep: true }
 )
-// 重新赋值
+// 重置
 const reSetColumnSet = () => {
-  let value: any = localStorage.getItem(`ep-ui:EPTable.columnSet-${props.name}`)
-  state.columnSet = JSON.parse(value)
-  emits("columnSetting", state.columnSet)
+  setItem({})
+  isShow.value = false
+  state.value.columnSet = getColumnSetCache()
+  nextTick(() => {
+    isShow.value = true
+  })
+
+  emits("columnSetting", state.value.columnSet)
 }
 // checkbox改变选中状态
 const checkChanged = (checked: any, index: string | number) => {
-  state.columnSet[index].hidden = !checked
-  //  获取未隐藏col
-  const noHiddenCol = state.columnSet.filter(
-    item => !item.hidden && item.prop !== "operation" && !item.type
-  )
-  console.log(noHiddenCol, "state.columnSet")
-
-  // 未隐藏数量小于2 禁止点击取消选中
-  if (noHiddenCol.length < 2) {
-    noHiddenCol[0].checkBoxDisabled = true
-  } else {
-    state.columnSet.forEach((element, index) => {
-      if (!element.hidden) {
-        state.columnSet[index].checkBoxDisabled = false
-      }
-    })
-  }
+  state.value.columnSet[index].hidden = !checked
+  disabledHiddenCol()
 }
 defineExpose({
   reSetColumnSet
@@ -143,29 +152,33 @@ defineExpose({
 </script>
 <style lang="scss">
 .column_set {
-  .el-dropdown-menu {
-    padding: 0;
+  .ep_table_column_setting_dropdown {
     font-size: 14px;
-
-    .el-dropdown-menu__item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .ep_table_column_setting_dropdown {
-        display: flex;
-        flex-direction: column;
-        max-height: 300px;
-        overflow-y: auto;
-        gap: 10px;
-
-        .el-checkbox {
-          .el-checkbox__input.is-checked + .el-checkbox__label,
-          .ep-checkbox__input.is-checked + .ep-checkbox__label {
-            cursor: move;
-            color: var(--el-text-color-primary);
-          }
-        }
+    .item {
+      padding: 0 16px;
+      &:hover {
+        background-color: #ecf5ff;
+      }
+    }
+    .footer {
+      box-sizing: border-box;
+      padding-top: 6px;
+      border-top: 1px solid #dcdfe6;
+      &:hover {
+        border-top: 1px solid #dcdfe6;
+      }
+      .el-button {
+        border-radius: none;
+      }
+    }
+    display: flex;
+    flex-direction: column;
+    max-height: 450px;
+    overflow-y: auto;
+    .el-checkbox {
+      .el-checkbox__input.is-checked + .el-checkbox__label,
+      .ep-checkbox__input.is-checked + .ep-checkbox__label {
+        cursor: move;
       }
     }
   }

@@ -6,6 +6,7 @@
       :data="data"
       :columns="columns"
       v-model:page="page"
+      :is-show-menu="false"
       :pageProps="pageProps"
       :isShowPagination="true"
       @getData="getData"

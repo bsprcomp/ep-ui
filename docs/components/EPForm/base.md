@@ -20,7 +20,7 @@ EPForm/ColNum
 
 ### 行内表单(^0.0.9)
 
-:::demo 设置 inline=true,有操作按钮时，默认左右 space-between 布局
+:::demo 设置 inline=true,有操作按钮时，默认左右 space-between 布局，调整间距使用 inlineGap(flex 的 gap) 属性，默认"16px 8px"
 EPForm/inline
 :::
 
@@ -55,6 +55,12 @@ EPForm/CustomOperator
 | rules         | 校验规则（可参考 element-plus el-form 方式配置,设置后完全覆盖 formItems 配置的 rules） | Object/Array                                    | -       |
 | btnSlotName   | 操作按钮插槽命名                                                                       | String                                          | -       |
 | operatorList  | 操作按钮 list，见如下表                                                                | Array                                           | -       |
+
+#### 事件
+
+| 名称       | 说明           | 类型       |
+| ---------- | -------------- | ---------- |
+| formChange | 表单值变化监听 | `Function` |
 
 #### operatorList 配置
 

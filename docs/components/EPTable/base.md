@@ -47,6 +47,12 @@ EPTable/check
 EPTable/filterCheckList
 :::
 
+### 列菜单设置 isShowMenu
+
+:::demo 仅对有 prop 属性且不为 operation（操作列，序号，复选框等不要排序），如需对单个列不显示设置，设置` hiddenMenu:true`;如何完全隐藏单个列以及其列设置，设置 `hiddenAll:true`;如需仅默认初始不显示列且可以通过列设置打开显示，设置 `hidden:true`
+EPTable/columnSetting
+:::
+
 ### 按钮插槽
 
 :::demo
@@ -69,12 +75,6 @@ EPTable/rowEdit
 
 :::demo
 EPTable/customColumn
-:::
-
-### 列菜单设置 isShowMenu
-
-:::demo 仅对有 prop 属性且不为 operation（操作列，序号，复选框等不要排序）
-EPTable/columnSetting
 :::
 
 ### 排序-前端排序
@@ -118,6 +118,7 @@ EPTable/expand
 | data                  | 列表数据                                                                                                | `Array`                                       | []     |
 | columns               | 表头信息 示例如下                                                                                       | `Array`                                       | []     |
 | border                | 是否开启边框线                                                                                          | `Boolean`                                     | false  |
+| loading               | table loading 动画                                                                                      | `Boolean`                                     | false  |
 | is-show-pagination    | 是否显示分页                                                                                            | `Boolean`                                     | false  |
 | is-show-menu          | 是否显示列菜单，需要配合 name 使用 （菜单可以拖拽排序）                                                 | `Boolean`                                     | false  |
 | name                  | table 唯一名称，项目不能重复，用于 lolocalStorage 缓存 menu                                             | `Boolean`                                     | false  |
@@ -131,10 +132,12 @@ EPTable/expand
   type columns= ({
     type?: "index" | "selection" | "expand"
     prop?: string
-    hidden?:boolen//列是否隐藏
     label?: string
     width?: string
     minWidth?: string
+    hiddenMenu?: boolean // 隐藏列设置选项
+    hiddenAll?: boolean // 隐藏列并且隐藏列选项
+    hidden?: boolean // 默认仅仅初始隐藏列
     render?:(row,index)=>VNode|string // (封装新增)
     formatter?: (row: any, column: any, cellValue: any, index: number) => VNode | string //（element-plus 提供，格式化单元格内容）
     slotName?:string // 插槽渲染列
@@ -151,6 +154,8 @@ EPTable/expand
       isDisabled?: (row: any, index: number) => boolean
       slotName?: string
       render?: (row: any) =>VNode | string
+      isShowConfirm?:boolean //是否显示确认弹框
+      msg?:boolean //显示确认弹框时，删除提示
       //
     }[]
 ```
@@ -256,7 +261,7 @@ EPTable/expand
 | 插槽名 | 说明                                                | 参数  |
 | :----- | :-------------------------------------------------- | :---- |
 | extra  | EPTable 顶部 extra 插槽                             | -     |
-| btn    | EPTable header 行 左侧 btn 插槽                     | -     |
+| button | EPTable header 行 左侧 button 插槽                  | -     |
 | input  | EPTable header 行 右侧 input 插槽                   | -     |
 | expand | table.firstColumn.type：`expand` 展开行插槽         | scope |
 | -      | el-table-column 某列自定义插槽（slotName 命名）     | scope |

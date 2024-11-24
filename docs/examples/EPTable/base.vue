@@ -1,7 +1,7 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" />
+    <EPTable name="Base" :is-show-pagination="false" :data="data" :columns="columns" />
   </div>
 </template>
 
@@ -12,9 +12,11 @@ const columns = ref<any[]>([
   {
     prop: "name",
     label: "姓名",
-    minWidth: "100"
+    minWidth: "100",
+    hiddenMenu: true
   },
   { prop: "age", label: "年龄", minWidth: "180" },
+  { prop: "height", label: "身高", minWidth: "180" },
   {
     prop: "operation",
     label: "操作",
@@ -31,8 +33,8 @@ const columns = ref<any[]>([
       {
         label: "删除",
         antiClick: true, // 开启防抖
+        isShowConfirm: true,
         func: (row, scope) => {
-          alert("删除")
           deleteRow(row, scope)
         }
       }
@@ -49,7 +51,8 @@ onMounted(() => {
   data.value = Array.from({ length: 2 }).map((_, index) => ({
     id: index,
     name: "@bscomp",
-    age: 18
+    age: 18,
+    height: 180
   }))
 })
 </script>

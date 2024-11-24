@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="!useVirtual ? ElSelect : ElSelectV2"
+    :is="!useVirtual ? 'el-select' : 'el-select-v2'"
     popper-class="e-p-select"
     ref="selectRef"
     v-model="modelValue"
@@ -42,7 +42,6 @@
 
 <script setup lang="ts" name="EPSelect">
 import { computed, ref, useSlots } from "vue"
-import { ElSelect, ElCheckbox, ElOption, ElSelectV2 } from "element-plus"
 type Props = {
   multiple?: boolean // 是否多选
   isShowSelectAllBtn?: boolean // 是否全选

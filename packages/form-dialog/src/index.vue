@@ -11,7 +11,12 @@
     </template>
     <el-Scollbar style="display: flex; flex-direction: column">
       <slot name="top" />
-      <EPForm ref="formRef" v-bind="initFormProps" v-model="params">
+      <EPForm
+        ref="formRef"
+        v-bind="{ inline: false, labelSuffix: ':', ...formProps }"
+        :form-items="formProps?.formItems || []"
+        v-model="params"
+      >
         <template v-slot:[name] v-for="name in Object.keys(slots)">
           <slot v-if="!extraSlot.includes(name)" :name="name" />
         </template>
@@ -35,7 +40,7 @@
 </template>
 
 <script setup lang="ts" name="EPDialog">
-import { useSlots, ref } from "vue"
+import { useSlots, ref, watch } from "vue"
 const slots = useSlots()
 const formRef = ref()
 const extraSlot = ["footer", "bootom", "top", "content", "header"]
@@ -66,14 +71,17 @@ const props = withDefaults(defineProps<Props>(), {
   cancelText: "取 消",
   hiddenCancelBtn: false,
   hiddensubmitBtn: false,
-  formProps: {}
+  formProps: () => ({
+    formItems: []
+  })
 })
-const initFormProps = {
-  inline: false,
-  formItems: [],
-  labelSuffix: ":",
-  ...props.formProps
-}
+const formItems = ref([])
+watch(
+  () => props.formProps,
+  () => {
+    formItems.value = props.formProps.formItems
+  }
+)
 // 抛出事件
 const emits = defineEmits(["close", "handleCancel", "handleSubmit"])
 const dialogVisible = defineModel({ default: false })
