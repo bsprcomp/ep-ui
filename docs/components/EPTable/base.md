@@ -47,6 +47,12 @@ EPTable/check
 EPTable/filterCheckList
 :::
 
+### 列菜单设置 isShowMenu
+
+:::demo 仅对有 prop 属性且不为 operation（操作列，序号，复选框等不要排序），如需对单个列不显示设置，设置` hiddenMenu:true`;如何完全隐藏单个列以及其列设置，设置 `hiddenAll:true`;如需仅默认初始不显示列且可以通过列设置打开显示，设置 `hidden:true`
+EPTable/columnSetting
+:::
+
 ### 按钮插槽
 
 :::demo
@@ -69,12 +75,6 @@ EPTable/rowEdit
 
 :::demo
 EPTable/customColumn
-:::
-
-### 列菜单设置 isShowMenu
-
-:::demo 仅对有 prop 属性且不为 operation（操作列，序号，复选框等不要排序）
-EPTable/columnSetting
 :::
 
 ### 排序-前端排序
@@ -132,10 +132,12 @@ EPTable/expand
   type columns= ({
     type?: "index" | "selection" | "expand"
     prop?: string
-    hidden?:boolen//列是否隐藏
     label?: string
     width?: string
     minWidth?: string
+    hiddenMenu?: boolean // 隐藏列设置选项
+    hiddenAll?: boolean // 隐藏列并且隐藏列选项
+    hidden?: boolean // 默认仅仅初始隐藏列
     render?:(row,index)=>VNode|string // (封装新增)
     formatter?: (row: any, column: any, cellValue: any, index: number) => VNode | string //（element-plus 提供，格式化单元格内容）
     slotName?:string // 插槽渲染列
@@ -152,6 +154,8 @@ EPTable/expand
       isDisabled?: (row: any, index: number) => boolean
       slotName?: string
       render?: (row: any) =>VNode | string
+      isShowConfirm?:boolean //是否显示确认弹框
+      msg?:boolean //显示确认弹框时，删除提示
       //
     }[]
 ```

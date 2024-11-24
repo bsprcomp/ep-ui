@@ -17,7 +17,7 @@
               v-if="isShowMenu"
               :name="name"
               :menuConfig="menuConfig"
-              :columns="renderColumns"
+              :columns="columns"
               ref="columnSetRef"
               @columnSetting="v => (state.columnSet = v)"
             />
@@ -129,32 +129,55 @@
                   </template>
                 </template>
                 <template v-else v-for="(op, index) in item.operation" :key="index">
-                  <EPButton
-                    v-if="!(op.isVisible && op.isVisible(scope.row, scope.$index))"
-                    @click="handleRowClick(scope.row, op, scope)"
-                    v-bind="{
-                      type: 'primary',
-                      link: true,
-                      ...op
-                    }"
-                    :disabled="
-                      op.disabled || (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
-                    "
-                  >
-                    <!-- render渲染 -->
-                    <template v-if="op.render">
-                      <CustomRender
-                        :column="op"
-                        :row="scope.row"
-                        :render="op.render"
-                        :index="scope.$index"
-                      />
-                    </template>
-                    <template v-if="op.slotName">
-                      <slot :name="op.slotName" :scope="scope"></slot>
-                    </template>
-                    <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
-                  </EPButton>
+                  <template v-if="!(op.isVisible && op.isVisible(scope.row, scope.$index))">
+                    <el-popconfirm
+                      v-if="op.isShowConfirm"
+                      :title="item.msg || '确认删除？'"
+                      @confirm="handleRowClick(scope.row, op, scope)"
+                    >
+                      <template #reference>
+                        <EPButton
+                          v-bind="{
+                            type: 'primary',
+                            link: true,
+                            ...op
+                          }"
+                          :disabled="
+                            op.disabled ||
+                            (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
+                          "
+                        >
+                          {{ op.label }}
+                        </EPButton>
+                      </template>
+                    </el-popconfirm>
+                    <EPButton
+                      v-else
+                      @click="handleRowClick(scope.row, op, scope)"
+                      v-bind="{
+                        type: 'primary',
+                        link: true,
+                        ...op
+                      }"
+                      :disabled="
+                        op.disabled || (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
+                      "
+                    >
+                      <!-- render渲染 -->
+                      <template v-if="op.render">
+                        <CustomRender
+                          :column="op"
+                          :row="scope.row"
+                          :render="op.render"
+                          :index="scope.$index"
+                        />
+                      </template>
+                      <template v-if="op.slotName">
+                        <slot :name="op.slotName" :scope="scope"></slot>
+                      </template>
+                      <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
+                    </EPButton>
+                  </template>
                 </template>
               </template>
             </el-table-column>
@@ -184,9 +207,9 @@
 </template>
 
 <script setup lang="ts" name="EPTable">
-import type { TableInstance } from "element-plus"
+import { ElMessage, type TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
-import { computed, ref, watch, useSlots, reactive, onUpdated, VNode } from "vue"
+import { computed, ref, watch, useSlots, reactive, onUpdated, VNode, onMounted } from "vue"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"
@@ -229,6 +252,9 @@ interface Props {
     minWidth?: string | number
     isLink?: boolean
     slotName?: string
+    hiddenMenu?: boolean
+    hiddenAll?: boolean
+    hidden?: boolean
     render?: Function
     [x: string]: any
     operation?:
@@ -242,6 +268,8 @@ interface Props {
           isDisabled?: (row: any, index: number) => boolean
           slotName?: string
           render?: (row: any) => VNode
+          isShowConfirm?: boolean
+          msg?: boolean
         }[]
       | []
       | undefined
@@ -268,7 +296,7 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   refreshTitle: "刷新",
   rowKey: "id",
-  isShowMenu: true,
+  isShowMenu: false,
   pageProps: () => ({}),
   extra: 0,
   isShowPagination: true,
@@ -390,19 +418,21 @@ const renderColumns = computed<Props["columns"]>(() => {
     acc[cur.prop] = cur
     return acc
   }, {})
-  return state.columnSet.filter((cur: any) => !cur.hidden).map((cur: any) => columnByProp[cur.prop])
+
+  return state.columnSet
+    .filter((cur: any) => !cur.hidden && !cur.hiddenAll)
+    .map((cur: any) => {
+      const { hidden, ...res } = columnByProp[cur.prop]
+      return res
+    })
 })
 
-// 判断是否是多级表头
-const isTableHeader = computed(() => {
-  return renderColumns.value.some((item: any) => item.children)
-})
-
-// 获取columnSet缓存数据
-const reSetColumnSet = () => {
-  return columnSetRef.value?.reSetColumnSet()
-}
 defineExpose({ tableInstance })
+onMounted(() => {
+  if (props.isShowMenu && !props.name) {
+    ElMessage.warning("警告：table开启列设置需要设置name，name值在整个项目唯一")
+  }
+})
 </script>
 <style lang="scss" scoped>
 div {

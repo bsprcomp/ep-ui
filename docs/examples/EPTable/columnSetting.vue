@@ -20,8 +20,11 @@
 import { onMounted, ref } from "vue"
 const data = ref<any[]>([])
 const columns = ref([
-  { prop: "name", label: "姓名", isShowHidden: true },
+  { prop: "name", label: "姓名" },
   { prop: "age", label: "年龄" },
+  { prop: "col_1", label: "不显示列设置", hiddenMenu: true },
+  { prop: "col_2", label: "都不显示", hiddenAll: true },
+  { prop: "col_3", label: "列默认隐藏", hidden: true },
   {
     prop: "operation",
     label: "操作",
