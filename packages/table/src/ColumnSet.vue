@@ -85,14 +85,24 @@ const disabledHiddenCol = () => {
 
 // 获取缓存数据
 const getColumnSetCache = () => {
-  let obj: any = localStorage.getItem(`column:${props.name}`)
   let columnOption = JSON.parse(JSON.stringify(props.columns))
+  let obj: any = localStorage.getItem(`column:${props.name}`)
+  if (obj == "{}" || !obj) {
+    return columnOption
+  }
   let propMap = JSON.parse(obj) || {}
-  columnOption.map(item => {
-    item.hidden = !!propMap[item.prop] || item.hidden
-  })
+  if (columnOption.length !== Object.entries(propMap).length) {
+    return columnOption
+  }
 
-  return columnOption
+  const columnByProp: any = columnOption.reduce((acc: any, cur: any) => {
+    acc[cur.prop || cur.type] = cur
+    return acc
+  }, {})
+
+  return Object.entries(propMap).map(([prop, hidden]) => {
+    return { ...columnByProp[prop], hidden: !!hidden }
+  })
 }
 
 // 抛出事件
@@ -121,8 +131,8 @@ watch(
   val => {
     emits("columnSetting", val)
     const obj = (val || []).reduce((acc, curr) => {
-      if (curr.hidden) {
-        acc[curr.prop] = curr.hidden
+      if (curr.prop || curr.type) {
+        acc[curr.prop || curr.type] = !!curr.hidden
       }
       return acc
     }, {})
