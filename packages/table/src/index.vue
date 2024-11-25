@@ -28,7 +28,6 @@
         :max-height="height"
         ref="tableInstance"
         :data="state.tableData"
-        show-overflow-tooltip
         @selection-change="selectionChange"
         @row-click="rowClick"
         :row-key="rowKey"
@@ -105,9 +104,9 @@
                       >{{ scope.row[item?.prop as any] }}
                     </el-button>
                   </template>
-                  <div v-else>
-                    <span>{{ scope.row[item?.prop as any] }}</span>
-                  </div>
+                  <template v-else>
+                    {{ scope.row[item?.prop as any] }}
+                  </template>
                 </template>
               </template>
               <!-- 展开列 -->
@@ -290,6 +289,8 @@ interface Props {
   menuConfig?: Object
   extra?: number
   isShowRefresh?: boolean
+  ascs?: string
+  descs?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -300,7 +301,9 @@ const props = withDefaults(defineProps<Props>(), {
   pageProps: () => ({}),
   extra: 0,
   isShowPagination: true,
-  isShowRefresh: false
+  isShowRefresh: false,
+  ascs: "ascs",
+  descs: "descs"
 })
 const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
 const {
@@ -321,21 +324,12 @@ const { height } = useRemainingHeight(tableContent, props.extra, extraRef)
 // 初始化数据
 let state = reactive<any>({
   tableData: props.data,
-  columnSet: [],
-  copyTableData: [] // 键盘事件
+  columnSet: []
 })
 // 获取e-p-table ref
 const EPTableBox = ref<HTMLElement | any>(null)
 // 获取columnSet Ref
 const columnSetRef = ref<HTMLElement | any>(null)
-// 获取form ref
-const formRef = ref({})
-// 动态form ref
-const handleRef = (el: any, scope: { $index: number; column: { property: string } }, item) => {
-  if (el) {
-    formRef.value[`formRef-${scope.$index}-${item?.prop || scope.column.property}`] = el
-  }
-}
 // link类型跳转
 const linkTo = (row, query = { name: 22 }, path) => {
   if (route.path || path) {
@@ -386,7 +380,7 @@ const sortChange = (data: any) => {
   const { column, prop, order } = data
 
   if (prop && order) {
-    sortParam.value = { [order == "ascending" ? "asc" : "desc"]: prop }
+    sortParam.value = { [order == "ascending" ? props.ascs : props.descs]: prop }
   } else {
     sortParam.value = {}
   }

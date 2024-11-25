@@ -85,7 +85,7 @@ EPTable/sort
 
 ### 排序-后端排序
 
-:::demo
+:::demo table 设置 sortable="custom"开启全部后端排序，部分排序可以在 columns 中设置，设置 v-modal:sortParam 接收排序属性`{ascs|descs:prop}`。如需更改默认使用 ascs|descs 映射，例如设置 descs='customDescs',`{ascs|customDescs:prop}`
 EPTable/sortBackend
 :::
 
