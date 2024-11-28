@@ -46,7 +46,7 @@ export default function (props) {
       rules[item.prop] = []
       if (item.rules) {
         const isArr = Array.isArray(item.rules)
-        rules = isArr ? item.rules : [item.rules]
+        rules[item.prop] = isArr ? item.rules : [item.rules]
       }
       if (item.required) {
         const placeholder = getDefaultMessage(item)

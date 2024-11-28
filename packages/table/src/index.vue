@@ -31,6 +31,7 @@
         @selection-change="selectionChange"
         @row-click="rowClick"
         :row-key="rowKey"
+        highlight-current-row
         @sort-change="sortChange"
         v-bind="$attrs"
         v-loading="loading"
@@ -208,7 +209,17 @@
 <script setup lang="ts" name="EPTable">
 import { ElMessage, type TableInstance } from "element-plus"
 import { useRemainingHeight } from "../../hook"
-import { computed, ref, watch, useSlots, reactive, onUpdated, VNode, onMounted } from "vue"
+import {
+  computed,
+  ref,
+  watch,
+  useSlots,
+  reactive,
+  onUpdated,
+  VNode,
+  onMounted,
+  nextTick
+} from "vue"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"
@@ -363,6 +374,7 @@ watch(
   () => props.data,
   val => {
     state.tableData = val
+    editRowKey.value = ""
   },
   { deep: true }
 )
@@ -426,6 +438,14 @@ onMounted(() => {
   if (props.isShowMenu && !props.name) {
     ElMessage.warning("警告：table开启列设置需要设置name，name值在整个项目唯一")
   }
+  // 默认勾选已选中列表
+  nextTick(() => {
+    state.tableData.forEach(item => {
+      if (check.value.some(key => key == item[props.rowKey])) {
+        tableInstance.value?.toggleRowSelection(item)
+      }
+    })
+  })
 })
 </script>
 <style lang="scss" scoped>

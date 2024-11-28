@@ -2,7 +2,7 @@
   <div class="wrapper vp-raw">
     <el-alert
       type="info"
-      description="v-model:page 接收page变化 默认为current size total，total需要手动赋值。"
+      description="1.v-model:page 接收page变化 默认为current size total，total需要手动赋值;2.设置reserveSelection 支持分页反选。"
     />
     <EPTable
       size="small"
@@ -32,6 +32,7 @@ const DATA = Array.from({ length: 100 }).map((_, index) => ({
 }))
 // 列
 const columns = ref([
+  { type: "selection", width: "55", reserveSelection: true },
   { type: "index", label: "序号", width: "55" },
   { prop: "name", label: "姓名", minWidth: "100" },
   { prop: "age", label: "年龄", minWidth: "180" }

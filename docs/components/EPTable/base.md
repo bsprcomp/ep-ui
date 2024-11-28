@@ -37,7 +37,7 @@ columns 中一项 设置 type 为 index
 
 ### 复选框
 
-:::demo v-model:check 绑定（需配合 rowKey 使用，rowKey 组件已默认`id`）
+:::demo v-model:check 绑定（需配合 rowKey 使用，rowKey 组件已默认`id`;支持默认选中）
 EPTable/check
 :::
 
