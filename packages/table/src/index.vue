@@ -374,7 +374,6 @@ watch(
   () => props.data,
   val => {
     state.tableData = val
-    editRowKey.value = ""
   },
   { deep: true }
 )

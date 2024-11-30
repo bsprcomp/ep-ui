@@ -32,13 +32,13 @@ EPForm/CustomLabel
 
 ### 自定义输入组件
 
-:::demo 设置 btnSlotName 插槽名称
+:::demo
 EPForm/CustomComp
 :::
 
 ### 自定义操作
 
-:::demo 设置 custom 为 true 开启自定义, prop 属性值 作为自定义组件名称
+:::demo
 EPForm/CustomOperator
 :::
 
