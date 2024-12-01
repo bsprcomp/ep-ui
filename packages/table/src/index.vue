@@ -25,7 +25,7 @@
         </div>
       </div>
       <el-table
-        :max-height="height"
+        height="100%"
         ref="tableInstance"
         :data="state.tableData"
         @selection-change="selectionChange"
@@ -98,12 +98,6 @@
                   <!-- 自定义插槽 -->
                   <template v-else-if="item?.slotName">
                     <slot :name="item?.slotName" :scope="scope"></slot>
-                  </template>
-                  <!-- 链接 -->
-                  <template v-else-if="item?.isLink">
-                    <el-button type="primary" link @click="linkTo(scope.row, item.query, item.path)"
-                      >{{ scope.row[item?.prop as any] }}
-                    </el-button>
                   </template>
                   <template v-else>
                     {{ scope.row[item?.prop as any] }}
@@ -208,7 +202,6 @@
 
 <script setup lang="ts" name="EPTable">
 import { ElMessage, type TableInstance } from "element-plus"
-import { useRemainingHeight } from "../../hook"
 import {
   computed,
   ref,
@@ -225,9 +218,6 @@ import useHooks from "./useHooks"
 import ColumnSet from "./ColumnSet.vue"
 import CustomRender from "./CustomRender.vue"
 import RowEdit from "./RowEdit.vue"
-import EPButton from "../../button"
-
-import { useRoute, useRouter } from "vue-router"
 
 // 分页设置
 const page = defineModel<Record<string, any>>("page", {
@@ -325,13 +315,8 @@ const {
   newPageProps,
   bindPageProps
 } = useHooks(props, emits)
-const route = useRoute()
-const router = useRouter()
 const tableContent = ref()
 const extraRef = ref()
-//  剩余高度计算
-const { height } = useRemainingHeight(tableContent, props.extra, extraRef)
-
 // 初始化数据
 let state = reactive<any>({
   tableData: props.data,
@@ -341,15 +326,6 @@ let state = reactive<any>({
 const EPTableBox = ref<HTMLElement | any>(null)
 // 获取columnSet Ref
 const columnSetRef = ref<HTMLElement | any>(null)
-// link类型跳转
-const linkTo = (row, query = { name: 22 }, path) => {
-  if (route.path || path) {
-    router.push({
-      path: `/${route.path}/${row[props.rowKey]}` || path,
-      query
-    })
-  }
-}
 
 // 序号
 const indexMethod = (index, item) => {
@@ -437,14 +413,6 @@ onMounted(() => {
   if (props.isShowMenu && !props.name) {
     ElMessage.warning("警告：table开启列设置需要设置name，name值在整个项目唯一")
   }
-  // 默认勾选已选中列表
-  nextTick(() => {
-    state.tableData.forEach(item => {
-      if (check.value.some(key => key == item[props.rowKey])) {
-        tableInstance.value?.toggleRowSelection(item)
-      }
-    })
-  })
 })
 </script>
 <style lang="scss" scoped>
@@ -464,6 +432,7 @@ div {
     flex-direction: column;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
     .header-wapper {
       display: flex;
       flex-direction: column;

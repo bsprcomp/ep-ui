@@ -6,13 +6,13 @@
   <div class="wrapper vp-raw">
     <EPButton type="primary" value="新 增" @click="dialogVisible = true" />
     <EPDialog
-      :width="900"
+      title="新增"
       v-model:params="formParams"
       v-model="dialogVisible"
       :formProps="formProps"
-      height="300px"
       @handleSubmit="handleSubmit"
       @handleCancel="handleCancel"
+      height="300px"
     >
     </EPDialog>
   </div>
@@ -28,6 +28,7 @@ const formItems = [
     prop: "test_1", //el-form-item属性
     label: "EPInput输入框", //el-form-item label值
     comp: "EPInput", // 组件类型
+    defaultValue: "默认值", //默认值（配合tools.getParams使用）
     required: true //校验（开启则会验证为空校验）
   },
   {
@@ -45,7 +46,6 @@ const formItems = [
     prop: "test_3",
     label: "日期",
     comp: "EPDatePicker",
-
     defaultValue: "2024-11-16",
     shortcutsName: ["今天", "昨天", "一周前"]
   },
@@ -93,8 +93,7 @@ const formItems = [
 const formProps = {
   formItems,
   labelWidth: "145px",
-  valueWidth: "280px",
-  colNum: 2
+  valueWidth: "320px"
 }
 // 获取初始化值（getParams 会返回一个对象 {[prop]:defaultValue||''}
 const formParams = ref(tools.getParams(formItems))

@@ -9,7 +9,7 @@
     <template #header="scope">
       <slot name="header" :scope="scope"></slot>
     </template>
-    <el-Scollbar style="display: flex; flex-direction: column">
+    <el-scrollbar :style="contentStyle">
       <slot name="top" />
       <EPForm
         ref="formRef"
@@ -23,7 +23,7 @@
       </EPForm>
       <slot name="content"></slot>
       <slot name="bootom" />
-    </el-Scollbar>
+    </el-scrollbar>
     <template #footer>
       <slot name="footer">
         <div class="dialog-footer">
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts" name="EPDialog">
-import { useSlots, ref, watch } from "vue"
+import { useSlots, ref, watch, computed } from "vue"
 const slots = useSlots()
 const formRef = ref()
 const extraSlot = ["footer", "bootom", "top", "content", "header"]
@@ -50,6 +50,8 @@ type Props = {
   submitText?: string
   hiddenCancelBtn?: boolean
   hiddensubmitBtn?: boolean
+  maxHeight?: string
+  height?: string
   formProps?:
     | {
         btnSlotName?: string
@@ -75,6 +77,12 @@ const props = withDefaults(defineProps<Props>(), {
     formItems: []
   })
 })
+const contentStyle = computed(() => ({
+  display: "flex",
+  flexDirection: "column",
+  maxHeight: props.maxHeight,
+  height: props.height
+}))
 const formItems = ref([])
 watch(
   () => props.formProps,
@@ -94,4 +102,9 @@ const handleSubmit = async () => {
   await formRef.value.validate()
   emits("handleSubmit")
 }
+watch(dialogVisible, newValue => {
+  if (newValue) {
+    formRef.value?.clearValidate()
+  }
+})
 </script>

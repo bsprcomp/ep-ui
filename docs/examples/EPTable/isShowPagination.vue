@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper vp-raw">
+    {{ checkedList.length }}
     <el-alert
       type="info"
       description="1.v-model:page 接收page变化 默认为current size total，total需要手动赋值;2.设置reserveSelection 支持分页反选。"
@@ -7,6 +8,7 @@
     <EPTable
       size="small"
       :is-show-menu="false"
+      v-model:check="checkedList"
       :data="data"
       :columns="columns"
       v-model:page="page"
@@ -18,9 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from "vue"
+import { onMounted, onUnmounted, reactive, ref, watch } from "vue"
 const loading = ref(true)
 const timer = ref()
+const checkedList = ref([])
 // 初始化
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])
@@ -40,7 +43,6 @@ const columns = ref([
 // page变化回调
 const getData = () => {
   loading.value = true
-
   timer.value = setTimeout(() => {
     loading.value = false
     data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
