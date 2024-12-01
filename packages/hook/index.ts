@@ -7,10 +7,16 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from "vue"
  * @param extra // 额外高度
  * @returns
  */
-export function useRemainingHeight(parentNodeRef?: any, extra: number = 0, childnodeRef?: any) {
+export function useRemainingHeight(
+  parentNodeRef: any,
+  extra: number = 0,
+  childnodeRef: any,
+  callBack: Function
+) {
   const height = ref(0)
   const calculateHeight = () => {
     height.value = parentNodeRef.value.offsetHeight - (childnodeRef?.value?.offsetHeight ?? 0)
+    callBack && callBack()
   }
   onMounted(() => {
     nextTick(() => {

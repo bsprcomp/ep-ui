@@ -1,5 +1,5 @@
 ::: warning
-**组件应放在有高度的元素中（组件内部使用 100%设置高度，table 自行计算 max-height）**
+**组件应放在有高度的元素中**
 :::
 
 # EPTable 表格
@@ -37,7 +37,7 @@ columns 中一项 设置 type 为 index
 
 ### 复选框
 
-:::demo v-model:check 绑定（需配合 rowKey 使用，rowKey 组件已默认`id`）
+:::demo v-model:check 绑定（需配合 rowKey 使用，rowKey 组件已默认`id`;支持默认选中）
 EPTable/check
 :::
 
@@ -85,7 +85,7 @@ EPTable/sort
 
 ### 排序-后端排序
 
-:::demo
+:::demo table 设置 sortable="custom"开启全部后端排序，部分排序可以在 columns 中设置，设置 v-modal:sortParam 接收排序属性`{ascs|descs:prop}`。如需更改默认使用 ascs|descs 映射，例如设置 descs='customDescs',`{ascs|customDescs:prop}`
 EPTable/sortBackend
 :::
 

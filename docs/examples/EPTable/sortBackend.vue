@@ -1,14 +1,11 @@
 <!-- 排序 -->
 <template>
   <div class="wrapper vp-raw">
-    <p>
-      table 设置
-      sortable="custom"开启全部后端排序，部分排序可以在columns中设置，设置v-modal:sortParam接收排序属性
-    </p>
     <EPTable
       :data="data"
       :columns="columns"
       v-model:sortParam="sortParam"
+      descs="customDescs"
       @getData="getData"
       @sort="sort"
     />

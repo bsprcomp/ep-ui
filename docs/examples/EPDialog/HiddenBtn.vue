@@ -4,18 +4,27 @@
  -->
 <template>
   <div class="wrapper vp-raw">
-    <EPButton type="primary" value="新 增" @click="dialogVisible = true" />
-    <EPDialog title="新增" hiddenCancelBtn hiddensubmitBtn v-model="dialogVisible">
+    <EPButton type="primary" value="查看详情" @click="dialogVisible = true" />
+    <EPDialog title="详情" hiddenCancelBtn hiddensubmitBtn v-model="dialogVisible">
       <template #content>
         <div class="content">
-          <EPTable :columns="columns" :data="data" />
+          <EPTable
+            :columns="columns"
+            :data="data"
+            :pageProps="{ layout: 'prev, pager, next', background: false }"
+            v-model:page="page"
+          />
         </div>
       </template>
     </EPDialog>
   </div>
 </template>
 <script setup lang="tsx">
-import { ref } from "vue"
+const page = reactive({
+  page: 1,
+  total: 10
+})
+import { reactive, ref } from "vue"
 const columns = [
   {
     prop: "test_1",

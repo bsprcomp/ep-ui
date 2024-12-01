@@ -1,7 +1,7 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable name="Base" :is-show-pagination="false" :data="data" :columns="columns" />
+    <EPTable name="Base" isShowMenu :is-show-pagination="false" :data="data" :columns="columns" />
   </div>
 </template>
 
@@ -12,8 +12,7 @@ const columns = ref<any[]>([
   {
     prop: "name",
     label: "姓名",
-    minWidth: "100",
-    hiddenMenu: true
+    minWidth: "100"
   },
   { prop: "age", label: "年龄", minWidth: "180" },
   { prop: "height", label: "身高", minWidth: "180" },

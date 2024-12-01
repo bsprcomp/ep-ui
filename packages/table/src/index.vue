@@ -25,13 +25,13 @@
         </div>
       </div>
       <el-table
-        :max-height="height"
+        height="100%"
         ref="tableInstance"
         :data="state.tableData"
-        show-overflow-tooltip
         @selection-change="selectionChange"
         @row-click="rowClick"
         :row-key="rowKey"
+        highlight-current-row
         @sort-change="sortChange"
         v-bind="$attrs"
         v-loading="loading"
@@ -99,15 +99,9 @@
                   <template v-else-if="item?.slotName">
                     <slot :name="item?.slotName" :scope="scope"></slot>
                   </template>
-                  <!-- 链接 -->
-                  <template v-else-if="item?.isLink">
-                    <el-button type="primary" link @click="linkTo(scope.row, item.query, item.path)"
-                      >{{ scope.row[item?.prop as any] }}
-                    </el-button>
+                  <template v-else>
+                    {{ scope.row[item?.prop as any] }}
                   </template>
-                  <div v-else>
-                    <span>{{ scope.row[item?.prop as any] }}</span>
-                  </div>
                 </template>
               </template>
               <!-- 展开列 -->
@@ -208,16 +202,22 @@
 
 <script setup lang="ts" name="EPTable">
 import { ElMessage, type TableInstance } from "element-plus"
-import { useRemainingHeight } from "../../hook"
-import { computed, ref, watch, useSlots, reactive, onUpdated, VNode, onMounted } from "vue"
+import {
+  computed,
+  ref,
+  watch,
+  useSlots,
+  reactive,
+  onUpdated,
+  VNode,
+  onMounted,
+  nextTick
+} from "vue"
 import useHooks from "./useHooks"
 
 import ColumnSet from "./ColumnSet.vue"
 import CustomRender from "./CustomRender.vue"
 import RowEdit from "./RowEdit.vue"
-import EPButton from "../../button"
-
-import { useRoute, useRouter } from "vue-router"
 
 // 分页设置
 const page = defineModel<Record<string, any>>("page", {
@@ -290,6 +290,8 @@ interface Props {
   menuConfig?: Object
   extra?: number
   isShowRefresh?: boolean
+  ascs?: string
+  descs?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -300,7 +302,9 @@ const props = withDefaults(defineProps<Props>(), {
   pageProps: () => ({}),
   extra: 0,
   isShowPagination: true,
-  isShowRefresh: false
+  isShowRefresh: false,
+  ascs: "ascs",
+  descs: "descs"
 })
 const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
 const {
@@ -311,40 +315,17 @@ const {
   newPageProps,
   bindPageProps
 } = useHooks(props, emits)
-const route = useRoute()
-const router = useRouter()
 const tableContent = ref()
 const extraRef = ref()
-//  剩余高度计算
-const { height } = useRemainingHeight(tableContent, props.extra, extraRef)
-
 // 初始化数据
 let state = reactive<any>({
   tableData: props.data,
-  columnSet: [],
-  copyTableData: [] // 键盘事件
+  columnSet: []
 })
 // 获取e-p-table ref
 const EPTableBox = ref<HTMLElement | any>(null)
 // 获取columnSet Ref
 const columnSetRef = ref<HTMLElement | any>(null)
-// 获取form ref
-const formRef = ref({})
-// 动态form ref
-const handleRef = (el: any, scope: { $index: number; column: { property: string } }, item) => {
-  if (el) {
-    formRef.value[`formRef-${scope.$index}-${item?.prop || scope.column.property}`] = el
-  }
-}
-// link类型跳转
-const linkTo = (row, query = { name: 22 }, path) => {
-  if (route.path || path) {
-    router.push({
-      path: `/${route.path}/${row[props.rowKey]}` || path,
-      query
-    })
-  }
-}
 
 // 序号
 const indexMethod = (index, item) => {
@@ -386,7 +367,7 @@ const sortChange = (data: any) => {
   const { column, prop, order } = data
 
   if (prop && order) {
-    sortParam.value = { [order == "ascending" ? "asc" : "desc"]: prop }
+    sortParam.value = { [order == "ascending" ? props.ascs : props.descs]: prop }
   } else {
     sortParam.value = {}
   }
@@ -451,6 +432,7 @@ div {
     flex-direction: column;
     position: relative;
     box-sizing: border-box;
+    overflow: hidden;
     .header-wapper {
       display: flex;
       flex-direction: column;

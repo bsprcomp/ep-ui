@@ -1,14 +1,20 @@
 <template>
   <div class="wrapper vp-raw">
-    <p>选中数：{{ checkList.length }}</p>
-    <EPTable :is-show-menu="false" v-model:check="checkList" :data="data" :columns="columns" />
+    <p>选中数：{{ checkedList.length }}</p>
+    <EPTable
+      :is-show-pagination="false"
+      :is-show-menu="false"
+      v-model:check="checkedList"
+      :data="data"
+      :columns="columns"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue"
 const data = ref<any[]>([])
-const checkList = ref([])
+const checkedList = ref([])
 const columns = ref([
   { type: "selection", width: "55" },
   { type: "index", width: "55", label: "序号" },
@@ -23,8 +29,8 @@ onMounted(() => {
   }))
 })
 
-watch(checkList, () => {
-  console.log(checkList.value, "checkList")
+watch(checkedList, () => {
+  console.log(checkedList.value, "checkList")
 })
 </script>
 <style scoped>
