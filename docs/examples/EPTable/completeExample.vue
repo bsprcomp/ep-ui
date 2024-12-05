@@ -11,6 +11,7 @@
       @getData="getData"
       is-show-pagination
       is-show-menu
+      v-model:check="checkList"
       name="TestTable"
     >
       <!-- 表额外插槽，单独一行，自行处理样式 -->
@@ -31,9 +32,9 @@
       <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
       <template #button>
         <EPButton value="新 增" type="primary" antiClick @click="add()" />
-        <el-popconfirm title="是否确定批量删除？">
+        <el-popconfirm title="是否确定批量删除？" @confirm="batchDelete">
           <template #reference>
-            <EPButton value="批量删除" @click="batchDelete" />
+            <EPButton :disabled="!checkList.length" value="批量删除" />
           </template>
         </el-popconfirm>
       </template>
@@ -62,6 +63,8 @@ import { tools } from "../../../packages/index"
 //import { tools } from "@bscomp/ep-ui" 在实际项目中使用
 // 是否显示弹框
 const dialogVisible = ref(false)
+//复选框选中
+const checkList = ref([])
 // 模拟弹框下拉选项接口返回，并在dialogFormitems中使用
 const options = ref<any>([])
 // 是否编辑
@@ -176,6 +179,7 @@ const DATA = Array.from({ length: 100 }).map((_, index) => ({
   address: "南京"
 }))
 const columns = ref<any[]>([
+  { type: "selection", width: "55" },
   {
     prop: "name",
     label: "用户名"
@@ -212,7 +216,7 @@ const columns = ref<any[]>([
   }
 ])
 const batchDelete = () => {
-  console.log("批量删除")
+  checkList.value = []
 }
 const add = (row?: any) => {
   dialogVisible.value = true

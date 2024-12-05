@@ -390,6 +390,13 @@ onUpdated(() => {
   tableInstance.value?.doLayout()
 })
 
+watch(check, () => {
+  if (!check.value.length) {
+    // 复选框选中为空时，清空列表所有选中
+    tableInstance.value?.clearSelection()
+  }
+})
+
 // 所有列（表头数据）
 const renderColumns = computed<Props["columns"]>(() => {
   if (state.columnSet.length === 0) {
