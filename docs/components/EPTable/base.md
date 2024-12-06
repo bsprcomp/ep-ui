@@ -147,7 +147,7 @@ EPTable/expand
     operation: {
       label?: string
       width?: string
-      isVisible?: (row: any, index: number) => boolean
+      hidden?: boolean|(row: any, scope:any) => boolean  //布尔值|函数类型
       operationType?: "rowEdit" // rowEdit 为开启行编辑，配合inputType使用
       func: (row:any,scope:any)=>{}
       disabled?: boolean

@@ -38,7 +38,7 @@
       >
         <!-- 主体内容 -->
         <template v-for="(item, index) in renderColumns">
-          <template v-if="!item?.hidden">
+          <template v-if="!item?.hidden && !item?.hiddenAll">
             <el-table-column
               show-overflow-tooltip
               :key="index + 'i'"
@@ -123,7 +123,7 @@
                   </template>
                 </template>
                 <template v-else v-for="(op, index) in item.operation" :key="index">
-                  <template v-if="!(op.isVisible && op.isVisible(scope.row, scope.$index))">
+                  <template v-if="!hiddenOp(op, scope)">
                     <el-popconfirm
                       v-if="op.isShowConfirm"
                       :title="item.msg || '确认删除？'"
@@ -261,7 +261,7 @@ interface Props {
       | {
           label?: string
           width?: string
-          isVisible?: (row: any, index: number) => boolean
+          hidden?: (row: any, index: number) => boolean
           operationType?: "rowEdit"
           func: Function
           disabled?: boolean
@@ -326,7 +326,15 @@ let state = reactive<any>({
 const EPTableBox = ref<HTMLElement | any>(null)
 // 获取columnSet Ref
 const columnSetRef = ref<HTMLElement | any>(null)
-
+// 是否隐藏操作项
+const hiddenOp = (op: any, scope: any) => {
+  if (typeof op.hidden == "boolean") {
+    return op.hidden
+  } else if (typeof op.hidden == "function") {
+    return op.hidden(scope.row, scope)
+  }
+  return false
+}
 // 序号
 const indexMethod = (index, item) => {
   if (props.isShowPagination && item.type == "index") {

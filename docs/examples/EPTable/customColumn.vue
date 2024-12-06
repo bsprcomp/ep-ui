@@ -47,7 +47,7 @@ const columns = [
       },
       {
         label: "是否显示",
-        isVisible: (row, scope) => row.id % 2 == 0,
+        hidden: (row, scope) => row.id % 2 == 0,
         func: row => alert("显示")
       }
     ]
