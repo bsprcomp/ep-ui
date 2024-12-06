@@ -18,19 +18,19 @@ EPTable/base
 
 ### 显示分页
 
-:::demo isShowPagination 设置 true
+:::demo `isShowPagination` 默认值 `true`显示分页,`v-model:page` 接收 page 变化 `{current:1, size:10,total:0}`，total 需要手动赋值; `reserveSelection:true` 支持分页反选
 EPTable/isShowPagination
 :::
 
 ### 分页属性设置 pageProps
 
-:::demo
+:::demo 默认分页 size， 当前页为 page，如需更改默认，使用 currentPage 和 pageSize 映射
 EPTable/paginationProps
 :::
 
 ### 索引
 
-:::demo
+:::demo columns 中设置`type:'index'`开启索引。索引在`isShowPagination为true`的情况下，分页递增，如需还原默认设置，设置 index:undefined
 EPTable/indexCom
 columns 中一项 设置 type 为 index
 :::
@@ -39,6 +39,12 @@ columns 中一项 设置 type 为 index
 
 :::demo v-model:check 绑定（需配合 rowKey 使用，rowKey 组件已默认`id`;支持默认选中）
 EPTable/check
+:::
+
+### 复选框支持默认选中
+
+:::demo 考虑到后端分页，默认选中需要开启 `reserveSelection:true` 反选功能，示例：`{ type: "selection", width: "55", reserveSelection: true }`
+EPTable/defaultCheck
 :::
 
 ### 使用 filterCheckList 方法 ，过滤 checkList

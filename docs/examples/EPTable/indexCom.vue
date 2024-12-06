@@ -1,9 +1,5 @@
 <template>
   <div class="wrapper vp-raw">
-    <el-alert
-      type="info"
-      description="columns中设置type:'index'开启索引，索引在isShowPagination为true的情况下，还原默认设置index:undefined"
-    />
     <EPTable
       size="small"
       :is-show-menu="false"

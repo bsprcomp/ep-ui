@@ -10,9 +10,7 @@
       :isShowPagination="true"
       @getData="getData"
       :loading="loading"
-    >
-      <template #extra> 数量：{{ checkedList.length }} </template>
-    </EPTable>
+    />
   </div>
 </template>
 
@@ -20,7 +18,7 @@
 import { onMounted, onUnmounted, reactive, ref, watch } from "vue"
 const loading = ref(true)
 const timer = ref()
-const checkedList = ref([])
+const checkedList = ref([1, 3, 5, 7, 13])
 // 初始化
 const page = reactive({ size: 10, page: 1, total: 0 })
 const data = ref<any[]>([])

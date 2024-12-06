@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper vp-raw">
-    <el-alert type="info" description="pageProps使用" />
     <EPTable
       size="small"
       :data="data"

@@ -1,5 +1,5 @@
 <template>
-  <div class="e-p-table" ref="EPTableBox">
+  <div class="e-p-table">
     <div class="table-content" ref="tableContent">
       <div ref="extraRef" class="header-wapper">
         <div class="extra" v-if="slots.extra">
@@ -18,7 +18,6 @@
               :name="name"
               :menuConfig="menuConfig"
               :columns="columns"
-              ref="columnSetRef"
               @columnSetting="v => (state.columnSet = v)"
             />
           </div>
@@ -29,6 +28,8 @@
         ref="tableInstance"
         :data="state.tableData"
         @selection-change="selectionChange"
+        @select="handleSelect"
+        @select-all="handleSelect"
         @row-click="rowClick"
         :row-key="rowKey"
         highlight-current-row
@@ -201,19 +202,10 @@
 </template>
 
 <script setup lang="ts" name="EPTable">
-import { ElMessage, type TableInstance } from "element-plus"
-import {
-  computed,
-  ref,
-  watch,
-  useSlots,
-  reactive,
-  onUpdated,
-  VNode,
-  onMounted,
-  nextTick
-} from "vue"
+import { ElMessage } from "element-plus"
+import { computed, ref, watch, useSlots, onUpdated, VNode, onMounted } from "vue"
 import useHooks from "./useHooks"
+import useCheckList from "./useCheckList"
 
 import ColumnSet from "./ColumnSet.vue"
 import CustomRender from "./CustomRender.vue"
@@ -231,8 +223,6 @@ const check = defineModel<any>("check", {
   default: []
 })
 const sortParam = defineModel<any>("sortParam", { default: {} })
-const tableInstance = ref<TableInstance>()
-
 interface Props {
   loading?: boolean
   name?: string
@@ -317,15 +307,7 @@ const {
 } = useHooks(props, emits)
 const tableContent = ref()
 const extraRef = ref()
-// 初始化数据
-let state = reactive<any>({
-  tableData: props.data,
-  columnSet: []
-})
-// 获取e-p-table ref
-const EPTableBox = ref<HTMLElement | any>(null)
-// 获取columnSet Ref
-const columnSetRef = ref<HTMLElement | any>(null)
+const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({ ...props, check })
 // 是否隐藏操作项
 const hiddenOp = (op: any, scope: any) => {
   if (typeof op.hidden == "boolean") {
@@ -368,7 +350,9 @@ const newFilterCheckList = (list: any[]) => {
 }
 // 复选框
 const selectionChange = value => {
-  check.value = newFilterCheckList(value)
+  if (!isReserveSelection.value) {
+    check.value = newFilterCheckList(value)
+  }
 }
 // 排序
 const sortChange = (data: any) => {
@@ -396,13 +380,6 @@ const handleSizeChange = () => {
 
 onUpdated(() => {
   tableInstance.value?.doLayout()
-})
-
-watch(check, () => {
-  if (!check.value.length) {
-    // 复选框选中为空时，清空列表所有选中
-    tableInstance.value?.clearSelection()
-  }
 })
 
 // 所有列（表头数据）
