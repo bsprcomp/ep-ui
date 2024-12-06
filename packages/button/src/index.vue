@@ -1,7 +1,7 @@
 <template>
   <!-- 按钮提示 -->
   <el-tooltip v-if="tip" :content="tip" v-bind="{ placement: 'top', ...tipProps }">
-    <el-button :loading="loading" v-bind="$attrs" class="e-p-button-tip" @click.stop="handleClick">
+    <el-button :loading="loading" v-bind="$attrs" class="e-p-button-tip" @click="handleClick">
     </el-button>
   </el-tooltip>
   <!-- 无提示 -->

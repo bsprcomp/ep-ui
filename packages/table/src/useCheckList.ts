@@ -4,7 +4,7 @@ export default function (props) {
   const tableInstance = ref<TableInstance>()
   const isReserveSelection = computed(() => {
     const data = props.columns.find(item => item.type === "selection")
-    return data["reserveSelection"] || data["reserve-selection"]
+    return data?.["reserveSelection"] || data?.["reserve-selection"]
   })
   // 初始化数据
   let state = reactive<any>({

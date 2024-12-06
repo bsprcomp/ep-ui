@@ -132,6 +132,7 @@
                     >
                       <template #reference>
                         <EPButton
+                          @click="setRowSelected(op, scope.row)"
                           v-bind="{
                             type: 'primary',
                             link: true,
@@ -227,6 +228,7 @@ interface Props {
   loading?: boolean
   name?: string
   rowKey?: string
+  heightlightClick?: boolean
   filterCheckList?: (list: any[]) => any
   isShowMenu?: boolean
   refreshTitle?: string
@@ -285,6 +287,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  heightlightClick: false,
   loading: false,
   refreshTitle: "刷新",
   rowKey: "id",
@@ -296,6 +299,7 @@ const props = withDefaults(defineProps<Props>(), {
   ascs: "ascs",
   descs: "descs"
 })
+const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({ ...props, check })
 const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
 const {
   editRowKey,
@@ -303,11 +307,11 @@ const {
   handleRowEditSave,
   handleRowEditCancel,
   newPageProps,
-  bindPageProps
-} = useHooks(props, emits)
+  bindPageProps,
+  setRowSelected
+} = useHooks(props, emits, tableInstance)
 const tableContent = ref()
 const extraRef = ref()
-const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({ ...props, check })
 // 是否隐藏操作项
 const hiddenOp = (op: any, scope: any) => {
   if (typeof op.hidden == "boolean") {

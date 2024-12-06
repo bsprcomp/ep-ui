@@ -1,5 +1,5 @@
 import { computed, nextTick, ref, defineEmits } from "vue"
-export default function (props, emits) {
+export default function (props, emits, tableInstance: any) {
   // 抛出事件
 
   // 保存当前编辑列id (开启编辑)
@@ -26,16 +26,20 @@ export default function (props, emits) {
   const bindPageProps = computed(() => ({
     ...res
   }))
+  const setRowSelected = (item, row) => {
+    if (props.heightlightClick && !item.removeHeightlightClick) {
+      tableInstance.value.setCurrentRow(row)
+    }
+  }
   // 筛选编辑项
   const editColumnItemArr = computed(() => props.columns.filter(item => item.inputType))
   const handleRowClick = (row: any, item: any, scope) => {
+    setRowSelected(item, row)
     if (item.operationType === "rowEdit") {
       // 给可编辑列新增属性 ${item.editKey || item.prop}EditValue,并赋默认值
       editColumnItemArr.value.map(item => {
         row[`${item.editKey || item.prop}EditValue`] = row[item.prop as any]
       })
-      console.log(row, "row")
-
       nextTick(() => {
         editRowKey.value = row[props.rowKey]
       })
@@ -64,6 +68,7 @@ export default function (props, emits) {
     handleRowClick,
     handleRowEditSave,
     handleRowEditCancel,
-    bindPageProps
+    bindPageProps,
+    setRowSelected
   }
 }

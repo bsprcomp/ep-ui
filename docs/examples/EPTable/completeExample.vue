@@ -5,6 +5,7 @@
 <template>
   <div class="wrapper vp-raw">
     <EPTable
+      :heightlightClick="true"
       v-model:page="page"
       :data="data"
       :columns="columns"
