@@ -2,7 +2,7 @@
 
 ### 基础用法
 
-:::demo
+:::demo 如需显示 按钮提交 loading 动画（^0.2.4），请设置`v-model:submitLoading`
 EPDialog/base
 :::
 

@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    ref="dialogRef"
     v-model="dialogVisible"
     :title="title"
     width="600"
@@ -30,7 +31,12 @@
           <el-button v-if="!hiddenCancelBtn" @click="emits('handleCancel')">{{
             cancelText
           }}</el-button>
-          <el-button v-if="!hiddensubmitBtn" @click="handleSubmit" type="primary">
+          <el-button
+            :loading="submitLoading"
+            v-if="!hiddensubmitBtn"
+            @click="handleSubmit"
+            type="primary"
+          >
             {{ submitText }}
           </el-button>
         </div>
@@ -40,9 +46,10 @@
 </template>
 
 <script setup lang="ts" name="EPDialog">
-import { useSlots, ref, watch, computed } from "vue"
+import { useSlots, ref, watch, computed, nextTick } from "vue"
 const slots = useSlots()
 const formRef = ref()
+const dialogRef = ref()
 const extraSlot = ["footer", "bootom", "top", "content", "header"]
 type Props = {
   title?: string
@@ -67,6 +74,7 @@ type Props = {
       }
     | any
 }
+const submitLoading = defineModel("submitLoading", { default: true })
 const props = withDefaults(defineProps<Props>(), {
   title: "标题",
   submitText: "确 定",
@@ -96,15 +104,23 @@ const dialogVisible = defineModel({ default: false })
 const params = defineModel("params")
 const handleClose = () => {
   dialogVisible.value = false
+  submitLoading.value = false
   emits("handleCancel")
 }
 const handleSubmit = async () => {
   await formRef.value.validate()
   emits("handleSubmit")
 }
+const clearValidate = () => {
+  formRef.value?.clearValidate()
+}
 watch(dialogVisible, newValue => {
   if (newValue) {
-    formRef.value?.clearValidate()
+    nextTick(() => {
+      clearValidate()
+      submitLoading.value = false
+    })
   }
 })
+defineExpose({ formRef, dialogRef, clearValidate })
 </script>

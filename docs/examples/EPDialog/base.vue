@@ -9,6 +9,7 @@
       title="新增"
       v-model:params="formParams"
       v-model="dialogVisible"
+      v-model:submitLoading="submitLoading"
       :formProps="formProps"
       @handleSubmit="handleSubmit"
       @handleCancel="handleCancel"
@@ -21,6 +22,7 @@ import { tools } from "../../../packages/index"
 //import { tools } from "@bscomp/ep-ui" 在实际项目中使用
 import { ref } from "vue"
 const dialogVisible = ref(false)
+const submitLoading = ref(false)
 // form items
 const formItems = [
   {
@@ -97,8 +99,12 @@ const formProps = {
 // 获取初始化值（getParams 会返回一个对象 {[prop]:defaultValue||''}
 const formParams = ref(tools.getParams(formItems))
 const handleSubmit = () => {
-  console.log(formParams.value, "formParams===>handleSubmit")
-  dialogVisible.value = false
+  submitLoading.value = true
+  setTimeout(() => {
+    console.log(formParams.value, "formParams===>handleSubmit")
+    submitLoading.value = false
+    dialogVisible.value = false
+  }, 1000)
 }
 const handleCancel = () => {
   dialogVisible.value = false
