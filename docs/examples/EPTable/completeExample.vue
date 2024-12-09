@@ -3,59 +3,60 @@
      is-show-menu需要配合name使用，设置唯一table名称，用于lolocalStorage缓存key（下拉菜单可拖拽排序）
  -->
 <template>
-  <div class="wrapper vp-raw">
-    <EPTable
-      :heightlightClick="true"
-      v-model:page="page"
-      :data="data"
-      :columns="columns"
-      @getData="getData"
-      is-show-pagination
-      is-show-menu
-      v-model:check="checkList"
-      name="TestTable"
-    >
-      <!-- 表额外插槽，单独一行，自行处理样式 -->
-      <template #extra>
-        <EPForm
-          ref="epForm"
-          label-suffix=":"
-          :formItems="formItems"
-          label-width="60px"
-          inline
-          v-model:expand="expand"
-          v-model="formParams"
-          :operatorList="operatorList"
-          @formChange="formChange"
-          @getRef="el => (formRef = el)"
-        />
-      </template>
-      <template #radio><el-radio>111</el-radio></template>
-      <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
-      <template #button>
-        <EPButton value="新 增" type="primary" antiClick @click="add()" />
-        <el-popconfirm title="是否确定批量删除？" @confirm="batchDelete">
-          <template #reference>
-            <EPButton :disabled="!checkList.length" value="批量删除" />
-          </template>
-        </el-popconfirm>
-      </template>
-      <!-- 预留input插槽 ，可以放置搜索框等 -->
-      <template #input>
-        <!-- antiClick 开启点击loading -->
-        <EPInput placeholder="请输入姓名" />
-      </template>
-    </EPTable>
-    <EPDialog
-      :title="dialogTitle"
-      @handle-cancel="dialogVisible = false"
-      @handle-submit="handleSubmit"
-      v-model:params="dialogParams"
-      :formProps="formProps"
-      v-model="dialogVisible"
-      max-height="400px"
-    ></EPDialog>
-  </div>
+  <EPConfigProvider :table="table">
+    <div class="wrapper vp-raw">
+      <EPTable
+        v-model:page="page"
+        :data="data"
+        :columns="columns"
+        @getData="getData"
+        is-show-pagination
+        is-show-menu
+        v-model:check="checkList"
+        name="TestTable"
+      >
+        <!-- 表额外插槽，单独一行，自行处理样式 -->
+        <template #extra>
+          <EPForm
+            ref="epForm"
+            label-suffix=":"
+            :formItems="formItems"
+            label-width="60px"
+            inline
+            v-model:expand="expand"
+            v-model="formParams"
+            :operatorList="operatorList"
+            @formChange="formChange"
+            @getRef="el => (formRef = el)"
+          />
+        </template>
+        <template #radio><el-radio>111</el-radio></template>
+        <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
+        <template #button>
+          <EPButton value="新 增" type="primary" antiClick @click="add()" />
+          <el-popconfirm title="是否确定批量删除？" @confirm="batchDelete">
+            <template #reference>
+              <EPButton :disabled="!checkList.length" value="批量删除" />
+            </template>
+          </el-popconfirm>
+        </template>
+        <!-- 预留input插槽 ，可以放置搜索框等 -->
+        <template #input>
+          <!-- antiClick 开启点击loading -->
+          <EPInput placeholder="请输入姓名" />
+        </template>
+      </EPTable>
+      <EPDialog
+        :title="dialogTitle"
+        @handle-cancel="dialogVisible = false"
+        @handle-submit="handleSubmit"
+        v-model:params="dialogParams"
+        :formProps="formProps"
+        v-model="dialogVisible"
+        max-height="400px"
+      ></EPDialog>
+    </div>
+  </EPConfigProvider>
 </template>
 
 <script setup lang="tsx">
@@ -69,6 +70,12 @@ const dialogVisible = ref(false)
 const checkList = ref([])
 // 模拟弹框下拉选项接口返回，并在dialogFormitems中使用
 const options = ref<any>([])
+const table = {
+  pageProps: {
+    pageSizes: [15, 30, 50, 100]
+  },
+  heightlightClick: true
+}
 // 是否编辑
 const isEdit = ref(false)
 // 弹框标题

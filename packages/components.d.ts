@@ -7,6 +7,7 @@ import EPRadio from "./radio/src/index.vue"
 import EPCheckbox from "./checkbox/src/index.vue"
 import EPDialog from "./form-dialog/src/index.vue"
 import EPForm from "./form/src/index.vue"
+import EPConfigProvider from "./config-provider/src/config-provider"
 
 declare module "vue" {
   export interface GlobalComponents {
@@ -19,5 +20,6 @@ declare module "vue" {
     EPCheckbox: typeof EPCheckbox
     EPDialog: typeof EPDialog
     EPForm: typeof EPForm
+    EPConfigProvider: typeof EPConfigProvider
   }
 }

@@ -1,16 +1,16 @@
 import { computed, nextTick, ref, defineEmits } from "vue"
-export default function (props, emits, tableInstance: any) {
+export default function (props, emits, tableInstance: any, tableConfig: any) {
   // 抛出事件
 
   // 保存当前编辑列id (开启编辑)
   const editRowKey = ref()
   const {
-    pageSize = "size",
-    currentPage = "page",
-    size = "default",
-    background = true,
-    pageSizes = [10, 20, 50, 100],
-    layout = "total,sizes, prev, pager, next, jumper",
+    pageSize = tableConfig?.pageProps?.pageSize ?? "size",
+    currentPage = tableConfig?.pageProps?.currentPage ?? "page",
+    size = tableConfig?.pageProps?.size ?? "default",
+    background = tableConfig?.pageProps?.background ?? true,
+    pageSizes = tableConfig?.pageProps?.pageSizes ?? [10, 20, 50, 100],
+    layout = tableConfig?.pageProps?.layout ?? "total,sizes, prev, pager, next, jumper",
     ...res
   } = props.pageProps
   // 赋值
@@ -27,7 +27,7 @@ export default function (props, emits, tableInstance: any) {
     ...res
   }))
   const setRowSelected = (item, row) => {
-    if (props.heightlightClick && !item.removeHeightlightClick) {
+    if (item.heightlightClick ?? props.heightlightClick ?? tableConfig?.heightlightClick ?? false) {
       tableInstance.value.setCurrentRow(row)
     }
   }

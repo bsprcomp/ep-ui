@@ -204,7 +204,7 @@
 
 <script setup lang="ts" name="EPTable">
 import { ElMessage } from "element-plus"
-import { computed, ref, watch, useSlots, onUpdated, VNode, onMounted } from "vue"
+import { inject, computed, ref, watch, useSlots, onUpdated, VNode, onMounted } from "vue"
 import useHooks from "./useHooks"
 import useCheckList from "./useCheckList"
 
@@ -228,7 +228,7 @@ interface Props {
   loading?: boolean
   name?: string
   rowKey?: string
-  heightlightClick?: boolean
+  heightlightClick?: any
   filterCheckList?: (list: any[]) => any
   isShowMenu?: boolean
   refreshTitle?: string
@@ -285,13 +285,11 @@ interface Props {
   ascs?: string
   descs?: string
 }
-
+const tableConfig = inject("table")
 const props = withDefaults(defineProps<Props>(), {
-  heightlightClick: false,
   loading: false,
   refreshTitle: "刷新",
   rowKey: "id",
-  isShowMenu: false,
   pageProps: () => ({}),
   extra: 0,
   isShowPagination: true,
@@ -299,7 +297,10 @@ const props = withDefaults(defineProps<Props>(), {
   ascs: "ascs",
   descs: "descs"
 })
-const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({ ...props, check })
+const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({
+  ...props,
+  check
+})
 const emits = defineEmits(["sort", "getData", "rowSort", "editSave", "editCancel"])
 const {
   editRowKey,
@@ -309,7 +310,7 @@ const {
   newPageProps,
   bindPageProps,
   setRowSelected
-} = useHooks(props, emits, tableInstance)
+} = useHooks(props, emits, tableInstance, tableConfig)
 const tableContent = ref()
 const extraRef = ref()
 // 是否隐藏操作项

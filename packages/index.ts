@@ -8,6 +8,7 @@ import EPForm from "./form"
 import EPDatePicker from "./date-picker"
 import EPRadio from "./radio"
 import EPDialog from "./form-dialog"
+import EPConfigProvider from "./config-provider"
 import * as tools from "./utils"
 // 存储组件列表
 const components: {
@@ -21,17 +22,18 @@ const components: {
   EPButton,
   EPDatePicker,
   EPRadio,
-  EPDialog
+  EPDialog,
+  EPConfigProvider
 }
 // 插件声明：声明所有插件
 // 插件注册：在 Vue 项目的入口文件中，通过 ( app.use(插件) ) 进行注册
-const installComponents: any = (app: App) => {
+const installComponents: any = (app: App, options) => {
   for (const key in components) {
     app.component(key, components[key])
   }
 }
-const install: any = (app: any, router?: any) => {
-  installComponents(app)
+const install: any = (app: any, options) => {
+  installComponents(app, options)
 }
 // @ts-ignore
 if (typeof window !== "undefined" && window.Vue) {
