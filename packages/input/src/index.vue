@@ -20,12 +20,12 @@ import { ElInput } from "element-plus"
 type Props = {
   placeholder?: string
   width?: string
-  inputType?: "text" | "integer"
+  inputType?: "trim" | "integer" | ""
 }
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "请输入",
   width: "100%",
-  inputType: "text"
+  inputType: "trim"
 })
 const emit = defineEmits(["update:modelValue"])
 const modelValue = defineModel<string | number>()
@@ -34,11 +34,15 @@ const inputRule = computed(() => {
     case "integer":
       return /[^\d]/g
     default:
-      return /[\\]/g //输入任意
+      return /[\s]/g //默认去除空格
   }
 })
 // 处理输入
 const handleInput = v => {
-  emit("update:modelValue", v.replace(inputRule.value, ""))
+  if (props.inputType) {
+    emit("update:modelValue", v.replace(inputRule.value, ""))
+  } else {
+    return v
+  }
 }
 </script>

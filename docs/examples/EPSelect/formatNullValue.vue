@@ -1,6 +1,12 @@
 <template>
   <div class="wrapper">
-    <EPSelect v-model="selectValue" :options="options" @change="change" width="200px" />
+    <EPSelect
+      formatNullValue="Option1"
+      v-model="selectValue"
+      :options="options"
+      @change="change"
+      width="200px"
+    />
   </div>
 </template>
 <script setup lang="ts" name="BaseEPSelect">
@@ -21,6 +27,6 @@ const options = [
   }
 ]
 const change = (val: any) => {
-  console.log(val, selectValue.value, "selectValue.value")
+  console.log(val, selectValue.value, typeof selectValue.value, "selectValue.value")
 }
 </script>

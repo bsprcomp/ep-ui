@@ -2,6 +2,18 @@
 
 ---
 
+### 基础用法
+
+::: demo
+EPDatePicker/base
+:::
+
+### 空值格式化(^0.2.5)
+
+:::demo 清空选择日期默认返回`formatNullValue`值。type 类型为范围选择器（`daterange`,`datetimerange`等）时，清空默认返回 null,如需修改默认返回，设置`formatNullValue`，例如清空默认返回空数组`formatNullValue=[]`
+EPDatePicker/formatNullValue
+:::
+
 ### 选择某一天
 
 ::: demo

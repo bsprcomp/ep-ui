@@ -3,6 +3,7 @@
     <el-date-picker
       v-model="selectedDate"
       :shortcuts="shortcuts"
+      @change="handleChange"
       ref="datePicker"
       v-bind="{ type, valueFormat: defaultValueFormat, format: defaultFormat, ...$attrs }"
     >
@@ -17,7 +18,7 @@ import { computed, onMounted, ref, useSlots } from "vue"
 const slots = useSlots()
 const selectedDate = defineModel<any>()
 const datePicker = ref()
-const emit = defineEmits(["getRef"])
+const emit = defineEmits(["getRef", "change"])
 
 type Props = {
   shortcutsName?:
@@ -51,12 +52,16 @@ type Props = {
     | "monthrange"
     | "yearrange"
   [x: string]: any
+  formatNullValue?: any
 }
 const props = withDefaults(defineProps<Props>(), {
+  type: "date",
   format: "YYYY-MM-DD",
   valueFormat: "YYYY-MM-DD",
+  formatNullValue: "",
   shortcutsName: () => []
 })
+
 const defaultFormat = ref()
 const defaultValueFormat = ref()
 
@@ -183,6 +188,13 @@ const shortcuts = computed(() => {
   }, {})
   return props.shortcutsName.map(name => nameMap[name])
 })
+// 当前选中
+const handleChange = (val: any) => {
+  if (!val) {
+    selectedDate.value = props.formatNullValue
+  }
+  emit("change", val ?? props.formatNullValue)
+}
 onMounted(() => {
   emit("getRef", datePicker.value)
   format()

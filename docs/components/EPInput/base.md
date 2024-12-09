@@ -4,7 +4,13 @@ pageClass: page
 
 # EPInput 输入框组件
 
-### 基本使用
+### 默认去除空格（^0.2.4）
+
+:::demo 默认 EPinput 组件输入去除空格符，取消默认设置 `inputType=""`
+EPInput/trim
+:::
+
+### 常见类型
 
 :::demo
 EPInput/base

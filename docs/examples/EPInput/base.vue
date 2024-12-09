@@ -12,7 +12,6 @@
       <EPInput placeholder="后图标" v-model="input5" :suffix-icon="Search" width="49%" />
       <EPInput placeholder="密码框" v-model="input6" type="password" width="49%" />
     </p>
-
     <p>
       <EPInput placeholder="文本域" type="textarea" v-model="input7" />
       <EPInput show-word-limit maxlength="20" type="textarea" v-model="input8" />

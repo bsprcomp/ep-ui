@@ -83,5 +83,6 @@ const change = (event, type, value) => {
     flex-wrap: wrap;
     gap: 16px;
   }
+  height: 400px;
 }
 </style>
