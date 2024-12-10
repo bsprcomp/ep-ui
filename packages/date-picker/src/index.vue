@@ -21,6 +21,7 @@ const datePicker = ref()
 const emit = defineEmits(["getRef", "change"])
 
 type Props = {
+  formatNullValue?: any
   shortcutsName?:
     | (
         | "今天"
@@ -51,8 +52,6 @@ type Props = {
     | "daterange"
     | "monthrange"
     | "yearrange"
-  [x: string]: any
-  formatNullValue?: any
 }
 const props = withDefaults(defineProps<Props>(), {
   type: "date",
