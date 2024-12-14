@@ -181,7 +181,6 @@ const DATA = Array.from({ length: 100 }).map((_, index) => ({
   address: "南京"
 }))
 const columns = ref<any[]>([
-  { prop: "", width: "100", slotName: "radio", hiddenAll: true },
   { type: "selection", width: "55" },
   {
     prop: "name",
