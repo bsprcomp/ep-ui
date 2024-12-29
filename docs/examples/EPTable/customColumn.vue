@@ -11,44 +11,43 @@ import { createElementVNode, onMounted, ref } from "vue"
 const data = ref<any[]>([])
 const columns = [
   {
-    minWidth: "800px",
+    minWidth: "960px",
     prop: "operation",
     label: "操作",
     fixed: "right",
     operation: [
       {
-        label: "disabled禁止",
+        label: "disabled(boolean)",
         disabled: true,
         func: (row, scope) => {}
       },
       {
-        label: "isDisabled回调禁止",
-        isDisabled: (row, scope) => row.id % 2 == 0,
+        label: "disabled(回调函数)",
+        disabled: (row, scope) => row.id % 2 == 0,
         func: (row, scope) => {}
       },
       {
-        label: "删除",
-        func: (row, scope) => {
-          alert("删除")
-        }
-      },
-      {
         render: () => createElementVNode("span", { style: { color: "red" } }, "createElementVNode"),
-        func: row => alert("createElementVNode渲染")
+        func: (row, scope) => {}
       },
       {
-        render: () => <el-radio>JSX/TSX渲染</el-radio>,
-        func: row => alert("JSX/TSX渲染")
+        render: () => <b>JSX/TSX渲染</b>,
+        func: (row, scope) => {}
       },
       {
         label: "插槽渲染",
         slotName: "operationCom",
-        func: row => alert("插槽渲染")
+        func: (row, scope) => {}
       },
       {
-        label: "是否显示",
+        label: "hidden(boolean)",
+        hidden: false,
+        func: (row, scope) => {}
+      },
+      {
+        label: "hidden(回调函数)",
         hidden: (row, scope) => row.id % 2 == 0,
-        func: row => alert("显示")
+        func: (row, scope) => {}
       }
     ]
   }
@@ -64,6 +63,6 @@ onMounted(() => {
 </script>
 <style scoped>
 .wrapper {
-  height: 400px;
+  height: 300px;
 }
 </style>

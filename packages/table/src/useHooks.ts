@@ -54,7 +54,6 @@ export default function (props, emits, tableInstance: any, tableConfig: any) {
       row[`${item.editKey || item.prop}`] = row[`${item.editKey || item.prop}EditValue`]
       delete row[`${item.editKey || item.prop}EditValue`]
     })
-    console.log(row, "row")
     emits("editSave", row)
   }
   // 行取消

@@ -1,7 +1,3 @@
-::: warning
-**组件应放在有高度的元素中**
-:::
-
 # EPTable 表格
 
 ### 完整示例
@@ -14,6 +10,24 @@ EPTable/completeExample
 
 :::demo 组件只需简单配置 data 数据源和 columns 就能快速展示列表
 EPTable/base
+:::
+
+### 显示操作列
+
+:::demo 注意：操作列支持子数组 children 功能 `0.2.8^`，如下`更多`
+EPTable/operation
+:::
+
+### 操作列开启(`operationType: "rowEdit"`)行编辑（需配和 `inputType` 使用）
+
+:::demo 默认支持 input,select,radio,time,其他类型使用 custom 自定义;使用自定义时，参数改变需 `属性+"EditValue"`
+EPTable/rowEdit
+:::
+
+### 操作列复杂操作（按钮禁止，按钮自定义渲染，按钮是否显示）
+
+:::demo
+EPTable/customColumn
 :::
 
 ### 显示分页
@@ -63,24 +77,6 @@ EPTable/columnSetting
 
 :::demo
 EPTable/btnSlot
-:::
-
-### 显示操作列
-
-:::demo
-EPTable/operation
-:::
-
-### 操作列开启行编辑（需配和 inputType 使用）
-
-:::demo 默认支持 input,select,radio,time,其他类型使用 custom 自定义
-EPTable/rowEdit
-:::
-
-### 操作列复杂操作（按钮禁止，按钮自定义渲染，按钮是否显示）
-
-:::demo
-EPTable/customColumn
 :::
 
 ### 排序-前端排序

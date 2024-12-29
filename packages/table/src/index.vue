@@ -41,7 +41,7 @@
         <template v-for="(item, index) in renderColumns">
           <template v-if="!item?.hidden && !item?.hiddenAll">
             <el-table-column
-              show-overflow-tooltip
+              :show-overflow-tooltip="item.prop !== 'operation'"
               :key="index + 'i'"
               :sortable="item?.sortable || sortable"
               :index="index => indexMethod(index, item)"
@@ -81,7 +81,7 @@
                     v-model="scope.row[`${item.editKey || item?.prop}EditValue`]"
                   />
                   <template v-if="item.editSlotName">
-                    <slot :name="item.editSlotName" />
+                    <slot :scope="scope" :name="item.editSlotName" />
                   </template>
                   <RowEdit
                     v-else
@@ -115,70 +115,131 @@
               </template>
               <!-- 操作列 -->
               <template v-slot="scope" v-if="item?.prop == 'operation'">
-                <template v-if="editRowKey !== undefined">
-                  <template v-if="scope.row[rowKey] == editRowKey">
-                    <el-Button link type="primary" @click="handleRowEditSave(scope.row)"
-                      >保存</el-Button
-                    >
-                    <el-Button link @click="handleRowEditCancel()">取消</el-Button>
+                <div class="operation">
+                  <template v-if="editRowKey !== undefined">
+                    <template v-if="scope.row[rowKey] == editRowKey">
+                      <el-Button link type="primary" @click="handleRowEditSave(scope.row)"
+                        >保存</el-Button
+                      >
+                      <el-Button link @click="handleRowEditCancel()">取消</el-Button>
+                    </template>
                   </template>
-                </template>
-                <template v-else v-for="(op, index) in item.operation" :key="index">
-                  <template v-if="!hiddenOp(op, scope)">
-                    <el-popconfirm
-                      v-if="op.isShowConfirm"
-                      :title="item.msg || '确认删除？'"
-                      @confirm="handleRowClick(scope.row, op, scope)"
-                    >
-                      <template #reference>
+                  <template v-else v-for="(op, index) in item.operation" :key="index">
+                    <template v-if="!handleOp(op, scope)">
+                      <el-dropdown trigger="click" v-if="!!op?.children?.length">
+                        <el-button
+                          @click="handleRowClick(scope.row, op, scope)"
+                          v-bind="{ type: 'primary', link: true, ...op }"
+                          :disabled="op.disabled"
+                          >{{ op.label }} <el-icon><ArrowDown /></el-icon
+                        ></el-button>
+                        <template #dropdown>
+                          <el-dropdown-menu>
+                            <template v-for="sonOp in op.children">
+                              <el-dropdown-item v-if="!handleOp(sonOp, scope)" v-bind="sonOp">
+                                <el-popconfirm
+                                  v-if="sonOp.isShowConfirm"
+                                  :title="sonOp.msg || '确认删除？'"
+                                  @confirm="handleRowClick(scope.row, sonOp, scope)"
+                                >
+                                  <template #reference>
+                                    <el-button
+                                      @click="setRowSelected(sonOp, scope.row)"
+                                      v-bind="{
+                                        type: 'primary',
+                                        link: true,
+                                        ...sonOp
+                                      }"
+                                      :disabled="handleOp(sonOp, scope, 'disabled')"
+                                    >
+                                      {{ sonOp.label }}
+                                    </el-button>
+                                  </template>
+                                </el-popconfirm>
+                                <el-button
+                                  v-else
+                                  @click="handleRowClick(scope.row, sonOp, scope)"
+                                  v-bind="{
+                                    type: 'primary',
+                                    link: true,
+                                    ...sonOp
+                                  }"
+                                  :disabled="handleOp(sonOp, scope, 'disabled')"
+                                >
+                                  <!-- render渲染 -->
+                                  <template v-if="sonOp.render">
+                                    <CustomRender
+                                      :column="sonOp"
+                                      :row="scope.row"
+                                      :render="sonOp.render"
+                                      :index="scope.$index"
+                                    />
+                                  </template>
+                                  <template v-if="sonOp.slotName">
+                                    <slot :name="sonOp.slotName" :scope="scope"></slot>
+                                  </template>
+                                  <span v-if="!sonOp.render && !sonOp.slotName">{{
+                                    sonOp.label
+                                  }}</span>
+                                </el-button>
+                              </el-dropdown-item>
+                            </template>
+                          </el-dropdown-menu>
+                        </template>
+                      </el-dropdown>
+                      <template v-else>
+                        <el-popconfirm
+                          v-if="op.isShowConfirm"
+                          :title="item.msg || '确认删除？'"
+                          @confirm="handleRowClick(scope.row, op, scope)"
+                        >
+                          <template #reference>
+                            <EPButton
+                              @click="setRowSelected(op, scope.row)"
+                              v-bind="{
+                                type: 'primary',
+                                link: true,
+                                ...op
+                              }"
+                              :disabled="handleOp(op, scope, 'disabled')"
+                            >
+                              {{ op.label }}
+                            </EPButton>
+                          </template>
+                        </el-popconfirm>
                         <EPButton
-                          @click="setRowSelected(op, scope.row)"
+                          v-else
+                          @click="handleRowClick(scope.row, op, scope)"
                           v-bind="{
                             type: 'primary',
                             link: true,
                             ...op
                           }"
-                          :disabled="
-                            op.disabled ||
-                            (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
-                          "
+                          :disabled="handleOp(op, scope, 'disabled')"
                         >
-                          {{ op.label }}
+                          <!-- render渲染 -->
+                          <template v-if="op.render">
+                            <CustomRender
+                              :column="op"
+                              :row="scope.row"
+                              :render="op.render"
+                              :index="scope.$index"
+                            />
+                          </template>
+                          <template v-if="op.slotName">
+                            <slot :name="op.slotName" :scope="scope"></slot>
+                          </template>
+                          <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
                         </EPButton>
                       </template>
-                    </el-popconfirm>
-                    <EPButton
-                      v-else
-                      @click="handleRowClick(scope.row, op, scope)"
-                      v-bind="{
-                        type: 'primary',
-                        link: true,
-                        ...op
-                      }"
-                      :disabled="
-                        op.disabled || (op?.isDisabled && op.isDisabled(scope.row, scope.$index))
-                      "
-                    >
-                      <!-- render渲染 -->
-                      <template v-if="op.render">
-                        <CustomRender
-                          :column="op"
-                          :row="scope.row"
-                          :render="op.render"
-                          :index="scope.$index"
-                        />
-                      </template>
-                      <template v-if="op.slotName">
-                        <slot :name="op.slotName" :scope="scope"></slot>
-                      </template>
-                      <span v-if="!op.render && !op.slotName">{{ op.label }}</span>
-                    </EPButton>
+                    </template>
                   </template>
-                </template>
+                </div>
               </template>
             </el-table-column>
           </template>
         </template>
+
         <slot></slot>
         <!-- 操作按钮 -->
       </el-table>
@@ -224,6 +285,19 @@ const check = defineModel<any>("check", {
   default: []
 })
 const sortParam = defineModel<any>("sortParam", { default: {} })
+type Operation = {
+  label?: string
+  width?: string
+  hidden?: (row: any, index: number) => boolean
+  operationType?: "rowEdit"
+  func?: Function
+  disabled?: boolean
+  slotName?: string
+  render?: (row: any) => VNode
+  isShowConfirm?: boolean
+  msg?: boolean
+  children?: Operation[]
+}
 interface Props {
   loading?: boolean
   name?: string
@@ -249,22 +323,7 @@ interface Props {
     hidden?: boolean
     render?: Function
     [x: string]: any
-    operation?:
-      | {
-          label?: string
-          width?: string
-          hidden?: (row: any, index: number) => boolean
-          operationType?: "rowEdit"
-          func: Function
-          disabled?: boolean
-          isDisabled?: (row: any, index: number) => boolean
-          slotName?: string
-          render?: (row: any) => VNode
-          isShowConfirm?: boolean
-          msg?: boolean
-        }[]
-      | []
-      | undefined
+    operation?: Operation[] | [] | undefined
   }[]
   // table对齐方式
   align?: "left" | "center" | "right"
@@ -314,11 +373,11 @@ const {
 const tableContent = ref()
 const extraRef = ref()
 // 是否隐藏操作项
-const hiddenOp = (op: any, scope: any) => {
-  if (typeof op.hidden == "boolean") {
-    return op.hidden
-  } else if (typeof op.hidden == "function") {
-    return op.hidden(scope.row, scope)
+const handleOp = (op: any, scope: any, type = "hidden") => {
+  if (typeof op[type] == "boolean") {
+    return op[type]
+  } else if (typeof op[type] == "function") {
+    return op[type](scope.row, scope)
   }
   return false
 }
@@ -440,6 +499,14 @@ div {
     .header {
       padding-bottom: 16px;
     }
+    .operation {
+      display: flex;
+      align-items: center;
+      ::v-deep(.el-button + .el-button) {
+        margin-left: 0 !important;
+      }
+      gap: 12px;
+    }
   }
   .el-pagination-com {
     padding-top: 16px;
@@ -452,15 +519,6 @@ div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  // 单选样式
-  .radioStyle {
-    :deep(tbody) {
-      .el-table__row {
-        cursor: pointer;
-      }
-    }
   }
 }
 .btn-wrapper,

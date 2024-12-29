@@ -1,7 +1,11 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" />
+    <EPTable :data="data" :columns="columns" @editSave="editSave">
+      <template v-slot:customInput="{ scope }">
+        <el-input v-model="scope.row['test_5' + 'EditValue']" />
+      </template>
+    </EPTable>
   </div>
 </template>
 
@@ -9,6 +13,7 @@
 import EPTable from "../../../packages/table/index"
 import { ElCheckbox } from "element-plus"
 import { computed, onMounted, ref } from "vue"
+const params = ref({ test_5: "" })
 const data = ref<any[]>([])
 const selectOptions = ref([
   { label: "类型_1", value: "类型_1" },
@@ -29,7 +34,7 @@ const columns = computed<any[]>(() => [
   },
   {
     prop: "test_3",
-    //  editKey: "gradeId",  // 可通过editKey映射实际编辑字段
+    editKey: "gradeId", // 可通过editKey映射实际编辑字段
     label: "select",
     inputType: "select",
     minWidth: "180",
@@ -43,10 +48,25 @@ const columns = computed<any[]>(() => [
   },
   {
     prop: "test_5",
-    label: "custom",
-    width: "100",
+    label: "custom(editSlotName)",
+    width: "200",
     inputType: "custom",
-    renderEdit: () => <ElCheckbox>是</ElCheckbox>
+    editSlotName: "customInput"
+  },
+  {
+    prop: "test_6",
+    label: "custom(renderEdit)",
+    width: "200",
+    inputType: "custom",
+    renderEdit: row => (
+      <ElCheckbox
+        onChange={v => {
+          row["test_6EditValue"] = v
+        }}
+      >
+        是
+      </ElCheckbox>
+    )
   },
 
   {
@@ -57,11 +77,7 @@ const columns = computed<any[]>(() => [
     operation: [
       {
         label: "编辑",
-        operationType: "rowEdit",
-        func: (row, scope) => {
-          alert("编辑")
-          edit(row, scope)
-        }
+        operationType: "rowEdit"
       },
       {
         label: "删除",
@@ -73,8 +89,8 @@ const columns = computed<any[]>(() => [
     ]
   }
 ])
-const edit = (row, scope) => {
-  console.log(row, scope)
+const editSave = row => {
+  console.log(row)
 }
 const deleteRow = (row, scope) => {
   console.log(row, scope)
