@@ -14,7 +14,7 @@ EPTable/base
 
 ### 显示操作列
 
-:::demo 注意：操作列支持子数组 children 功能 `0.2.8^`，如下`更多`
+:::demo 注意：操作列支持子数组 children 功能 `^0.2.8`，如下`更多`
 EPTable/operation
 :::
 

@@ -2,7 +2,6 @@
   <EPConfigProvider :table="tableConfig">
     <div class="wrapper vp-raw">
       <EPTable
-        size="small"
         :data="data"
         :columns="columns"
         v-model:page="page"
@@ -25,6 +24,7 @@ const tableConfig = {
     background: true
   }
 }
+
 const data = ref<any[]>([])
 // 模拟接口数据
 const DATA = Array.from({ length: 20 }).map((_, index) => ({

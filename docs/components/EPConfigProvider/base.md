@@ -2,15 +2,22 @@
 
 ### 设置 EPTable 组件全局配置
 
-:::demo
-EPConfigProvider/base
+:::demo 在需要对 EPTable 进行统一配置时，在最顶层组件使用 `EPConfigProvider组件`，使用 table 属性配置，如下全局配置 table 分页为`[15, 30, 50, 100]`等
+EPConfigProvider/table
+:::
+
+### 设置 EPDatePicker 组件全局配置(^0.3.0)
+
+:::demo `datePicker`设置,例如设置`startPlaceholder: '开始日期'`
+EPConfigProvider/datePicker
 :::
 
 ### 2、配置参数
 
-| 参数  | 说明             | 类型                                          | 默认值 |
-| :---- | :--------------- | :-------------------------------------------- | :----- |
-| table | EPTable 全局配置 | `{pageProps:Object,heightlightClick:boolean}` | -      |
+| 参数       | 说明                  | 类型                                          | 默认值 |
+| :--------- | :-------------------- | :-------------------------------------------- | :----- |
+| table      | EPTable 全局配置      | `{pageProps:Object,heightlightClick:boolean}` | -      |
+| datePicker | EPDatePicker 全局配置 | `详细配置EPDatePicker`                        | -      |
 
 ### pageProps ts 如下
 

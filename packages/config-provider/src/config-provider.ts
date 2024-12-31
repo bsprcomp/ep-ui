@@ -5,11 +5,17 @@ const ConfigProvider = defineComponent({
     table: {
       type: Object,
       default: () => ({})
+    },
+    datePicker: {
+      type: Object,
+      default: () => ({})
     }
   },
 
   setup(props, { slots }) {
     Object.entries(props).map(([key, prop]) => {
+      console.log(props, "props")
+
       provide(key, prop)
     })
     return () => renderSlot(slots, "default")

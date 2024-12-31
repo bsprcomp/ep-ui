@@ -4,8 +4,16 @@
       v-model="selectedDate"
       :shortcuts="shortcuts"
       @change="handleChange"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
       ref="datePicker"
-      v-bind="{ type, valueFormat: defaultValueFormat, format: defaultFormat, ...$attrs }"
+      v-bind="{
+        ...datePickerConfig,
+        type,
+        valueFormat: defaultValueFormat,
+        format: defaultFormat,
+        ...$attrs
+      }"
     >
       <template v-for="(_, name) in slots" v-slot:[name]="data">
         <slot :name="name" v-bind="data"></slot>
@@ -14,11 +22,13 @@
   </div>
 </template>
 <script setup lang="ts" name="EPDatePicker">
-import { computed, onMounted, ref, useSlots } from "vue"
+import { computed, inject, onMounted, ref, useSlots } from "vue"
 const slots = useSlots()
 const selectedDate = defineModel<any>()
 const datePicker = ref()
 const emit = defineEmits(["getRef", "change"])
+const datePickerConfig = inject("datePicker") || {}
+console.log(inject("datePicker"), "dataPickerConfig")
 
 type Props = {
   formatNullValue?: any
