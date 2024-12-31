@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <EPInput placeholder="默认去除空格" v-model="modelValue1" />
-    <EPInput placeholder="取消默认" inputType="" v-model="modelValue2" />
+    <EPInput placeholder="取消默认" inputType="default" v-model="modelValue2" />
   </div>
 </template>
 <script setup lang="ts" name="Integer">

@@ -4,10 +4,16 @@ pageClass: page
 
 # EPInput 输入框组件
 
-### 默认去除空格（^0.2.4）
+### 默认去除空格（^0.2.9）
 
-:::demo 默认 EPinput 组件输入去除空格符，取消默认设置 `inputType=""`
+:::demo 默认 EPinput 组件输入去除空格符，取消默认设置 `inputType="default"`
 EPInput/trim
+:::
+
+### 使用 inputRule 正则 （^0.2.9）
+
+:::demo inputRule 会把符合此条件的内容置空，原理：`v.replace(inputRule, "")`,如下示例，只能输入小写字母
+EPInput/inputRegExp
 :::
 
 ### 常见类型
@@ -40,10 +46,11 @@ EPInput/size
 
 ### 配置参数
 
-| 属性名    | 说明   | 类型                   | 默认值 |
-| :-------- | :----- | :--------------------- | :----- |
-| v-model   | 绑定值 | string                 | -      |
-| inputType | 类型   | 文字:text,整数:integer | text   |
+| 属性名    | 说明   | 类型                          | 默认值 |
+| :-------- | :----- | :---------------------------- | :----- |
+| v-model   | 绑定值 | `string`                      | -      |
+| inputType | 类型   | `integer` \| `default`\|`'' ` | ``     |
+| inputRule | 类型   | `RegExp`                      | -      |
 
 ### 继承
 

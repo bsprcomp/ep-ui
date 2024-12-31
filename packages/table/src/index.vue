@@ -131,8 +131,9 @@
                           @click="handleRowClick(scope.row, op, scope)"
                           v-bind="{ type: 'primary', link: true, ...op }"
                           :disabled="op.disabled"
-                          >{{ op.label }} <el-icon><ArrowDown /></el-icon
-                        ></el-button>
+                          >{{ op.label }}&nbsp;
+                          <el-icon><ArrowDown /> </el-icon>
+                        </el-button>
                         <template #dropdown>
                           <el-dropdown-menu>
                             <template v-for="sonOp in op.children">
@@ -146,7 +147,7 @@
                                     <el-button
                                       @click="setRowSelected(sonOp, scope.row)"
                                       v-bind="{
-                                        type: 'primary',
+                                        type: 'text',
                                         link: true,
                                         ...sonOp
                                       }"
@@ -160,7 +161,7 @@
                                   v-else
                                   @click="handleRowClick(scope.row, sonOp, scope)"
                                   v-bind="{
-                                    type: 'primary',
+                                    type: 'text',
                                     link: true,
                                     ...sonOp
                                   }"

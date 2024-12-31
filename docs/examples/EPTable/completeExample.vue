@@ -46,14 +46,16 @@
         <EPInput placeholder="请输入姓名" />
       </template>
     </EPTable>
+    <!-- EPDialog默认宽度600px -->
     <EPDialog
+      max-height="400px"
+      width="600px"
       :title="dialogTitle"
       @handle-cancel="dialogVisible = false"
       @handle-submit="handleSubmit"
       v-model:params="dialogParams"
       :formProps="formProps"
       v-model="dialogVisible"
-      max-height="400px"
     ></EPDialog>
   </div>
 </template>
@@ -116,7 +118,9 @@ const dialogFormitems = computed(() => [
 // 弹框表单配置
 const formProps = computed(() => {
   return {
-    formItems: dialogFormitems.value
+    formItems: dialogFormitems.value,
+    labelWidth: "145px",
+    valueWidth: "320px"
   }
 })
 const expand = ref(false)
@@ -209,6 +213,7 @@ const columns = ref<any[]>([
       {
         label: "删除",
         antiClick: true, // 开启防抖
+        type: "danger",
         func: (row, scope) => {
           deleteRow(row, scope)
         },
