@@ -20,7 +20,7 @@ const page = reactive({ pageSize: 15, pageIndex: 1, total: 0 })
 const tableConfig = {
   pageProps: {
     currentPage: "pageIndex",
-    currentSize: "pageSize",
+    pageSize: "pageSize",
     pageSizes: [15, 30, 50, 100],
     background: true
   }

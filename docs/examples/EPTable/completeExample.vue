@@ -30,7 +30,6 @@
           @getRef="el => (formRef = el)"
         />
       </template>
-      <template #radio><el-radio>111</el-radio></template>
       <!-- 预留btn插槽,置于列表左侧，如渲染新增、批量删除等按钮  antiClick 开启防抖loading-->
       <template #button>
         <EPButton value="新 增" type="primary" antiClick @click="add()" />
