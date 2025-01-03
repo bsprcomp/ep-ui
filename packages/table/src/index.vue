@@ -144,7 +144,7 @@
                                   @confirm="handleRowClick(scope.row, sonOp, scope)"
                                 >
                                   <template #reference>
-                                    <el-button
+                                    <e-p-button
                                       @click="setRowSelected(sonOp, scope.row)"
                                       v-bind="{
                                         type: 'text',
@@ -154,7 +154,7 @@
                                       :disabled="handleOp(sonOp, scope, 'disabled')"
                                     >
                                       {{ sonOp.label }}
-                                    </el-button>
+                                    </e-p-button>
                                   </template>
                                 </el-popconfirm>
                                 <el-button

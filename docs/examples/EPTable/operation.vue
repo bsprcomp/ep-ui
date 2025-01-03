@@ -62,7 +62,7 @@ const columns = [
   {
     prop: "operation",
     label: "操作",
-    width: 160,
+    width: 120,
     fixed: "right",
     operation: [
       {
@@ -75,6 +75,12 @@ const columns = [
         label: "更多",
         children: [
           {
+            label: "编辑",
+            func: row => {
+              edit(row)
+            }
+          },
+          {
             label: "操作一",
             func: (row, scope) => {}
           },
@@ -83,17 +89,13 @@ const columns = [
             func: (row, scope) => {}
           },
           {
-            label: "操作三",
-            func: (row, scope) => {},
-            hidden: true
+            label: "删除",
+            func: (row, scope) => {
+              deleteRow(row, scope)
+            },
+            isShowConfirm: true
           }
         ]
-      },
-      {
-        label: "删除",
-        func: (row, scope) => {
-          deleteRow(row, scope)
-        }
       }
     ]
   }
