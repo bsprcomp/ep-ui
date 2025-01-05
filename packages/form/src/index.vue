@@ -10,6 +10,7 @@
       :label-width="newLabelWidth"
       class="e-p-form"
     >
+      <slot name="top"></slot>
       <component
         :is="inline ? 'div' : 'el-row'"
         :class="{ 'inline-flex': inline }"
@@ -50,7 +51,12 @@
                 :is="item.comp"
                 v-model="formModel[item.prop]"
                 :type="item.type"
-                v-bind="{ clearable: true, filterable: true, ...item }"
+                v-bind="{
+                  clearable: true,
+                  filterable: true,
+                  label: item.text || item.label,
+                  ...item
+                }"
                 :style="{ width: item.width || valueWidth }"
               >
                 <template #prepend v-if="item.prepend">{{ item.prepend }}</template>

@@ -63,7 +63,7 @@
 import { computed, onMounted, reactive, ref } from "vue"
 import { ElMessage } from "element-plus"
 import { tools } from "../../../packages/index"
-//import { tools } from "@bscomp/ep-ui" 在实际项目中使用
+//import { tools } from "@bscomp/ep-ui" // 在实际项目中使用
 // 是否显示弹框
 const dialogVisible = ref(false)
 //复选框选中
@@ -271,7 +271,7 @@ onMounted(() => {
   box-sizing: border-box;
   position: relative;
   ::v-deep(.el-table__header) {
-    --el-table-header-bg-color: #f2f6fc;
+    --el-table-header-bg-color: var(--table-header-bg-color);
   }
 }
 </style>

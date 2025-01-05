@@ -1,5 +1,11 @@
 # EPDialog 动态表单组件
 
+### 示例
+
+:::demo
+EPForm/login
+:::
+
 ### 基础用法
 
 :::demo
@@ -75,6 +81,7 @@ EPForm/CustomOperator
 | 参数          | 说明                                                                             | 类型                                                                                                                                        | 默认值 |
 | :------------ | :------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :----- |
 | prop          | el-form-item prop                                                                | `String`                                                                                                                                    | -      |
+| text          | 当 comp 为 `el-radio`和 `el-checkbox` 中 label 属性 使用 text 代替               | `String`                                                                                                                                    | -      |
 | label         | el-form-item label                                                               | `String`                                                                                                                                    | -      |
 | hidden        | 是否隐藏                                                                         | `Boolean`                                                                                                                                   | false  |
 | comp          | 表单每一项组件名称（可使用第三方 UI 如 el-select/el-input 也可以使用自定义组件） | `Boolean`                                                                                                                                   | false  |

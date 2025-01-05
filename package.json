@@ -1,6 +1,6 @@
 {
   "name": "@bscomp/ep-ui",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Vue3 中基于Element-plus二次封装基础组件文档",
   "author": "bishang",
   "license": "MIT",
@@ -73,6 +73,7 @@
     "type": "git",
     "url": "https://github.com/bsprcomp/ep-ui.git"
   },
+  "homepage": "https://bsprcomp.github.io/ep-ui/",
   "keywords": [
     "element-ui",
     "element-plus",

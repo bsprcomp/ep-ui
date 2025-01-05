@@ -14,8 +14,6 @@ const ConfigProvider = defineComponent({
 
   setup(props, { slots }) {
     Object.entries(props).map(([key, prop]) => {
-      console.log(props, "props")
-
       provide(key, prop)
     })
     return () => renderSlot(slots, "default")

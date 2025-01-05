@@ -1,2 +1,13 @@
 @import "vars.scss";
 @import "code.css";
+:root {
+  --table-header-bg-color: #f2f6fc;
+}
+// 暗黑模式
+html.dark {
+  --dark-color: #141414;
+  --el-menu-border-color: var(--el-border-color);
+  --table-header-bg-color: var(--dark-color);
+  --el-menu-bg-color: var(--dark-color);
+  --header-bg-color: var(--dark-color);
+}
