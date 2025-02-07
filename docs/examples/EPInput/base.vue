@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <p>
-      <EPInput placeholder="请输入" v-model="input1" width="49%" />
+      <EPInput max="10" placeholder="请输入" v-model="input1" width="49%" />
       <EPInput placeholder="禁止输入" disabled v-model="input2" width="49%" />
     </p>
     <p>

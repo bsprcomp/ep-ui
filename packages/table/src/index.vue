@@ -37,12 +37,13 @@
         v-bind="$attrs"
         v-loading="loading"
       >
+        <slot name="first"></slot>
         <!-- 主体内容 -->
         <template v-for="(item, index) in renderColumns">
           <template v-if="!item?.hidden && !item?.hiddenAll">
             <el-table-column
               :show-overflow-tooltip="item.prop !== 'operation'"
-              :key="index + 'i'"
+              :key="getKey(item, index)"
               :sortable="item?.sortable || sortable"
               :index="index => indexMethod(index, item)"
               v-bind="{ align, ...item, renderHeader: undefined }"
@@ -240,7 +241,6 @@
             </el-table-column>
           </template>
         </template>
-
         <slot></slot>
         <!-- 操作按钮 -->
       </el-table>
@@ -249,16 +249,30 @@
     <el-pagination
       class="el-pagination-com"
       v-if="isShowPagination"
-      v-model:current-page="page[newPageProps.currentPage]"
       v-model:page-size="page[newPageProps.pageSize]"
+      v-model:current-page="page[newPageProps.currentPage]"
       :total="page.total"
       :page-sizes="newPageProps.pageSizes"
-      :layout="newPageProps.layout"
+      :layout="`${newPageProps.layout}`.replace('jumpTotal', 'slot')"
       :background="newPageProps.background"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
       v-bind="{ size: $attrs.size, ...bindPageProps }"
     >
+      <slot v-if="newPageProps.layout.includes('jumpTotal')">
+        <div class="jump-total">
+          <el-input
+            :max="maxPageCount"
+            :min="1"
+            @change="handleChange"
+            :size="$attrs.size || bindPageProps.size || 'default'"
+            @blur="emits('getData')"
+            v-model="useInput"
+            style="width: 46px"
+          ></el-input>
+          &nbsp; / &nbsp; {{ maxPageCount }}
+        </div>
+      </slot>
       <slot name="pagination"></slot>
     </el-pagination>
   </div>
@@ -269,11 +283,12 @@ import { ElMessage } from "element-plus"
 import { inject, computed, ref, watch, useSlots, onUpdated, VNode, onMounted } from "vue"
 import useHooks from "./useHooks"
 import useCheckList from "./useCheckList"
-
 import ColumnSet from "./ColumnSet.vue"
 import CustomRender from "./CustomRender.vue"
 import RowEdit from "./RowEdit.vue"
-
+const getKey = (item, index) => {
+  return `${item?.prop ?? ""}${item?.type ?? ""}${item?.slotName ?? ""}${index}`
+}
 // 分页设置
 const page = defineModel<Record<string, any>>("page", {
   default: {
@@ -372,6 +387,7 @@ const {
   setRowSelected
 } = useHooks(props, emits, tableInstance, tableConfig)
 const tableContent = ref()
+const useInput = ref(1)
 const extraRef = ref()
 // 是否隐藏操作项
 const handleOp = (op: any, scope: any, type = "hidden") => {
@@ -419,6 +435,22 @@ const selectionChange = value => {
     check.value = newFilterCheckList(value)
   }
 }
+
+const handleChange = v => {
+  const value = parseInt(v, 10)
+  let pageIndex = 1
+  if (isNaN(value) || value < 1) {
+    pageIndex = 1
+  } else {
+    if (value > maxPageCount.value) {
+      pageIndex = maxPageCount.value
+    } else {
+      pageIndex = value
+    }
+  }
+  useInput.value = page.value[newPageProps.value.currentPage] = pageIndex
+}
+
 // 排序
 const sortChange = (data: any) => {
   const { column, prop, order } = data
@@ -446,6 +478,9 @@ const handleSizeChange = () => {
 onUpdated(() => {
   tableInstance.value?.doLayout()
 })
+const maxPageCount = computed(() => {
+  return Math.ceil(page.value.total / page.value[newPageProps.value.pageSize]) || 1
+})
 
 // 所有列（表头数据）
 const renderColumns = computed<Props["columns"]>(() => {
@@ -453,14 +488,14 @@ const renderColumns = computed<Props["columns"]>(() => {
     return props.columns
   }
   const columnByProp: any = props.columns.reduce((acc: any, cur: any) => {
-    acc[cur.prop] = cur
+    acc[cur.prop || cur.type] = cur
     return acc
   }, {})
 
   return state.columnSet
     .filter((cur: any) => !cur.hidden && !cur.hiddenAll)
     .map((cur: any) => {
-      const { hidden, ...res } = columnByProp[cur.prop]
+      const { hidden, ...res } = columnByProp[cur.prop || cur.type]
       return res
     })
 })

@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper vp-raw">
     <EPTable
-      size="small"
       :data="data"
       :columns="columns"
       v-model:page="page"
@@ -16,12 +15,10 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue"
 // 初始化
-const page = reactive({ pageSize: 15, pageIndex: 1, total: 0 })
+const page = reactive({ size: 15, page: 1, total: 0 })
 const pageProps = {
-  currentPage: "pageIndex",
-  pageSize: "pageSize",
-  layout: "prev, pager, next",
-  pageSizes: [15, 50, 100],
+  layout: "total,sizes,prev,jumpTotal,next",
+  sizes: [15, 50, 100],
   background: false
 }
 const data = ref<any[]>([])
@@ -39,7 +36,7 @@ const columns = ref([
 // page变化回调
 const getData = () => {
   console.log(page, "page")
-  data.value = DATA.slice((page.pageIndex - 1) * page.pageSize, page.pageIndex * page.pageSize)
+  data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
   page.total = 100
 }
 onMounted(() => {

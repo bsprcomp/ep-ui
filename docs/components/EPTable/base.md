@@ -42,6 +42,12 @@ EPTable/isShowPagination
 EPTable/paginationProps
 :::
 
+### 分页 layout 新增 jumpTotal（^0.3.6）
+
+:::demo `layout='prev,jumpTotal,next'`
+EPTable/jumpTotal
+:::
+
 ### 索引
 
 :::demo columns 中设置`type:'index'`开启索引。索引在`isShowPagination为true`的情况下，分页递增，如需还原默认设置，设置 index:undefined
