@@ -565,4 +565,10 @@ div {
     margin-left: 0 !important;
   }
 }
+::v-deep .el-dropdown-menu__item {
+  .el-button {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
 </style>

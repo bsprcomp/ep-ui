@@ -1,9 +1,11 @@
 <template>
   <el-input
-    :style="{ width: width }"
+    :style="{ width }"
     v-model="modelValue"
     @input="handleInput"
-    v-bind="{ placeholder, clearable: true, ...$attrs }"
+    :clearable="true"
+    v-bind="$attrs"
+    :placeholder="placeholder"
   >
     <template #append v-if="$slots.append">
       <slot name="append" />
@@ -17,38 +19,43 @@
 <script setup lang="ts" name="EpInput">
 import { defineModel, defineEmits, computed } from "vue"
 import { ElInput } from "element-plus"
-type Props = {
+
+interface Props {
   placeholder?: string
   width?: string
-  inputType?: "integer" | "default" | ""
+  inputType?: "integer" | "default" | "text"
   inputRule?: RegExp
 }
+
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "请输入",
   width: "100%",
-  inputType: ""
+  inputType: "text"
 })
-const emit = defineEmits(["update:modelValue"])
+
+const emit = defineEmits<{
+  "update:modelValue": [value: string | number]
+}>()
+
 const modelValue = defineModel<string | number>()
+
 const newInputRule = computed(() => {
-  if (props.inputRule) {
-    return props.inputRule
-  }
-  switch (props.inputType) {
-    case "integer":
-      return /[^\d]/g
-    case "default":
-      return ""
-    default:
-      return /[\s]/g //默认去除空格
-  }
+  if (props.inputRule) return props.inputRule
+
+  const rules = {
+    integer: /[^\d]/g,
+    default: null,
+    text: /[\s]/g
+  } as const
+
+  return rules[props.inputType]
 })
-// 处理输入
-const handleInput = v => {
-  if (newInputRule.value) {
-    emit("update:modelValue", v.replace(newInputRule.value, ""))
-  } else {
-    return v
+
+const handleInput = (value: string | number): void => {
+  if (!newInputRule.value) {
+    emit("update:modelValue", value)
+    return
   }
+  emit("update:modelValue", String(value).replace(newInputRule.value, ""))
 }
 </script>
