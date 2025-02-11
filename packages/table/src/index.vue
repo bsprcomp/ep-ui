@@ -138,7 +138,11 @@
                         <template #dropdown>
                           <el-dropdown-menu>
                             <template v-for="sonOp in op.children">
-                              <el-dropdown-item v-if="!handleOp(sonOp, scope)" v-bind="sonOp">
+                              <el-dropdown-item
+                                v-if="!handleOp(sonOp, scope)"
+                                v-bind="sonOp"
+                                :disabled="handleOp(sonOp, scope, 'disabled')"
+                              >
                                 <el-popconfirm
                                   v-if="sonOp.isShowConfirm"
                                   :title="sonOp.msg || '确认删除？'"

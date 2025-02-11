@@ -76,12 +76,14 @@ const columns = [
         children: [
           {
             label: "编辑",
+            disabled: row => false,
             func: row => {
               edit(row)
             }
           },
           {
             label: "操作一",
+            disabled: true,
             func: (row, scope) => {}
           },
           {
