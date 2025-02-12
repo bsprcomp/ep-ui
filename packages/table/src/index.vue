@@ -131,7 +131,7 @@
                         <el-button
                           @click="handleRowClick(scope.row, op, scope)"
                           v-bind="{ type: 'primary', link: true, ...op }"
-                          :disabled="op.disabled"
+                          :disabled="handleOp(op, scope, 'disabled')"
                           >{{ op.label }}&nbsp;
                           <el-icon><ArrowDown /> </el-icon>
                         </el-button>
@@ -152,7 +152,6 @@
                                     <e-p-button
                                       @click="setRowSelected(sonOp, scope.row)"
                                       v-bind="{
-                                        type: 'text',
                                         link: true,
                                         ...sonOp
                                       }"
@@ -569,10 +568,16 @@ div {
     margin-left: 0 !important;
   }
 }
-::v-deep .el-dropdown-menu__item {
+.el-dropdown-menu__item {
   .el-button {
     width: 100%;
     justify-content: flex-start;
+  }
+}
+::v-deep .el-dropdown-menu__item:not(.is-disabled):focus,
+.el-dropdown-menu__item:not(.is-disabled):hover {
+  .el-button {
+    color: var(--el-color-primary);
   }
 }
 </style>
