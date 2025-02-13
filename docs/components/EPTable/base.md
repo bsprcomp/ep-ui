@@ -42,7 +42,7 @@ EPTable/isShowPagination
 EPTable/paginationProps
 :::
 
-### 分页 layout 新增 jumpTotal（^0.3.6）
+### 分页 layout 新增 jumpTotal（^0.4.1）
 
 :::demo `layout='prev,jumpTotal,next'`
 EPTable/jumpTotal

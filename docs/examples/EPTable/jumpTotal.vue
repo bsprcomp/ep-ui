@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue"
 // 初始化
-const page = reactive({ size: 15, page: 1, total: 0 })
+const page = reactive({ size: 10, page: 1, total: 0 })
 const pageProps = {
   layout: "total,sizes,prev,jumpTotal,next",
   sizes: [15, 50, 100],

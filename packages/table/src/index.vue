@@ -453,6 +453,13 @@ const handleChange = v => {
   }
   useInput.value = page.value[newPageProps.value.currentPage] = pageIndex
 }
+watch(
+  page,
+  () => {
+    useInput.value = page.value[newPageProps.value.currentPage]
+  },
+  { deep: true }
+)
 
 // 排序
 const sortChange = (data: any) => {
