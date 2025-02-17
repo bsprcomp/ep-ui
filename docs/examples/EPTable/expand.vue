@@ -18,6 +18,8 @@ import EPTable from "../../../packages/table/index"
 import { onMounted, ref } from "vue"
 const data = ref<any[]>([])
 const columns = ref<any[]>([
+  { type: "index" },
+  { type: "selection" },
   { type: "expand" },
   { prop: "name", label: "姓名", minWidth: "100" },
   { prop: "age", label: "年龄", minWidth: "180" },

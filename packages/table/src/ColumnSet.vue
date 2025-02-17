@@ -92,7 +92,7 @@ const getColumnSetCache = () => {
   }
   let propMap = JSON.parse(obj) || {}
   if (columnOption.length !== Object.entries(propMap).length) {
-    return columnOption
+    return columnOption.map(item => ({ ...item, hidden: propMap[item.prop || item.type] }))
   }
 
   const columnByProp: any = columnOption.reduce((acc: any, cur: any) => {
