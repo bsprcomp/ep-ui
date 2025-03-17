@@ -12,6 +12,12 @@ EPConfigProvider/table
 EPConfigProvider/datePicker
 :::
 
+### 设置 EPDialog 组件全局配置(^0.4.3)
+
+:::demo `EPDialog`设置,例如设置`close-on-click-modal: false`
+EPConfigProvider/dialog
+:::
+
 ### 2、配置参数
 
 | 参数       | 说明                  | 类型                                          | 默认值 |

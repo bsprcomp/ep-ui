@@ -34,7 +34,7 @@
         :row-key="rowKey"
         highlight-current-row
         @sort-change="sortChange"
-        v-bind="$attrs"
+        v-bind="{ ...otherConfig, ...$attrs }"
         v-loading="loading"
       >
         <slot name="first"></slot>
@@ -139,6 +139,7 @@
                           <el-dropdown-menu>
                             <template v-for="sonOp in op.children">
                               <el-dropdown-item
+                                class="operation-drop"
                                 v-if="!handleOp(sonOp, scope)"
                                 v-bind="sonOp"
                                 :disabled="handleOp(sonOp, scope, 'disabled')"
@@ -363,7 +364,7 @@ interface Props {
   ascs?: string
   descs?: string
 }
-const tableConfig = inject("table")
+const tableConfig: any = inject("table") || {}
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
   refreshTitle: "刷新",
@@ -389,6 +390,7 @@ const {
   bindPageProps,
   setRowSelected
 } = useHooks(props, emits, tableInstance, tableConfig)
+const { pageProps, ...otherConfig } = tableConfig
 const tableContent = ref()
 const useInput = ref(1)
 const extraRef = ref()
@@ -517,9 +519,22 @@ onMounted(() => {
   }
 })
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 div {
   box-sizing: border-box;
+}
+.operation-drop {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  .el-button {
+    padding: 0 20px;
+  }
+  .el-link {
+    padding: 0 20px;
+  }
+  &div {
+    padding: 0 20px;
+  }
 }
 .e-p-table {
   box-sizing: border-box;

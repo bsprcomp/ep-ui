@@ -6,6 +6,10 @@ const ConfigProvider = defineComponent({
       type: Object,
       default: () => ({})
     },
+    dialog: {
+      type: Object,
+      default: () => ({})
+    },
     datePicker: {
       type: Object,
       default: () => ({})

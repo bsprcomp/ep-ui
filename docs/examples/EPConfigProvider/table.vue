@@ -22,7 +22,8 @@ const tableConfig = {
     pageSize: "pageSize",
     pageSizes: [15, 30, 50, 100],
     background: true
-  }
+  },
+  border: true
 }
 
 const data = ref<any[]>([])

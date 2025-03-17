@@ -5,7 +5,7 @@
     :title="title"
     width="600"
     :before-close="handleClose"
-    v-bind="$attrs"
+    v-bind="{ ...dialogConfig, ...$attrs }"
   >
     <template #header="scope">
       <slot name="header" :scope="scope"></slot>
@@ -46,7 +46,8 @@
 </template>
 
 <script setup lang="ts" name="EPDialog">
-import { useSlots, ref, watch, computed, nextTick } from "vue"
+import { useSlots, ref, watch, computed, nextTick, inject } from "vue"
+const dialogConfig: any = inject("dialog") || {}
 const slots = useSlots()
 const formRef = ref()
 const dialogRef = ref()
