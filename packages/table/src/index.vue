@@ -527,13 +527,22 @@ div {
   padding-left: 0 !important;
   padding-right: 0 !important;
   .el-button {
-    padding: 0 20px;
+    padding: 0 16px;
+    &:not(.is-disabled):hover {
+      color: var(--el-color-primary) !important;
+    }
   }
   .el-link {
-    padding: 0 20px;
+    padding: 0 16px;
+    &:not(.is-disabled):hover {
+      color: var(--el-color-primary) !important;
+    }
   }
   &div {
-    padding: 0 20px;
+    padding: 0 16px;
+    &:not(.is-disabled):hover {
+      color: var(--el-color-primary) !important;
+    }
   }
 }
 .e-p-table {
@@ -594,12 +603,6 @@ div {
   .el-button {
     width: 100%;
     justify-content: flex-start;
-  }
-}
-::v-deep .el-dropdown-menu__item:not(.is-disabled):focus,
-.el-dropdown-menu__item:not(.is-disabled):hover {
-  .el-button {
-    color: var(--el-color-primary);
   }
 }
 </style>
