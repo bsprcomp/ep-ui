@@ -17,7 +17,10 @@
         :style="inlineFlex"
       >
         <template v-for="(item, index) in newFormItems">
-          <component :is="inline ? 'div' : 'el-col'" :span="24 / (item.colNum || colNum)">
+          <component
+            :is="inline ? 'div' : 'el-col'"
+            :span="item.span || 24 / (item.colNum || colNum)"
+          >
             <el-form-item v-if="!item.hidden" :key="index" v-bind="item">
               <!-- 自定义label -->
               <template #label v-if="item.labelSlotName || item.labelRender">
@@ -123,13 +126,13 @@ const props = withDefaults(defineProps<Props>(), {
   formProps: () => ({}),
   // label对齐方式
   labelPosition: "right",
-  valueWidth: "200px",
+  valueWidth: "100%",
   formItems: () => [],
   isShowDefaultPlaceholder: true,
   operatorList: () => [],
   inline: false,
   colNum: 1,
-  inlineGap: "18px 8px"
+  inlineGap: "16px 8px"
 })
 const inlineFlex =
   (props.inline && {

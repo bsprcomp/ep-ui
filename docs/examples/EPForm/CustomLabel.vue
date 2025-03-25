@@ -5,7 +5,6 @@
       ref="epForm"
       :formItems="formItems"
       label-Width="145px"
-      valueWidth="320px"
       v-model="formParams"
       :operatorList="operatorList"
       @getRef="el => (formRef = el)"
@@ -49,7 +48,6 @@ const formItems = [
     prop: "test_2",
     label: "labelRender",
     comp: "el-input",
-    width: "320px",
     labelRender: item => (
       <>
         {item.label}
@@ -60,7 +58,6 @@ const formItems = [
   {
     prop: "test_3",
     comp: "el-input",
-    width: "320px",
     labelSlotName: "testSlot"
   }
 ]

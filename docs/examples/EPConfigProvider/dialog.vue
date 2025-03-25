@@ -1,5 +1,5 @@
 <!-- 
- valueWidth 默认200px
+ valueWidth 100%
  labelWidth 默认120px
  -->
 <template>
@@ -25,7 +25,7 @@ import { tools } from "../../../packages/index"
 import { ref } from "vue"
 const dialogVisible = ref(false)
 const submitLoading = ref(false)
-const dialogConfig = ref({ closeOnClickModal: false, fullscreen: true })
+const dialogConfig = ref({ closeOnClickModal: false, draggable: true })
 // form items
 const formItems = [
   {
@@ -96,15 +96,13 @@ const formItems = [
 ]
 const formProps = {
   formItems,
-  labelWidth: "145px",
-  valueWidth: "320px"
+  labelWidth: "145px"
 }
 // 获取初始化值（getParams 会返回一个对象 {[prop]:defaultValue||''}
 const formParams = ref(tools.getParams(formItems))
 const handleSubmit = () => {
   submitLoading.value = true
   setTimeout(() => {
-    console.log(formParams.value, "formParams===>handleSubmit")
     submitLoading.value = false
     dialogVisible.value = false
   }, 1000)

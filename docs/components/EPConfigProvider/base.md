@@ -14,7 +14,7 @@ EPConfigProvider/datePicker
 
 ### 设置 EPDialog 组件全局配置(^0.4.3)
 
-:::demo `EPDialog`设置,例如设置`close-on-click-modal: false`
+:::demo `EPDialog`设置,例如全部配置`close-on-click-modal`，`draggable`等属性
 EPConfigProvider/dialog
 :::
 
@@ -24,6 +24,7 @@ EPConfigProvider/dialog
 | :--------- | :-------------------- | :-------------------------------------------- | :----- |
 | table      | EPTable 全局配置      | `{pageProps:Object,heightlightClick:boolean}` | -      |
 | datePicker | EPDatePicker 全局配置 | `详细配置EPDatePicker`                        | -      |
+| dialog     | dialog 全局配置       | `详细配置EPDialog`                            | -      |
 
 ### pageProps ts 如下
 

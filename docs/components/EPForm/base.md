@@ -18,10 +18,16 @@ EPForm/base
 EPForm/showText
 :::
 
-### 多列展示
+### 多列展示 ColNum
 
 :::demo 设置 ColNum（被 24 整除，内部 el-row,el-col 布局）
 EPForm/ColNum
+:::
+
+### 间距 span 使用
+
+:::demo 设置 span 1-24
+EPForm/span
 :::
 
 ### 行内表单(^0.0.9)
@@ -57,7 +63,7 @@ EPForm/CustomOperator
 | labelPosition | 改变表单项 label 与输入框的布局方式(`right,left,top`)                                  | `String`                                        | 'right' |
 | colNum        | 显示几列（默认一列，内部使用 el-row,el-col,`colNum`要被 24 整除）                      | Number                                          | 1       |
 | labelWidth    | label 宽度                                                                             | String                                          | 120px   |
-| valueWidth    | 输入宽度                                                                               | String                                          | 200px   |
+| valueWidth    | 输入宽度                                                                               | String                                          | 100%    |
 | rules         | 校验规则（可参考 element-plus el-form 方式配置,设置后完全覆盖 formItems 配置的 rules） | Object/Array                                    | -       |
 | btnSlotName   | 操作按钮插槽命名                                                                       | String                                          | -       |
 | operatorList  | 操作按钮 list，见如下表                                                                | Array                                           | -       |

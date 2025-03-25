@@ -1,5 +1,5 @@
 <!-- 
- valueWidth 默认200px
+ valueWidth 默认100%
  labelWidth 默认120px
  -->
 <template>

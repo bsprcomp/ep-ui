@@ -21,7 +21,7 @@ export default function (props) {
   const getDefaultMessage = item => {
     const message =
       (item.comp &&
-        ["el-input", "ElInput", "EPInput", "e-p-input"].includes(item.comp) &&
+        ["el-input", "ElInput", "EPInput", "e-p-input", "el-input-number"].includes(item.comp) &&
         "请输入") ||
       "请选择"
     return item.placeholder || `${message}${item.label || ""}`

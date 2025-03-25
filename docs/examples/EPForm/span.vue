@@ -1,15 +1,15 @@
 <!-- 
- valueWidth 默认100%
- labelWidth 默认120px
+多列展示
  -->
 <template>
   <div class="wrapper vp-raw">
     <EPForm
       ref="epForm"
       label-suffix=":"
+      :colNum="colNum"
       :formItems="formItems"
       label-Width="145px"
-      valueWidth="320px"
+      valueWidth="120px"
       v-model="formParams"
       :operatorList="operatorList"
       @getRef="el => (formRef = el)"
@@ -18,10 +18,9 @@
 </template>
 <script setup lang="tsx">
 import { tools } from "../../../packages/index"
-//import { tools } from "@bscomp/ep-ui" // 在实际项目中使用
 import { ref } from "vue"
 import { ElMessage } from "element-plus"
-
+const colNum = ref(1)
 // EPForm 组件中el-form实例
 const formRef = ref()
 // EPForm实例
@@ -52,12 +51,14 @@ const formItems = [
     label: "EPInput输入框", //el-form-item label值
     comp: "EPInput", // 组件类型
     defaultValue: "默认值", //默认值（配合tools.getParams使用）
-    required: true //校验（开启则会验证为空校验）
+    required: true, //校验（开启则会验证为空校验）
+    span: 12
   },
   {
     prop: "select",
     label: "下拉选项",
     comp: "EPSelect",
+    span: 12,
     defaultValue: "1",
     required: true,
     options: [
@@ -68,47 +69,15 @@ const formItems = [
   {
     prop: "date",
     label: "日期",
+    span: 12,
     comp: "EPDatePicker",
     defaultValue: "2024-11-16",
     shortcutsName: ["今天", "昨天", "一周前"]
   },
-  {
-    prop: "dateranage",
-    label: "时间范围",
-    comp: "EPDatePicker",
-    type: "daterange",
-    defaultValue: ["2024-10-16", "2024-11-16"],
-    shortcutsName: ["近一月", "近三月", "近半年"]
-  },
-  {
-    prop: "EPCheckbox",
-    label: "EPCheckbox复选框",
-    comp: "EPCheckbox",
-    defaultValue: ["1", "2"],
-    options: [
-      { label: "选项一", value: "1" },
-      { label: "选项二", value: "2" },
-      { label: "选项三", value: "3" }
-    ]
-  },
-  {
-    prop: "EPRadio",
-    label: "EPRadio单选框",
-    comp: "EPRadio",
-    defaultValue: "1",
-    options: [
-      { label: "选项一", value: "1" },
-      { label: "选项二", value: "2" },
-      { label: "选项三", value: "3" }
-    ]
-  },
-  {
-    prop: "ElRate",
-    label: "el-rate评分",
-    comp: "el-rate"
-  },
+
   {
     prop: "ElSwitch",
+    span: 12,
     label: "el-switch开关",
     comp: "el-switch"
   }
@@ -116,14 +85,5 @@ const formItems = [
 // 获取初始化值（getParams 会返回一个对象 {[prop]:defaultValue||''}
 const formParams = ref(tools.getParams(formItems))
 // form 表单按钮
-const operatorList = [
-  { label: "提交", bind: { type: "primary" }, fun: submitForm },
-  { label: "重置", bind: { type: "default" }, fun: resetFields },
-  { label: "清除验证", bind: { type: "default" }, fun: clearValidate }
-]
+const operatorList = [{ label: "提交", bind: { type: "primary" }, fun: submitForm }]
 </script>
-<style scoped>
-.wrapper {
-  height: 500px;
-}
-</style>
