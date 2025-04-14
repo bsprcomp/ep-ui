@@ -27,8 +27,7 @@ const slots = useSlots()
 const selectedDate = defineModel<any>()
 const datePicker = ref()
 const emit = defineEmits(["getRef", "change"])
-const datePickerConfig = inject("datePicker") || {}
-console.log(inject("datePicker"), "dataPickerConfig")
+const datePickerConfig: any = inject("datePicker") || {}
 
 type Props = {
   formatNullValue?: any

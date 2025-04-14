@@ -50,6 +50,7 @@ const date = ref([])
 const date1 = ref([])
 const shortcutsName = [
   "本日",
+  "本周",
   "本月",
   "本年",
   "近一日",

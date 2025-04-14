@@ -18,8 +18,6 @@
 
 <script setup lang="ts" name="EpInput">
 import { defineModel, defineEmits, computed } from "vue"
-import { ElInput } from "element-plus"
-
 interface Props {
   placeholder?: string
   width?: string
@@ -32,10 +30,6 @@ const props = withDefaults(defineProps<Props>(), {
   width: "100%",
   inputType: "text"
 })
-
-const emit = defineEmits<{
-  "update:modelValue": [value: string | number]
-}>()
 
 const modelValue = defineModel<string | number>()
 
@@ -53,9 +47,9 @@ const newInputRule = computed(() => {
 
 const handleInput = (value: string | number): void => {
   if (!newInputRule.value) {
-    emit("update:modelValue", value)
-    return
+    modelValue.value = value
+  } else {
+    modelValue.value = String(value).replace(newInputRule.value, "")
   }
-  emit("update:modelValue", String(value).replace(newInputRule.value, ""))
 }
 </script>

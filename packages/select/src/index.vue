@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts" name="EPSelect">
-import { computed, ref, useSlots, watch } from "vue"
+import { computed, ref, useSlots } from "vue"
 type Props = {
   multiple?: boolean // 是否多选
   isShowSelectAllBtn?: boolean // 是否全选
