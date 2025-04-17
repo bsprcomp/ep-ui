@@ -129,7 +129,7 @@
                     <template v-if="!handleOp(op, scope)">
                       <el-dropdown trigger="click" v-if="!!op?.children?.length">
                         <el-button
-                          @click="handleRowClick(scope.row, op, scope)"
+                          @click.stop="handleRowClick(scope.row, op, scope)"
                           v-bind="{ type: 'primary', link: true, ...op }"
                           :disabled="handleOp(op, scope, 'disabled')"
                           >{{ op.label }}&nbsp;
