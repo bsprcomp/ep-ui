@@ -196,7 +196,7 @@
                       <template v-else>
                         <el-popconfirm
                           v-if="op.isShowConfirm"
-                          :title="item.msg || '确认删除？'"
+                          :title="op.msg || '确认删除？'"
                           @confirm="handleRowClick(scope.row, op, scope)"
                         >
                           <template #reference>
