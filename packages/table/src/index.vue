@@ -520,6 +520,13 @@ onMounted(() => {
 })
 </script>
 <style lang="scss">
+.input-content,
+.btn-wrapper {
+  .el-button + .el-button {
+    margin-left: unset;
+  }
+}
+
 div {
   box-sizing: border-box;
 }
