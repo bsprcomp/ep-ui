@@ -9,6 +9,7 @@
       ref="datePicker"
       v-bind="{
         ...datePickerConfig,
+        defaultTime,
         type,
         valueFormat: defaultValueFormat,
         format: defaultFormat,
@@ -72,7 +73,13 @@ const props = withDefaults(defineProps<Props>(), {
 
 const defaultFormat = ref()
 const defaultValueFormat = ref()
-
+const defaultTime = computed(() => {
+  if (props.type === "datetime") {
+    return new Date()
+  } else if (props.type === "datetimerange") {
+    return [new Date(2000, 1, 1, 0, 0, 0), new Date(2, 1, 1, 23, 59, 59)]
+  }
+})
 const format = () => {
   switch (props.type) {
     case "date":
