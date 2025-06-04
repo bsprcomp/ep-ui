@@ -42,7 +42,7 @@
       <!-- 预留input插槽 ，可以放置搜索框等 -->
       <template #input>
         <!-- antiClick 开启点击loading -->
-        <EPInput placeholder="请输入姓名" />
+        <EPInput @input="handleSearch" v-model="name" placeholder="请输入姓名" />
       </template>
     </EPTable>
     <!-- EPDialog默认宽度600px -->
@@ -60,12 +60,13 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onMounted, reactive, ref, watch } from "vue"
 import { ElMessage } from "element-plus"
 import { tools } from "../../../packages/index"
 //import { tools } from "@bscomp/ep-ui" // 在实际项目中使用
 // 是否显示弹框
 const dialogVisible = ref(false)
+const name = ref("")
 //复选框选中
 const checkList = ref([])
 // 模拟弹框下拉选项接口返回，并在dialogFormitems中使用
@@ -76,6 +77,12 @@ const isEdit = ref(false)
 const dialogTitle = computed(() => (isEdit.value ? "编辑" : "新增"))
 // 弹框表单参数
 const dialogParams = ref({})
+watch(
+  () => checkList.value,
+  () => {
+    console.log(checkList.value, "checkList.value")
+  }
+)
 // 自定义验证
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value && /[\`\~\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\:\;\'\<\>\?\,\.]+/.test(value)) {
@@ -244,9 +251,17 @@ const deleteRow = (row, scope) => {
 }
 // page变化回调
 const getData = () => {
-  data.value = DATA.slice((page.page - 1) * page.size, page.page * page.size)
-  page.total = 20
+  data.value = [...DATA].slice((page.page - 1) * page.size, page.page * page.size)
+  page.total = DATA.length
 }
+const handleSearch = () => {
+  page.page = 1
+  data.value = [...DATA]
+    .filter(item => item.name.includes(name.value))
+    .slice((page.page - 1) * page.size, page.page * page.size)
+  page.total = DATA.length
+}
+
 onMounted(() => {
   getData()
   setTimeout(() => {

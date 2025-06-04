@@ -2,10 +2,6 @@ import { computed, nextTick, reactive, ref, watch } from "vue"
 import { type TableInstance } from "element-plus"
 export default function (props) {
   const tableInstance = ref<TableInstance>()
-  const isReserveSelection = computed(() => {
-    const data = props.columns.find(item => item.type === "selection")
-    return data?.["reserveSelection"] || data?.["reserve-selection"]
-  })
   // 初始化数据
   let state = reactive<any>({
     tableData: props.data,
@@ -23,10 +19,6 @@ export default function (props) {
     () => {
       //勾选已选列表
       nextTick(() => {
-        if (!isReserveSelection.value) {
-          return
-        }
-        // 开启 reserveSelection 可以回显设置table选中
         state.tableData.map(item => {
           if (props.check.value.some((ite: any) => ite == item[props.rowKey])) {
             tableInstance.value?.toggleRowSelection(item, true)
@@ -37,10 +29,6 @@ export default function (props) {
     { deep: true }
   )
   const handleSelect = (v: any[]) => {
-    // 开启 reserveSelection 可以回显设置table选中
-    if (!isReserveSelection.value) {
-      return
-    }
     let checkList: any[] = []
     if (v.length == 0) {
       // 清除当夜选中
@@ -63,7 +51,6 @@ export default function (props) {
   return {
     state,
     tableInstance,
-    handleSelect,
-    isReserveSelection
+    handleSelect
   }
 }

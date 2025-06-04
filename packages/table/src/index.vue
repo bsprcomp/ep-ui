@@ -27,7 +27,6 @@
         height="100%"
         ref="tableInstance"
         :data="state.tableData"
-        @selection-change="selectionChange"
         @select="handleSelect"
         @select-all="handleSelect"
         @row-click="rowClick"
@@ -376,7 +375,7 @@ const props = withDefaults(defineProps<Props>(), {
   ascs: "ascs",
   descs: "descs"
 })
-const { state, tableInstance, handleSelect, isReserveSelection } = useCheckList({
+const { state, tableInstance, handleSelect } = useCheckList({
   ...props,
   check
 })
@@ -429,17 +428,6 @@ watch(
   },
   { deep: true }
 )
-// 过滤复选框选中数据
-const newFilterCheckList = (list: any[]) => {
-  const { filterCheckList } = props
-  return filterCheckList ? filterCheckList(list) : list.map(item => item[props.rowKey])
-}
-// 复选框
-const selectionChange = value => {
-  if (!isReserveSelection.value) {
-    check.value = newFilterCheckList(value)
-  }
-}
 
 const handleChange = v => {
   const value = parseInt(v, 10)

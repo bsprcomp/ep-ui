@@ -32,7 +32,7 @@ const DATA = Array.from({ length: 100 }).map((_, index) => ({
 }))
 // 列
 const columns = ref([
-  { type: "selection", width: "55", reserveSelection: true },
+  { type: "selection", width: "55" },
   { type: "index", label: "序号", width: "55" },
   { prop: "name", label: "姓名", minWidth: "100" },
   { prop: "age", label: "年龄", minWidth: "180" }

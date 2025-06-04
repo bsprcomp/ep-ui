@@ -32,7 +32,7 @@ EPTable/customColumn
 
 ### 显示分页
 
-:::demo `isShowPagination` 默认值 `true`显示分页,`v-model:page` 接收 page 变化 `{current:1, size:10,total:0}`，total 需要手动赋值; `reserveSelection:true` 支持分页反选
+:::demo `isShowPagination` 默认值 `true`显示分页,`v-model:page` 接收 page 变化 `{current:1, size:10,total:0}`，total 需要手动赋值; 支持分页反选
 EPTable/isShowPagination
 :::
 
@@ -63,7 +63,7 @@ EPTable/check
 
 ### 复选框支持默认选中
 
-:::demo 考虑到后端分页，默认选中需要开启 `reserveSelection:true` 反选功能，示例：`{ type: "selection", width: "55", reserveSelection: true }`
+:::demo
 EPTable/defaultCheck
 :::
 
