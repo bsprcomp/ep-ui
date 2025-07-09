@@ -20,7 +20,7 @@ EPTable/operation
 
 ### 操作列开启(`operationType: "rowEdit"`)行编辑（需配和 `inputType` 使用）
 
-:::demo 默认支持 input,select,radio,time,其他类型使用 custom 自定义;使用自定义时，参数改变需 `属性+"EditValue"`
+:::demo inputType 参数未全局组件名称， 支持自定义;使用自定义时，参数改变需 `属性+"EditValue"`
 EPTable/rowEdit
 :::
 

@@ -83,12 +83,21 @@
                   <template v-if="item.editSlotName">
                     <slot :scope="scope" :name="item.editSlotName" />
                   </template>
-                  <RowEdit
+                  <component
                     v-else
-                    v-bind="item"
-                    :type="item.inputType"
+                    :is="item.inputType"
                     v-model="scope.row[`${item.editKey || item?.prop}EditValue`]"
-                  />
+                    v-bind="{
+                      ...item,
+                      clearable: true,
+                      filterable: true,
+                      width: '98%',
+                      ...(item.config || {})
+                    }"
+                  >
+                    <template #prepend v-if="item.prepend">{{ item.prepend }}</template>
+                    <template #append v-if="item.append">{{ item.append }}</template>
+                  </component>
                 </template>
                 <!-- 不可编辑 -->
                 <template v-else>

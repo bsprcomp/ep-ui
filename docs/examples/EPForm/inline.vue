@@ -50,6 +50,7 @@ const formItems = computed(() => [
     prop: "select",
     label: "类型",
     comp: "EPSelect",
+    width: "220px",
     hidden: !expand.value,
     options: [
       { label: "option1", value: "1" },

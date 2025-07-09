@@ -1,7 +1,7 @@
 <!-- 基础用法 -->
 <template>
   <div class="wrapper vp-raw">
-    <EPTable :data="data" :columns="columns" @editSave="editSave">
+    <EPTable :data="data" :columns="columns" @editSave="editSave" @editCancel="editCancel">
       <template v-slot:customInput="{ scope }">
         <el-input v-model="scope.row['test_5' + 'EditValue']" />
       </template>
@@ -13,20 +13,30 @@
 import EPTable from "../../../packages/table/index"
 import { ElCheckbox } from "element-plus"
 import { computed, onMounted, ref } from "vue"
-const params = ref({ test_5: "" })
 const data = ref<any[]>([])
 const selectOptions = ref([
-  { label: "类型_1", value: "类型_1" },
-  { label: "类型_2", value: "类型_2" },
-  { label: "类型_2", value: "类型_2 " }
+  { label: "类型_1", value: "1" },
+  { label: "类型_2", value: "2" },
+  { label: "类型_3", value: "3" }
 ])
 const columns = computed<any[]>(() => [
-  { prop: "test_1", label: "input", minWidth: "200", inputType: "input" },
+  {
+    prop: "test_1",
+    label: "input",
+    minWidth: "200",
+    inputType: "EPInput",
+    config: {
+      type: "number"
+    }
+  },
   {
     prop: "test_2",
-    label: "radio",
-    minWidth: "130",
-    inputType: "radio",
+    label: "EPRadio",
+    minWidth: "200",
+    inputType: "EPRadio",
+    render: ({ test_2 }) => {
+      return test_2 ? "是" : "否"
+    },
     options: [
       { value: 1, label: "是" },
       { value: 0, label: "否" }
@@ -34,22 +44,25 @@ const columns = computed<any[]>(() => [
   },
   {
     prop: "test_3",
-    editKey: "gradeId", // 可通过editKey映射实际编辑字段
-    label: "select",
-    inputType: "select",
-    minWidth: "180",
+    // editKey: "gradeId", // 可通过editKey映射实际编辑字段
+    label: "EPSelect",
+    inputType: "EPSelect",
+    minWidth: "200",
+    render: ({ test_3 }) => {
+      return selectOptions.value.find(it => it.value == test_3)?.label
+    },
     options: selectOptions.value
   },
   {
     prop: "test_4",
-    label: "date-picker",
-    width: "250",
-    inputType: "date-picker"
+    label: "EPDatePicker",
+    minWidth: "220",
+    inputType: "EPDatePicker"
   },
   {
     prop: "test_5",
     label: "custom(editSlotName)",
-    width: "200",
+    width: "220",
     inputType: "custom",
     editSlotName: "customInput"
   },
@@ -91,6 +104,9 @@ const columns = computed<any[]>(() => [
 ])
 const editSave = row => {
   console.log(row)
+}
+const editCancel = () => {
+  console.log("取消")
 }
 const deleteRow = (row, scope) => {
   console.log(row, scope)
