@@ -21,7 +21,7 @@
             :is="inline ? 'div' : 'el-col'"
             :span="item.span || 24 / (item.colNum || colNum)"
           >
-            <el-form-item v-if="!item.hidden" :key="index" v-bind="item">
+            <el-form-item v-show="!item.hidden" :key="index" v-bind="item">
               <!-- 自定义label -->
               <template #label v-if="item.labelSlotName || item.labelRender">
                 <CustomRender v-if="item.labelRender" :render="item.labelRender" :item="item" />
