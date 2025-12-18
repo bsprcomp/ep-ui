@@ -576,10 +576,10 @@ div {
     .operation {
       display: flex;
       align-items: center;
-      ::v-deep(.el-button + .el-button) {
-        margin-left: 0 !important;
+      .el-button + .el-button {
+        margin-left: 0px !important;
       }
-      gap: 12px;
+      gap: 8px;
     }
   }
   .el-pagination-com {
