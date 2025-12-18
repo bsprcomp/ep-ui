@@ -1,6 +1,6 @@
 {
   "name": "@bscomp/ep-ui",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Vue3 中基于Element-plus二次封装基础组件文档",
   "author": "bishang",
   "license": "MIT",

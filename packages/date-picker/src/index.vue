@@ -201,7 +201,7 @@ const shortcuts = computed(() => {
     acc[curr.text] = curr
     return acc
   }, {})
-  return props.shortcutsName.map(name => nameMap[name])
+  return props.shortcutsName.map(name => nameMap[name]).filter(v => v)
 })
 // 当前选中
 const handleChange = (val: any) => {

@@ -25,7 +25,7 @@
           type="daterange"
           v-model="date1"
           :size="size"
-          @change="change($event, 'daterange', date)"
+          @change="change($event, 'daterange', date1)"
         />
       </div>
       <div>
@@ -36,7 +36,7 @@
           type="daterange"
           v-model="date1"
           :size="size"
-          @change="change($event, 'daterange', date)"
+          @change="change($event, 'daterange', date1)"
         />
       </div>
     </div>
