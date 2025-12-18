@@ -28,9 +28,7 @@
     <template #footer>
       <slot name="footer">
         <div class="dialog-footer">
-          <el-button v-if="!hiddenCancelBtn" @click="emits('handleCancel')">{{
-            cancelText
-          }}</el-button>
+          <el-button v-if="!hiddenCancelBtn" @click="handleClose">{{ cancelText }}</el-button>
           <el-button
             :loading="submitLoading"
             v-if="!hiddensubmitBtn"
@@ -104,9 +102,11 @@ const emits = defineEmits(["close", "handleCancel", "handleSubmit"])
 const dialogVisible = defineModel({ default: false })
 const params = defineModel("params")
 const handleClose = () => {
+  emits("handleCancel")
+  formRef.value?.clearValidate()
+  formRef.value?.resetFields()
   dialogVisible.value = false
   submitLoading.value = false
-  emits("handleCancel")
 }
 const handleSubmit = async () => {
   await formRef.value.validate()

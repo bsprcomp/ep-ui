@@ -56,10 +56,12 @@ EPDialog/slot
 
 ### 事件
 
+EPDialog 0.5.7 版本后可无需使用 handleCancel 来关闭弹框（内部已经清除校验和表单重置）
+
 | 事件名       | 说明                           |
 | ------------ | ------------------------------ |
 | handleSubmit | 确认按钮提交（会先验证 rules） |
-| handleCancel | 弹框取消                       |
+| handleCancel | 弹框取消后的额外操作           |
 
 ### Slots
 

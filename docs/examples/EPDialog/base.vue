@@ -107,6 +107,7 @@ const handleSubmit = () => {
   }, 1000)
 }
 const handleCancel = () => {
-  dialogVisible.value = false
+  // 0.5.7版本后可无需手动设置关闭弹框dialogVisible.value = false
+  //取消后额外操作
 }
 </script>
