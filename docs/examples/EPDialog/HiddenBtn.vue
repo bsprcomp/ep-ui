@@ -5,6 +5,7 @@
 <template>
   <div class="wrapper vp-raw">
     <EPButton type="primary" value="查看详情" @click="dialogVisible = true" />
+    <!-- :isShowFoot="false" 可以直接隐藏foot -->
     <EPDialog title="详情" hiddenCancelBtn hiddensubmitBtn v-model="dialogVisible">
       <template #content>
         <div class="content">

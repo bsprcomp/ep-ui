@@ -25,13 +25,16 @@
       <slot name="content"></slot>
       <slot name="bootom" />
     </el-scrollbar>
-    <template #footer>
+    <template
+      #footer
+      v-if="(!hiddenCancelBtn || !(hiddensubmitBtn || hiddenSubmitBtn)) && isShowFoot"
+    >
       <slot name="footer">
         <div class="dialog-footer">
           <el-button v-if="!hiddenCancelBtn" @click="handleClose">{{ cancelText }}</el-button>
           <el-button
             :loading="submitLoading"
-            v-if="!hiddensubmitBtn"
+            v-if="!hiddensubmitBtn && !hiddenSubmitBtn"
             @click="handleSubmit"
             type="primary"
           >
@@ -55,7 +58,9 @@ type Props = {
   cancelText?: string
   submitText?: string
   hiddenCancelBtn?: boolean
+  isShowFoot?: boolean
   hiddensubmitBtn?: boolean
+  hiddenSubmitBtn?: boolean
   maxHeight?: string
   height?: string
   formProps?:
@@ -80,6 +85,8 @@ const props = withDefaults(defineProps<Props>(), {
   cancelText: "取 消",
   hiddenCancelBtn: false,
   hiddensubmitBtn: false,
+  hiddenSubmitBtn: false,
+  isShowFoot: false,
   formProps: () => ({
     formItems: []
   })
