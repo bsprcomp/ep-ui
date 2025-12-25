@@ -6,9 +6,15 @@
 EPConfigProvider/table
 :::
 
+### 设置 EPInput 组件全局配置(^0.6.1)
+
+:::demo `EPInput`设置,例如设置最大字数`defaultMaxlength`和文本域的默认最大字数`textareaMaxlength`,设置显示字数长度`showWordLimit`等
+EPConfigProvider/input
+:::
+
 ### 设置 EPDatePicker 组件全局配置(^0.3.0)
 
-:::demo `datePicker`设置,例如设置`startPlaceholder: '开始日期'`
+:::demo `EPDatePicker`设置,例如设置`startPlaceholder: '开始日期'`
 EPConfigProvider/datePicker
 :::
 
@@ -20,11 +26,12 @@ EPConfigProvider/dialog
 
 ### 2、配置参数
 
-| 参数       | 说明                  | 类型                                          | 默认值 |
-| :--------- | :-------------------- | :-------------------------------------------- | :----- |
-| table      | EPTable 全局配置      | `{pageProps:Object,heightlightClick:boolean}` | -      |
-| datePicker | EPDatePicker 全局配置 | `详细配置EPDatePicker`                        | -      |
-| dialog     | dialog 全局配置       | `详细配置EPDialog`                            | -      |
+| 参数       | 说明                  | 类型                                                                                  | 默认值 |
+| :--------- | :-------------------- | :------------------------------------------------------------------------------------ | :----- |
+| table      | EPTable 全局配置      | `{pageProps:Object,heightlightClick:boolean}`                                         | -      |
+| datePicker | EPDatePicker 全局配置 | `详细配置EPDatePicker`                                                                | -      |
+| dialog     | dialog 全局配置       | `详细配置EPDialog`                                                                    | -      |
+| input      | input 全局配置        | `详细配置EPInput` 以及对字数限制特有的两个属性`defaultMaxlength`和`textareaMaxlength` | -      |
 
 ### pageProps ts 如下
 

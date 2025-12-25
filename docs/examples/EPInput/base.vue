@@ -13,7 +13,7 @@
       <EPInput placeholder="密码框" v-model="input6" type="password" width="49%" />
     </p>
     <p>
-      <EPInput placeholder="文本域" type="textarea" v-model="input7" />
+      <EPInput placeholder="文本域" type="text" v-model="input7" inputType="default" />
       <EPInput show-word-limit maxlength="20" type="textarea" v-model="input8" />
     </p>
     <p>

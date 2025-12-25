@@ -4,7 +4,11 @@
     v-model="modelValue"
     @input="handleInput"
     :clearable="true"
-    v-bind="$attrs"
+    v-bind="{
+      maxlength: attrs.type !== 'textarea' ? defaultMaxlength : textareaMaxlength,
+      ...inputInject,
+      ...$attrs
+    }"
     :placeholder="placeholder"
   >
     <template #append v-if="$slots.append">
@@ -17,14 +21,15 @@
 </template>
 
 <script setup lang="ts" name="EpInput">
-import { defineModel, defineEmits, computed } from "vue"
+import { computed, useAttrs, inject } from "vue"
 interface Props {
   placeholder?: string
   width?: string
   inputType?: "integer" | "default" | "text"
   inputRule?: RegExp
 }
-
+const attrs = useAttrs()
+const { defaultMaxlength, textareaMaxlength, ...inputInject }: any = inject("input") || {}
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "请输入",
   width: "100%",
@@ -35,7 +40,9 @@ const modelValue = defineModel<string | number>()
 
 const newInputRule = computed(() => {
   if (props.inputRule) return props.inputRule
-
+  if (attrs.type == "textarea") {
+    return null
+  }
   const rules = {
     integer: /[^\d]/g,
     default: null,

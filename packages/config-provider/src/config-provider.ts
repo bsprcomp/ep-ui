@@ -13,6 +13,10 @@ const ConfigProvider = defineComponent({
     datePicker: {
       type: Object,
       default: () => ({})
+    },
+    input: {
+      type: Object,
+      default: () => ({})
     }
   },
 

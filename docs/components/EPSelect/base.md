@@ -12,12 +12,6 @@ EPSelect/base
 EPSelect/formatterLabel
 :::
 
-### 空值格式化（^0.2.5）
-
-:::demo `formatNullValue` 返回下拉选择清空状态值，默认清空返回空字符串。
-EPSelect/formatNullValue
-:::
-
 ### 多选
 
 :::demo

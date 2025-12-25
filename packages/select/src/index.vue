@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts" name="EPSelect">
-import { computed, ref, useSlots } from "vue"
+import { computed, useSlots } from "vue"
 type Props = {
   multiple?: boolean // 是否多选
   isShowSelectAllBtn?: boolean // 是否全选
@@ -52,7 +52,6 @@ type Props = {
   options: Record<string, any>[] | [] // 下拉框组件数据
   useVirtual?: boolean // 是否开启虚拟列表
   formatterLabel?: Function // 是否格式化label
-  formatNullValue?: any // 格式化返回空值
 }
 const props = withDefaults(defineProps<Props>(), {
   multiple: false,
@@ -64,21 +63,16 @@ const props = withDefaults(defineProps<Props>(), {
   options: () => [],
   filterable: true,
   useVirtual: false,
-  returnObject: false,
-  formatNullValue: ""
+  returnObject: false
 })
 const modelValue = defineModel<String | Number | string[] | Object>()
-const selectRef = ref<any>()
 // 获取插槽
 const slots = useSlots()
 // 抛出事件
 const emits = defineEmits(["change"])
 // 当前选中
 const handleChange = (val: any) => {
-  if (!val) {
-    modelValue.value = props.formatNullValue
-  }
-  emits("change", val ?? props.formatNullValue)
+  emits("change", val)
 }
 // 过滤出未禁止options选项
 const unDisabledOptions = computed(() =>
