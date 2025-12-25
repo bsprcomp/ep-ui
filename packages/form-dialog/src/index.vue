@@ -86,7 +86,7 @@ const props = withDefaults(defineProps<Props>(), {
   hiddenCancelBtn: false,
   hiddensubmitBtn: false,
   hiddenSubmitBtn: false,
-  isShowFoot: false,
+  isShowFoot: true,
   formProps: () => ({
     formItems: []
   })

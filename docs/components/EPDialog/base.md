@@ -18,7 +18,7 @@ EPDialog/dialogHeight
 EPDialog/dialogMaxHeight
 :::
 
-### 取消和确认按钮隐藏(^0.5.9 版本可以使用 isShowFoot 隐藏全部)
+### 取消和确认按钮隐藏(^0.6.0 版本可以使用 isShowFoot 隐藏全部)
 
 :::demo hiddenCancelBtn 和 hiddensubmitBtn 使用
 EPDialog/HiddenBtn
@@ -51,7 +51,7 @@ EPDialog/slot
 | max-height          | 弹框内容最大高度（例如`max-height="400px"`）      | String                                                                                            | -      |
 | height              | 弹框内容高度 （例如`height="400px"`）             | String                                                                                            | -      |
 | title               | Dialog 对话框 Dialog 的标题                       | `string`                                                                                          | ""     |
-| isShowFoot `^0.5.9` | 是否隐藏 foot(隐藏确认和取消以及 foot 的插槽内容) | `boolean`                                                                                         | false  |
+| isShowFoot `^0.6.0` | 是否隐藏 foot(隐藏确认和取消以及 foot 的插槽内容) | `boolean`                                                                                         | false  |
 | hiddenCancelBtn     | 是否隐藏取消按钮                                  | `boolean`                                                                                         | false  |
 | hiddensubmitBtn     | 是否隐藏确认按钮                                  | `boolean`                                                                                         | false  |
 | width               | 对话框的宽度                                      | `string`/`number`                                                                                 | 600    |
