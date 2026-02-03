@@ -9,6 +9,7 @@ import EPDatePicker from "./date-picker"
 import EPRadio from "./radio"
 import EPDialog from "./form-dialog"
 import EPConfigProvider from "./config-provider"
+import EPColumnSet from "./column-set"
 import * as tools from "./utils"
 // 存储组件列表
 const components: {
@@ -23,7 +24,8 @@ const components: {
   EPDatePicker,
   EPRadio,
   EPDialog,
-  EPConfigProvider
+  EPConfigProvider,
+  EPColumnSet
 }
 // 插件声明：声明所有插件
 // 插件注册：在 Vue 项目的入口文件中，通过 ( app.use(插件) ) 进行注册
@@ -52,7 +54,8 @@ export {
   EPCheckbox,
   EPInput,
   EPDialog,
-  tools
+  tools,
+  EPColumnSet
 }
 
 export default {

@@ -99,3 +99,11 @@ EPForm/CustomOperator
 | rules         | 每一项输入框的表单校验规则（可参考 element-plus el-form-item 方式配置）          | `Object/Array `                                                                                                                             | -      |
 | options       | 下拉选择数据源（`type:'select'\|'EPCheckbox'\|'EPRadio'`生效）                   | `{label:string,value:any}[]`                                                                                                                | -      |
 | shortcutsName | type:"EPDataPicker" 生效                                                         | `String` <t-tip content="year\| years\|month\|months\|date\|dates\|datetime\|week\|datetimerange\|daterange\|monthrange\|yearrange\|date"/> | -      |
+
+#### 插槽
+
+| 插槽名         | 描述             |
+| -------------- | ---------------- |
+| operatorTop    | 操作按钮排在前面 |
+| operatorBottom | 操作按钮排在最后 |
+| top            | 表单最前         |

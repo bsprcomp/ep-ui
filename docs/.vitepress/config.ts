@@ -50,7 +50,8 @@ export default defineConfig({
           items: [
             { text: "Table 组件", link: "/components/EPTable/base.md" },
             { text: "Dynamic Form（^0.0.8）", link: "/components/EPForm/base.md" },
-            { text: "Form Dialog （^0.0.9）", link: "/components/EPDialog/base.md" }
+            { text: "Form Dialog （^0.0.9）", link: "/components/EPDialog/base.md" },
+            { text: "EPColumnSet（^0.6.2）", link: "/components/EPColumnSet/base.md" }
           ]
         },
         {

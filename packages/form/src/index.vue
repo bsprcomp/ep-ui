@@ -75,6 +75,7 @@
       <template v-if="btnSlotName">
         <slot :name="btnSlotName"></slot>
       </template>
+      <slot name="operatorTop"></slot>
       <template v-if="operatorList && operatorList.length > 0">
         <template v-for="(val, index) in operatorList" :key="index">
           <template v-if="val.render">
@@ -94,6 +95,7 @@
           </template>
         </template>
       </template>
+      <slot name="operatorBottom"></slot>
       <EPButton type="primary" link v-if="expand !== undefined" @click="expand = !expand">
         {{ expand ? "收起" : "展开" }}
         <el-icon>
