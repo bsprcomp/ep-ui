@@ -95,6 +95,7 @@ const columns = [
             func: (row, scope) => {
               deleteRow(row, scope)
             },
+            render: (row, index) => (index == 1 ? "删除" : "删除--2"),
             isShowConfirm: true
           }
         ]

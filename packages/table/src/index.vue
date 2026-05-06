@@ -166,7 +166,16 @@
                                       }"
                                       :disabled="handleOp(sonOp, scope, 'disabled')"
                                     >
-                                      {{ sonOp.label }}
+                                      <template v-if="sonOp.render">
+                                        <CustomRender
+                                          :column="sonOp"
+                                          :row="scope.row"
+                                          :render="sonOp.render"
+                                          :index="scope.$index"
+                                        />
+                                      </template>
+
+                                      <span v-else>{{ sonOp.label }}</span>
                                     </e-p-button>
                                   </template>
                                 </el-popconfirm>
@@ -217,7 +226,16 @@
                               }"
                               :disabled="handleOp(op, scope, 'disabled')"
                             >
-                              {{ op.label }}
+                              <template v-if="op.render">
+                                <CustomRender
+                                  :column="op"
+                                  :row="scope.row"
+                                  :render="op.render"
+                                  :index="scope.$index"
+                                />
+                              </template>
+
+                              <span v-else>{{ op.label }}</span>
                             </EPButton>
                           </template>
                         </el-popconfirm>
@@ -323,7 +341,7 @@ type Operation = {
   slotName?: string
   render?: (row: any) => VNode
   isShowConfirm?: boolean
-  msg?: boolean
+  msg?: string
   children?: Operation[]
 }
 interface Props {

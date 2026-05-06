@@ -33,6 +33,7 @@ const columns = ref<any[]>([
         label: "删除",
         antiClick: true, // 开启防抖
         isShowConfirm: true,
+        render: (row, index) => (index == 1 ? "删除" : ""),
         func: (row, scope) => {
           deleteRow(row, scope)
         }
