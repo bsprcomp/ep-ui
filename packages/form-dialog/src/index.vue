@@ -122,6 +122,12 @@ const handleSubmit = async () => {
 const clearValidate = () => {
   formRef.value?.clearValidate()
 }
+const validate = fn => {
+  formRef.value?.validate(fn)
+}
+const validateField = (props, fn) => {
+  formRef.value?.validate(props, fn)
+}
 watch(dialogVisible, newValue => {
   if (newValue) {
     nextTick(() => {
@@ -130,5 +136,5 @@ watch(dialogVisible, newValue => {
     })
   }
 })
-defineExpose({ formRef, dialogRef, clearValidate })
+defineExpose({ formRef, dialogRef, clearValidate, validate, validateField })
 </script>

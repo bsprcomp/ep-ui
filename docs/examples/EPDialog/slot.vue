@@ -5,15 +5,15 @@
 <template>
   <div class="wrapper vp-raw">
     <EPButton type="primary" value="新 增" @click="dialogVisible = true" />
-    <EPDialog title="新增" v-model:params="formParams" v-model="dialogVisible">
+    <EPDialog title="新增" v-model:params="formParams" v-model="dialogVisible" ref="dialogRef">
       <!-- 自定义header -->
       <template #header> <span style="color: red">我是自定义标题</span></template>
       <!-- 自定义content -->
-      <template #content> 自定义content</template>
+      <template #content> <div>自定义content</div></template>
       <template #bootom> <span style="color: red">自定义bootom</span></template>
       <template #footer>
-        <EPButton type="primary" value="取消（自定义footer）" @click="dialogVisible = false"
-      /></template>
+        <EPButton type="primary" value="自定义取消" @click="dialogVisible = false" />
+      </template>
     </EPDialog>
   </div>
 </template>
@@ -55,6 +55,7 @@ const handleSubmit = () => {
   console.log(formParams.value, "formParams===>handleSubmit")
   dialogVisible.value = false
 }
+
 const handleCancel = () => {
   // 0.5.7版本后可无需手动设置关闭弹框dialogVisible.value = false
   //取消后额外操作

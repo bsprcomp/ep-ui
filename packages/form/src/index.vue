@@ -165,9 +165,10 @@ const newFormItems = computed(() => transformFormItems())
 const emits = defineEmits(["getRef", "formChange"])
 const resetFields = () => formRef.value.resetFields()
 const validate = fun => formRef.value.validate(fun)
+const validateField = (prop, fn) => formRef.value.validateField(prop, fn)
 const clearValidate = () => formRef.value.clearValidate()
 // 暴露方法出去
-defineExpose({ resetFields, validate, clearValidate })
+defineExpose({ resetFields, validate, clearValidate, formRef, validateField })
 watch(
   formModel,
   () => {
